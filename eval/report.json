@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-10-24T11:25:43",
+  "mode": "end-to-end",
+  "models": {
+    "gemini": "gemini-flash-latest",
+    "groq": "openai/gpt-oss-120b"
+  },
+  "policy": "United India IHIP prospectus",
+  "n_scenarios": 2,
+  "split": "dev",
+  "scenarios_note": "PLUMBING-ONLY SAMPLE scenarios (data/scenarios.sample.csv) - NOT real labels; metrics below are not evidence of accuracy.",
+  "metrics": {
+    "verdict_accuracy": 1.0,
+    "payout_mae_inr": 0.0,
+    "payout_within_1_pct": 1.0,
+    "citation_correctness": 1.0,
+    "quote_verified_pct": 1.0,
+    "extraction_accuracy": 1.0,
+    "abstention_precision": null,
+    "abstention_recall": null,
+    "confident_wrong_rate": 0.0
+  },
+  "confusion": {
+    "PARTIAL": {
+      "PARTIAL": 1
+    },
+    "COVERED": {
+      "COVERED": 1
+    }
+  },
+  "baseline": {
+    "verdict_accuracy": 1.0,
+    "payout_mae_inr": 0.0,
+    "abstention_recall": null,
+    "n_scored": 2,
+    "note": "plain LLM (policy text + incident -> JSON), same scenarios"
+  },
+  "cross_policy_extraction": [
+    {
+      "policy": "SBI General Health Insurance - Retail (data/policy_b.pdf)",
+      "extraction_accuracy": 1.0,
+      "n_checks": 11,
+      "note": "built-in checks from facts stated in the task brief",
+      "failures": []
+    }
+  ],
+  "extraction_failures": [],
+  "notes": [
+    "citation_correctness compares clause ids loosely (last segments, alphanumerics)",
+    "confident_wrong_rate = wrong or off-by->1% predictions among non-abstained predictions",
+    "end-to-end: a needs_info response counts as a NEEDS_REVIEW (abstention) prediction"
+  ],
+  "live_calls_this_run": 2
+}
