@@ -76,3 +76,19 @@ def test_unknown_policy(client):
 
 def test_eval_latest_missing_or_present(client):
     assert client.get("/eval/latest").status_code in (200, 404)
+
+
+def test_llm_unavailable_maps_to_503(client, pid, monkeypatch):
+    from app import llm
+
+    def boom(*a, **k):
+        raise llm.LLMUnavailable("gemini: daily limit reached")
+
+    monkeypatch.setattr(llm, "extract", boom)
+    r = client.post("/claims/check", json={"policy_id": pid, "profile": PROFILE, "incident_text": TEXT})
+    assert r.status_code == 503 and r.json()["error"] == "llm_unavailable" and "detail" in r.json()
+
+
+def test_cors_header(client):
+    r = client.get("/policies", headers={"Origin": "http://localhost:3000"})
+    assert r.headers.get("access-control-allow-origin") == "http://localhost:3000"

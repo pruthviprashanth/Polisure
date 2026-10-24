@@ -1,0 +1,11 @@
+id,incident_text,room_rent_per_day,days,bill_room,bill_linked,bill_meds_implants,bill_other,policy_age_months,ped,expected_verdict,expected_payout_inr,expected_clauses,should_abstain,split,category
+S01,"PLUMBING-ONLY SAMPLE. Appendix surgery, 3 days in a room at Rs 8000 per day. Doctor and OT charges 96000 and medicines 40000.",8000,3,24000,96000,40000,0,24,N,PARTIAL,115000,III.A.1.i;1.1(i),0,dev,appendectomy
+S02,"PLUMBING-ONLY SAMPLE. Appendectomy, 3 days in a room at Rs 5000 per day.",5000,3,15000,96000,40000,0,24,N,COVERED,151000,III.A.1.i,0,dev,appendectomy
+S03,"PLUMBING-ONLY SAMPLE. Cataract surgery on one eye, 1 day, room Rs 2000. Policy started 12 months ago.",2000,1,2000,40000,0,0,12,N,NOT_COVERED,0,Table A,0,dev,cataract
+S04,"PLUMBING-ONLY SAMPLE. Cataract surgery on one eye, 1 day, room Rs 2000. Policy started 30 months ago.",2000,1,2000,60000,0,0,30,N,PARTIAL,40000,1.2,0,test,cataract
+S05,"PLUMBING-ONLY SAMPLE. Delivery of a baby by caesarean, 3 days.",3000,3,9000,80000,10000,0,36,N,NOT_COVERED,0,Excl18,0,dev,maternity
+S06,"PLUMBING-ONLY SAMPLE. Appendix surgery two weeks after buying the policy.",3000,2,6000,70000,20000,0,0,N,NOT_COVERED,0,Excl03,0,dev,appendectomy
+S07,"PLUMBING-ONLY SAMPLE. Appendix surgery; the patient may have had a long-standing stomach condition, not sure.",3000,2,6000,70000,20000,0,24,unknown,NEEDS_REVIEW,,Excl01,1,test,appendectomy
+S08,"PLUMBING-ONLY SAMPLE. Road accident, fracture surgery, 2 days, room Rs 3000. Policy started 1 month ago.",3000,2,6000,80000,0,0,1,N,COVERED,86000,III.A.1.i,0,dev,accident_trauma
+S09,"PLUMBING-ONLY SAMPLE. Hernia surgery, 2 days, room Rs 3000, policy started 36 months ago.",3000,2,6000,200000,0,0,36,N,PARTIAL,100000,1.2,0,test,hernia
+S10,"PLUMBING-ONLY SAMPLE. Admitted for stomach trouble, details unclear.",3000,2,6000,50000,10000,0,24,N,NEEDS_REVIEW,,—,1,dev,unknown

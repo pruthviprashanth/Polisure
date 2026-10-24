@@ -8,6 +8,7 @@ from .present import inr
 from .schemas import ClaimFacts, Counterfactual, CoverageModel, Profile, Verdict
 
 CONF_MIN = 0.5
+USE_LLM_EXPLAIN = True  # the eval harness turns this off to save live calls
 COMBINED_NOTE = ("Indemnity policies can often be claimed together up to the actual loss; the second insurer pays against the "
                  "balance. Estimate only — confirm each insurer's other-insurance clause.")
 
@@ -123,8 +124,11 @@ def check(policy_ids: list[str], profile: dict, incident_text: str, bill: Option
 
     for c, v, _ in results:
         if c.policy_id == best_c.policy_id:
-            why, steps, p = explain.explain(v)
-            provs.append(p)
+            if USE_LLM_EXPLAIN:
+                why, steps, p = explain.explain(v)
+                provs.append(p)
+            else:
+                why, steps = explain.template(v)
         else:
             why, steps = explain.template(v)
         v.why, v.next_steps = why, steps
