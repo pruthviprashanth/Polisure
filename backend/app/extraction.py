@@ -17,7 +17,7 @@ PROMPT = """You are a careful health-insurance policy analyst. Read the policy t
 Rules:
 - Use ONLY what the document says. If a rule is absent, leave that field null / empty. Never invent clauses.
 - For EVERY rule give `clause` (the clause/code id as printed, e.g. 'III.A.1.i', '9.A.1', 'Excl02'), `page` (the number in the [[PAGE n]] marker of the page where the quote appears) and `quote`: text copied EXACTLY, verbatim and contiguous from the document, at most 220 characters, no ellipses, no paraphrase.
-- room_rent: kind=percent_si with value=percent of sum insured per day (icu_value for ICU) or kind=fixed (rupees/day), kind=any for no cap. Set computable=false if the limit depends on hospital tariffs, 'entitled category' or similar and cannot be worked out from the sum insured alone.
+- room_rent: kind=percent_si with value=percent of sum insured per day (icu_value for ICU) or kind=fixed (rupees/day). Use kind=any ONLY if the document explicitly says there is no limit (actual expenses / any room category). If the wording merely lists room rent as covered, or says the limit is in the policy schedule, use kind=unknown. Set computable=false if the limit depends on hospital tariffs, 'entitled category' or similar and cannot be worked out from the sum insured alone.
 - proportionate: applies=true if exceeding the room limit reduces other associated expenses proportionately; applies_to lists which buckets are reduced: 'linked' (doctor fees, OT, room-category linked charges, investigations), 'meds_implants' (only if the policy says medicines/implants are also reduced), 'other'. Default to ['linked'].
 - copay: percent (0 if 'Not Applicable'); applies_when='always', 'non_network' (only non-network hospitals) or 'other'.
 - waiting_initial (days), waiting_ped (months), specific_waits: one entry per listed disease/procedure with months. category must be one of the enum when it fits (cataract, hernia, joint_replacement, ...); otherwise use 'other' AND put lowercase keywords (e.g. ['piles','fistula']) so code can match the diagnosis text.
@@ -146,19 +146,25 @@ def finalize(ext: CoverageExtract, pages: list[str], policy_id: str, pdf_rel: st
     verify(ext, pages)
     m = CoverageModel(**ext.model_dump(), policy_id=policy_id, pages=len(pages), pdf_path=pdf_rel,
                       source_providers=providers)
+    set_computable(m)
+    return m
+
+
+def set_computable(m: CoverageModel) -> None:
+    """(Re)derive the computable flag and note from the rules; used by finalize and by re-verification of cached models."""
     computable, note = True, None
     rr = m.room_rent
     if rr is None or rr.kind == "unknown":
-        computable, note = False, "The room-rent rule could not be read from this policy."
+        computable, note = False, (rr.note if rr and rr.note else "The room-rent rule could not be read from this policy.")
     elif not rr.computable:
         computable, note = False, rr.note or "The room-rent limit depends on hospital tariffs or the 'entitled category', so payouts cannot be computed exactly."
     elif m.unmodeled_terms:
         computable, note = False, "Contains terms the estimator cannot compute exactly: " + "; ".join(m.unmodeled_terms[:3])
     m.computable, m.computable_note = computable, note
-    return m
 
 
 _NOISE = re.compile(r"ambulance|check-?up|domiciliary|pre-?\s?hospital|post-?\s?hospital|daily cash|cash allowance", re.I)
+_NO_LIMIT = re.compile(r"no (?:limit|cap|sub-?limit)|without (?:any )?(?:limit|cap)|any (?:room|category)|actual|all categor|irrespective|not (?:be )?(?:restricted|limited)", re.I)
 _VALID_ORDER = {"sublimit", "room_rent", "copay", "sum_insured"}
 
 
@@ -166,5 +172,12 @@ def clean(ext: CoverageExtract) -> None:
     """Deterministic guards on LLM output (applied before verification)."""
     ext.sublimits = [s for s in ext.sublimits if not _NOISE.search(f"{s.label} {s.quote} {' '.join(s.keywords)}")]
     ext.unmodeled_terms = [t for t in ext.unmodeled_terms if not _NOISE.search(t)]
+    rr = ext.room_rent
+    if rr and rr.kind == "any" and not _NO_LIMIT.search(rr.quote):
+        # A heading like "Room rent, boarding expenses" is not a statement that there is no limit: the limit is
+        # normally set in the policy schedule, which is not part of the wording.
+        rr.kind = "unknown"
+        rr.note = ("The wording lists room rent as covered but states no limit; the limit and any co-payment are set in the "
+                   "policy schedule, which is not part of this document.")
     if set(ext.deduction_order) != _VALID_ORDER or len(ext.deduction_order) != 4:
         ext.deduction_order = ["sublimit", "room_rent", "copay", "sum_insured"]

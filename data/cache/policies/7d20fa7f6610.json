@@ -1,0 +1,702 @@
+{
+ "name": "SBI General Arogya Premier Policy",
+ "room_rent": {
+  "clause": "IV.1.a",
+  "page": 9,
+  "quote": "Room rent, boarding expenses",
+  "verified": true,
+  "kind": "unknown",
+  "value": 0.0,
+  "icu_value": null,
+  "computable": true,
+  "note": "The wording lists room rent as covered but states no limit; the limit and any co-payment are set in the policy schedule, which is not part of this document."
+ },
+ "proportionate": {
+  "clause": "",
+  "page": 0,
+  "quote": "",
+  "verified": false,
+  "applies": false,
+  "applies_to": []
+ },
+ "copay": null,
+ "waiting_initial": {
+  "clause": "V.3",
+  "page": 14,
+  "quote": "Expenses related to the treatment of any illness within 30 days from the first policy commencement date shall be excluded except claims arising due to an accident, provided the same are covered.",
+  "verified": true,
+  "days": 30
+ },
+ "waiting_ped": {
+  "clause": "V.1.a",
+  "page": 13,
+  "quote": "Expenses related to the treatment of a pre-existing Disease (PED) and its direct complications shall be excluded until the expiry of 48 months of continuous coverage after the date of inception of the first policy",
+  "verified": true,
+  "months": 48
+ },
+ "specific_waits": [
+  {
+   "clause": "V.2.f.i",
+   "page": 13,
+   "quote": "Any types of gastric or duodenal ulcers",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Gastric or duodenal ulcers",
+   "keywords": [
+    "gastric ulcers",
+    "duodenal ulcers"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 13,
+   "quote": "Tonsillectomy, Adenoidectomy, Mastoidectomy, Tympanoplasty",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Tonsillectomy, Adenoidectomy, Mastoidectomy, Tympanoplasty",
+   "keywords": [
+    "tonsillectomy",
+    "adenoidectomy",
+    "mastoidectomy",
+    "tympanoplasty"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 13,
+   "quote": "Surgery on all internal or external tumour /cysts/nodules/polyps of any kind including breast lumps",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Tumour/cysts/nodules/polyps",
+   "keywords": [
+    "tumour",
+    "cysts",
+    "nodules",
+    "polyps",
+    "breast lumps"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 13,
+   "quote": "All types of Hernia and Hydrocele",
+   "verified": true,
+   "category": "hernia",
+   "months": 12,
+   "label": "Hernia and Hydrocele",
+   "keywords": [
+    "hernia",
+    "hydrocele"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 13,
+   "quote": "Anal Fissures, Fistula and Piles",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Anal Fissures, Fistula and Piles",
+   "keywords": [
+    "fissures",
+    "fistula",
+    "piles"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 13,
+   "quote": "Cataract",
+   "verified": true,
+   "category": "cataract",
+   "months": 12,
+   "label": "Cataract",
+   "keywords": [
+    "cataract"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 13,
+   "quote": "Benign Prostatic Hypertrophy",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Benign Prostatic Hypertrophy",
+   "keywords": [
+    "benign prostatic hypertrophy",
+    "bph"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 13,
+   "quote": "Hysterectomy/ myomectomy for menorrhagia or fibromyoma or prolapse of uterus",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Hysterectomy / myomectomy",
+   "keywords": [
+    "hysterectomy",
+    "myomectomy",
+    "menorrhagia",
+    "fibromyoma",
+    "prolapse of uterus"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 13,
+   "quote": "Non infective Arthritis, Treatment of Spondylosis / Spondylitis, Gout & Rheumatism",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Arthritis, Spondylosis, Spondylitis, Gout, Rheumatism",
+   "keywords": [
+    "arthritis",
+    "spondylosis",
+    "spondylitis",
+    "gout",
+    "rheumatism"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 13,
+   "quote": "Surgery of Genitourinary tract",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Surgery of Genitourinary tract",
+   "keywords": [
+    "genitourinary tract"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 14,
+   "quote": "Calculus Diseases",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Calculus Diseases",
+   "keywords": [
+    "calculus diseases",
+    "stones"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 14,
+   "quote": "Sinusitis, nasal disorders and related disorders",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Sinusitis and nasal disorders",
+   "keywords": [
+    "sinusitis",
+    "nasal disorders"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 14,
+   "quote": "Gall bladder stones",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Gall bladder stones",
+   "keywords": [
+    "gall bladder stones"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 14,
+   "quote": "Surgery for prolapsed intervertebral disc unless arising from accident",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Prolapsed intervertebral disc",
+   "keywords": [
+    "prolapsed intervertebral disc",
+    "pivd"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 14,
+   "quote": "Vertebro-spinal disorders (including disc) and knee conditions",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Vertebro-spinal disorders and knee conditions",
+   "keywords": [
+    "vertebro-spinal disorders",
+    "knee conditions"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 14,
+   "quote": "Surgery of varicose veins and varicose ulcers",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Varicose veins and varicose ulcers",
+   "keywords": [
+    "varicose veins",
+    "varicose ulcers"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 14,
+   "quote": "Chronic Renal failure",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Chronic Renal failure",
+   "keywords": [
+    "chronic renal failure"
+   ]
+  },
+  {
+   "clause": "V.2.f.i",
+   "page": 14,
+   "quote": "Medical Expenses incurred in connection with joint replacement surgery due to Degenerative condition, Age related osteoarthritis and Osteoporosis unless such Joint replacement surgery unless necessitated by accidental",
+   "verified": true,
+   "category": "joint_replacement",
+   "months": 12,
+   "label": "Joint replacement surgery",
+   "keywords": [
+    "joint replacement",
+    "osteoarthritis",
+    "osteoporosis"
+   ]
+  },
+  {
+   "clause": "V.2.f.ii",
+   "page": 14,
+   "quote": "Hypertension, Heart Disease and related complications",
+   "verified": true,
+   "category": "other",
+   "months": 3,
+   "label": "Hypertension and Heart Disease",
+   "keywords": [
+    "hypertension",
+    "heart disease"
+   ]
+  },
+  {
+   "clause": "V.2.f.ii",
+   "page": 14,
+   "quote": "Diabetes and related complications",
+   "verified": true,
+   "category": "other",
+   "months": 3,
+   "label": "Diabetes",
+   "keywords": [
+    "diabetes"
+   ]
+  },
+  {
+   "clause": "V.4",
+   "page": 14,
+   "quote": "Insurer shall not be liable to make any payment under this Policy in connection with or in respect of maternity expenses within first 9 months from the date of inception of the Policy.",
+   "verified": true,
+   "category": "maternity",
+   "months": 9,
+   "label": "Maternity Expenses",
+   "keywords": [
+    "maternity"
+   ]
+  }
+ ],
+ "sublimits": [
+  {
+   "clause": "IV.14.Sub-limit",
+   "page": 10,
+   "quote": "The following disorders / conditions shall be covered only up to Rs. 1,00,000/-. This sub-limit shall apply for all the following disorders / conditions on cumulative basis.",
+   "verified": true,
+   "category": "other",
+   "label": "Mental Illness specific disorders",
+   "pct_si": null,
+   "limit_inr": 100000.0,
+   "per": "claim",
+   "keywords": [
+    "severe depression",
+    "schizophrenia",
+    "bipolar disorder",
+    "post-traumatic stress disorder",
+    "eating disorder",
+    "generalized anxiety disorder",
+    "obsessive compulsive disorders",
+    "panic disorders",
+    "personality disorders",
+    "conversion disorders",
+    "dissociative disorders"
+   ]
+  },
+  {
+   "clause": "IV.15",
+   "page": 12,
+   "quote": "Genetic Disorders or Diseases are covered up to the Limit Rs. 1,00,000",
+   "verified": true,
+   "category": "other",
+   "label": "Genetic Disorders or Diseases",
+   "pct_si": null,
+   "limit_inr": 100000.0,
+   "per": "claim",
+   "keywords": [
+    "genetic disorders",
+    "genetic diseases"
+   ]
+  },
+  {
+   "clause": "IV.16",
+   "page": 12,
+   "quote": "Internal Congenital Diseases are Covered upto the Limit Rs. 10% of Sum Insured.",
+   "verified": true,
+   "category": "other",
+   "label": "Internal Congenital Diseases",
+   "pct_si": 10.0,
+   "limit_inr": null,
+   "per": "claim",
+   "keywords": [
+    "internal congenital diseases",
+    "internal congenital anomaly"
+   ]
+  },
+  {
+   "clause": "IV.17",
+   "page": 12,
+   "quote": "The following procedures will be covered (wherever medically indicated) either as in patient or as part of day care treatment in a hospital up to 50% of -of Sum Insured, specified in the policy schedule, during the policy period",
+   "verified": true,
+   "category": "other",
+   "label": "Specified Advanced Procedures",
+   "pct_si": 50.0,
+   "limit_inr": null,
+   "per": "year",
+   "keywords": [
+    "uterine artery embolization",
+    "hifu",
+    "balloon sinuplasty",
+    "deep brain stimulation",
+    "oral chemotherapy",
+    "immunotherapy",
+    "intra vitreal injections",
+    "robotic surgeries",
+    "stereotactic radio surgeries",
+    "bronchial thermoplasty",
+    "vaporisation of the prostrate",
+    "ionm",
+    "stem cell therapy"
+   ]
+  }
+ ],
+ "exclusions": [
+  {
+   "clause": "V.5",
+   "page": 14,
+   "quote": "Treatment taken outside India.",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment taken outside India",
+   "keywords": [
+    "outside india",
+    "foreign treatment"
+   ]
+  },
+  {
+   "clause": "V.6",
+   "page": 14,
+   "quote": "War, invasion, acts of foreign enemies, hostilities (whether war be declared or not), civil war, commotion, unrest, rebellion, revolution, insurrection, military or usurped power or confiscation or nationalisation",
+   "verified": true,
+   "category": "other",
+   "text": "War and warlike operations",
+   "keywords": [
+    "war",
+    "invasion",
+    "hostilities",
+    "civil war",
+    "rebellion"
+   ]
+  },
+  {
+   "clause": "V.7",
+   "page": 14,
+   "quote": "Injury or disease directly or indirectly caused by or contributed to by nuclear weapons/materials.",
+   "verified": true,
+   "category": "other",
+   "text": "Nuclear weapons/materials",
+   "keywords": [
+    "nuclear",
+    "weapons",
+    "materials"
+   ]
+  },
+  {
+   "clause": "V.8",
+   "page": 14,
+   "quote": "Circumcision unless necessary for treatment of a disease, illness or injury not excluded hereunder, or, as may be necessitated due to an accident",
+   "verified": true,
+   "category": "other",
+   "text": "Circumcision unless required for disease or accident",
+   "keywords": [
+    "circumcision"
+   ]
+  },
+  {
+   "clause": "V.9",
+   "page": 14,
+   "quote": "Expenses related to the treatment for correction of eye sight due to refractive error less than 7.5 dioptres.",
+   "verified": true,
+   "category": "other",
+   "text": "Refractive error less than 7.5 dioptres",
+   "keywords": [
+    "refractive error",
+    "eye sight",
+    "dioptres"
+   ]
+  },
+  {
+   "clause": "V.10",
+   "page": 15,
+   "quote": "Expenses for cosmetic or plastic surgery or any treatment to change appearance unless for reconstruction following an Accident, Burn(s) or Cancer or as part of medically necessary treatment to remove a direct and immediate health risk to the insured.",
+   "verified": true,
+   "category": "cosmetic",
+   "text": "Cosmetic or plastic surgery",
+   "keywords": [
+    "cosmetic",
+    "plastic surgery",
+    "appearance"
+   ]
+  },
+  {
+   "clause": "V.11",
+   "page": 15,
+   "quote": "The cost of spectacles, contact lenses, hearing aids, crutches, wheelchairs, artificial limbs, dentures, artificial teeth and all other external appliances , prosthesis and/or devices.",
+   "verified": true,
+   "category": "other",
+   "text": "External appliances, devices and prosthesis",
+   "keywords": [
+    "spectacles",
+    "contact lenses",
+    "hearing aids",
+    "crutches",
+    "wheelchairs",
+    "artificial limbs",
+    "dentures"
+   ]
+  },
+  {
+   "clause": "V.12",
+   "page": 15,
+   "quote": "Expenses incurred on items for personal comfort like television, telephone, etc. Incurred during hospitalization and which have been specifically charged for in the hospitalisation bills issued by the hospital/nursing home.",
+   "verified": true,
+   "category": "other",
+   "text": "Personal comfort items",
+   "keywords": [
+    "television",
+    "telephone",
+    "personal comfort"
+   ]
+  },
+  {
+   "clause": "V.13",
+   "page": 15,
+   "quote": "External medical equipment of any kind used at home as post hospitalisation care including cost of instrument used in the treatment of sleep apnoea syndrome (C.P.A.P), continuous ambulatory peritoneal dialysis (C.A.P.D) and oxygen concentrator for bronchial asthmatic condition.",
+   "verified": true,
+   "category": "other",
+   "text": "External medical equipment used at home",
+   "keywords": [
+    "cpap",
+    "capd",
+    "oxygen concentrator",
+    "external medical equipment"
+   ]
+  },
+  {
+   "clause": "V.14",
+   "page": 15,
+   "quote": "Dental treatment or surgery of any kind unless required as a result of accidental bodily injury to teeth requiring hospitalization treatment.",
+   "verified": true,
+   "category": "dental",
+   "text": "Dental treatment or surgery unless due to accidental bodily injury",
+   "keywords": [
+    "dental",
+    "teeth"
+   ]
+  },
+  {
+   "clause": "V.15",
+   "page": 15,
+   "quote": "Convalescence, general debility, “run-down” condition, rest cure, i/external congenital anomaly.",
+   "verified": true,
+   "category": "other",
+   "text": "Convalescence, general debility, rest cure, external congenital anomaly",
+   "keywords": [
+    "convalescence",
+    "general debility",
+    "run-down condition",
+    "rest cure",
+    "external congenital anomaly"
+   ]
+  },
+  {
+   "clause": "V.16",
+   "page": 15,
+   "quote": "Intentional self-injury and suicide (including but not limited to the use or misuse of any intoxicating drugs or alcohol)",
+   "verified": true,
+   "category": "other",
+   "text": "Intentional self-injury and suicide",
+   "keywords": [
+    "self-injury",
+    "suicide",
+    "drugs",
+    "alcohol"
+   ]
+  },
+  {
+   "clause": "V.17",
+   "page": 15,
+   "quote": "Expenses for treatment directly arising from or consequent upon any Insured Person committing or attempting to commit a breach of law with criminal intent.",
+   "verified": true,
+   "category": "other",
+   "text": "Breach of law with criminal intent",
+   "keywords": [
+    "breach of law",
+    "criminal intent"
+   ]
+  },
+  {
+   "clause": "V.18",
+   "page": 15,
+   "quote": "Treatment for, Alcoholism, drug or substance abuse or any addictive condition and consequences thereof.",
+   "verified": true,
+   "category": "other",
+   "text": "Alcoholism, drug or substance abuse",
+   "keywords": [
+    "alcoholism",
+    "drug abuse",
+    "substance abuse",
+    "addictive condition"
+   ]
+  },
+  {
+   "clause": "V.19",
+   "page": 15,
+   "quote": "Venereal disease or any sexually transmitted disease or sickness. (excluding HIV / AIDS as mentioned under scope of cover)",
+   "verified": true,
+   "category": "other",
+   "text": "Venereal disease or sexually transmitted disease (excluding HIV/AIDS)",
+   "keywords": [
+    "venereal disease",
+    "sexually transmitted disease",
+    "std"
+   ]
+  },
+  {
+   "clause": "V.20",
+   "page": 15,
+   "quote": "Outpatient department treatment",
+   "verified": true,
+   "category": "other",
+   "text": "Outpatient department treatment",
+   "keywords": [
+    "outpatient",
+    "opd"
+   ]
+  },
+  {
+   "clause": "V.21",
+   "page": 15,
+   "quote": "Expenses related to sterility and infertility this includes: i. Any type of sterilization ii. Assisted Reproduction services including artificial insemination and advanced reproductive technologies such as IVF, ZIFT, GIFT ICSI iii. Gestational Surrogacy iv. Reversal of sterilization",
+   "verified": true,
+   "category": "infertility",
+   "text": "Sterility and Infertility",
+   "keywords": [
+    "sterility",
+    "infertility",
+    "sterilization",
+    "ivf",
+    "zift",
+    "gift",
+    "icsi",
+    "surrogacy"
+   ]
+  },
+  {
+   "clause": "V.22",
+   "page": 15,
+   "quote": "Vaccination or inoculation except as part of post-bite treatment for animal bite.",
+   "verified": true,
+   "category": "other",
+   "text": "Vaccination or inoculation except post animal bite",
+   "keywords": [
+    "vaccination",
+    "inoculation"
+   ]
+  },
+  {
+   "clause": "V.23",
+   "page": 15,
+   "quote": "Dietary supplements and substances that can be purchased without prescription, including but not limited to Vitamins, minerals and organic substances unless prescribed by a medical practitioner as part of hospitalization claim or day care procedure.",
+   "verified": true,
+   "category": "other",
+   "text": "Dietary supplements and OTC substances",
+   "keywords": [
+    "dietary supplements",
+    "vitamins",
+    "minerals",
+    "organic substances"
+   ]
+  },
+  {
+   "clause": "V.24",
+   "page": 15,
+   "quote": "Surgery to correct deviated septum and hypertrophied turbinate unless necessitated by an accidental body injury.",
+   "verified": true,
+   "category": "other",
+   "text": "Surgery to correct deviated septum and hypertrophied turbinate unless accidental",
+   "keywords": [
+    "deviated septum",
+    "hypertrophied turbinate"
+   ]
+  },
+  {
+   "clause": "V.26",
+   "page": 15,
+   "quote": "Expenses related to any treatment, including surgical management, to change characteristics of the body to those of the opposite sex",
+   "verified": false,
+   "category": "other",
+   "text": "Change-of-Gender treatments",
+   "keywords": [
+    "change-of-gender",
+    "opposite sex"
+   ]
+  }
+ ],
+ "deduction_order": [
+  "sublimit",
+  "room_rent",
+  "copay",
+  "sum_insured"
+ ],
+ "plans": [],
+ "waiting_plans": [],
+ "sublimit_plans": [],
+ "unmodeled_terms": [],
+ "policy_id": "7d20fa7f6610",
+ "pages": 36,
+ "computable": false,
+ "computable_note": "The wording lists room rent as covered but states no limit; the limit and any co-payment are set in the policy schedule, which is not part of this document.",
+ "pdf_path": "data/library/sbi_arogya_premier.pdf",
+ "source_providers": [
+  "gemini"
+ ]
+}

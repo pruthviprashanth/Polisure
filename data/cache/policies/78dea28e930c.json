@@ -1,0 +1,547 @@
+{
+ "name": "SBI General Super Health Insurance Policy",
+ "room_rent": {
+  "clause": "ANNEXURE I",
+  "page": 30,
+  "quote": "Room Rent | Actuals up to Sum Insured",
+  "verified": true,
+  "kind": "any",
+  "value": 0.0,
+  "icu_value": null,
+  "computable": true,
+  "note": null
+ },
+ "proportionate": {
+  "clause": "C.1.iii",
+  "page": 6,
+  "quote": "In case of admission to a room at rates exceeding the limits as mentioned under 1.a and 1.b of Policy Schedule, the reimbursement of all other Associated Medical Expenses incurred at the Hospital, shall be payable in the same proportion as the admissible rate per day bears to the actual rate per day of room rent charges.",
+  "verified": true,
+  "applies": true,
+  "applies_to": [
+   "linked"
+  ]
+ },
+ "copay": {
+  "clause": "D.3",
+  "page": 18,
+  "quote": "10% or 20% Co-Payment as specified in the Policy Schedule, shall be applied on each and every admissible claim after Deductible wherever applicable under this Policy",
+  "verified": true,
+  "percent": 0.0,
+  "applies_when": "always",
+  "condition": "Optional co-payment of 10% or 20% as specified in the Policy Schedule"
+ },
+ "waiting_initial": {
+  "clause": "E.I",
+  "page": 20,
+  "quote": "Expenses related to the treatment of any Illness within 30 days from the first Policy Commencement Date shall be excluded excepts claims arising due to an Accident",
+  "verified": true,
+  "days": 30
+ },
+ "waiting_ped": {
+  "clause": "E.III.a",
+  "page": 20,
+  "quote": "Expenses related to the treatment of a Pre-Existing Diseases (PED) and its direct complications shall be excluded until the expiry of 24 months of continuous coverage after the date of inception of the first Policy with Us.",
+  "verified": true,
+  "months": 24
+ },
+ "specific_waits": [
+  {
+   "clause": "E.IV",
+   "page": 20,
+   "quote": "A waiting period of 90 days shall apply for all claims of Hypertension, Diabetes, Cardiac Condition except if these diseases are pre-existing and disclosed at the time of Policy.",
+   "verified": true,
+   "category": "other",
+   "months": 3,
+   "label": "Hypertension, Diabetes, Cardiac Condition",
+   "keywords": [
+    "hypertension",
+    "diabetes",
+    "cardiac condition"
+   ]
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Expenses related to the treatment of listed Conditions; Surgeries/treatments shall be excluded until the expiry of 24/12 months (as specified in the Policy Schedule) of continuous coverage after the date of inception of the first Policy with Us.",
+   "verified": true,
+   "category": "cataract",
+   "months": 24,
+   "label": "Cataract",
+   "keywords": []
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Hernia",
+   "verified": true,
+   "category": "hernia",
+   "months": 24,
+   "label": "Hernia",
+   "keywords": []
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Joint replacement surgeries",
+   "verified": true,
+   "category": "joint_replacement",
+   "months": 24,
+   "label": "Joint replacement surgeries",
+   "keywords": []
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Adenoidectomy, tonsillectomy",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Adenoidectomy, tonsillectomy",
+   "keywords": [
+    "adenoidectomy",
+    "tonsillectomy"
+   ]
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Dilatation and curettage (D&C)",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Dilatation and curettage (D&C)",
+   "keywords": [
+    "dilatation and curettage",
+    "d&c"
+   ]
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Myomectomy for fibroids",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Myomectomy for fibroids",
+   "keywords": [
+    "myomectomy",
+    "fibroids"
+   ]
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Surgery on prostate",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Surgery on prostate",
+   "keywords": [
+    "prostate",
+    "bph"
+   ]
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Cholecystectomy",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Cholecystectomy",
+   "keywords": [
+    "cholecystectomy",
+    "gallbladder"
+   ]
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Surgery for prolapsed inter vertebral disc",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Surgery for prolapsed inter vertebral disc",
+   "keywords": [
+    "prolapsed inter vertebral disc",
+    "pivd",
+    "spine"
+   ]
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Surgery for varicose veins and varicose ulcers",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Surgery for varicose veins and varicose ulcers",
+   "keywords": [
+    "varicose veins",
+    "varicose ulcers"
+   ]
+  },
+  {
+   "clause": "E.II.a",
+   "page": 20,
+   "quote": "Fissurectomy, Haemorrhoidectomy, Fistulectomy, ENT surgeries",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Fissurectomy, Haemorrhoidectomy, Fistulectomy, ENT surgeries",
+   "keywords": [
+    "fissurectomy",
+    "haemorrhoidectomy",
+    "fistulectomy",
+    "piles",
+    "fissure",
+    "fistula",
+    "ent"
+   ]
+  },
+  {
+   "clause": "E.VI",
+   "page": 21,
+   "quote": "Maternity and Related Expenses cover: Single Adult – 48 months and All other Family Combinations – 24 months",
+   "verified": true,
+   "category": "maternity",
+   "months": 24,
+   "label": "Maternity and Related Expenses",
+   "keywords": []
+  },
+  {
+   "clause": "E.V",
+   "page": 20,
+   "quote": "Expenses related to the treatment taken abroad for any listed Major Illness under this benefit within 36 months from the first Policy Commencement Date shall be excluded.",
+   "verified": false,
+   "category": "other",
+   "months": 36,
+   "label": "Medical Treatment Abroad",
+   "keywords": [
+    "medical treatment abroad"
+   ]
+  }
+ ],
+ "sublimits": [
+  {
+   "clause": "ANNEXURE I",
+   "page": 30,
+   "quote": "Bariatric Surgery Cover | Up to INR 50,000 | Up to INR 50,000 | Up to INR 50,000 | Up to INR 2 Lacs | Up to INR 2 Lacs",
+   "verified": false,
+   "category": "other",
+   "label": "Bariatric Surgery Cover",
+   "pct_si": null,
+   "limit_inr": 50000.0,
+   "per": "claim",
+   "keywords": [
+    "bariatric surgery",
+    "bariatric"
+   ]
+  },
+  {
+   "clause": "ANNEXURE I",
+   "page": 30,
+   "quote": "Maternity Expenses | Up to INR 25,000 (N)/INR 50,000(C-sec) | Up to INR 50,000 (N)/INR 75,000(C-sec) | Up to 2 Lac",
+   "verified": false,
+   "category": "maternity",
+   "label": "Maternity Expenses",
+   "pct_si": null,
+   "limit_inr": 200000.0,
+   "per": "claim",
+   "keywords": [
+    "maternity",
+    "delivery",
+    "c-section"
+   ]
+  }
+ ],
+ "exclusions": [
+  {
+   "clause": "A.I",
+   "page": 21,
+   "quote": "Expenses related to any admission primarily for diagnostics and evaluation purposes. Any diagnostic expenses which are not related or not incidental to the current diagnosis and treatment.",
+   "verified": true,
+   "category": "other",
+   "text": "Investigation and Evaluation",
+   "keywords": [
+    "investigation",
+    "evaluation",
+    "diagnostics"
+   ]
+  },
+  {
+   "clause": "A.II",
+   "page": 21,
+   "quote": "Expenses related to any admission primarily for enforced bed rest and not for receiving treatment.",
+   "verified": true,
+   "category": "other",
+   "text": "Rest Cure, rehabilitation, and respite care",
+   "keywords": [
+    "rest cure",
+    "rehabilitation",
+    "respite care",
+    "custodial care"
+   ]
+  },
+  {
+   "clause": "A.III",
+   "page": 21,
+   "quote": "Expenses related to the surgical treatment of obesity that does not fulfil all the below conditions",
+   "verified": true,
+   "category": "other",
+   "text": "Obesity / Weight Control",
+   "keywords": [
+    "obesity",
+    "weight control"
+   ]
+  },
+  {
+   "clause": "A.IV",
+   "page": 21,
+   "quote": "Expenses related to any treatment, including surgical management, to change characteristics of the body to those of the opposite sex.",
+   "verified": true,
+   "category": "other",
+   "text": "Change of Gender Treatments",
+   "keywords": [
+    "change of gender",
+    "transgender",
+    "sex reassignment"
+   ]
+  },
+  {
+   "clause": "A.V",
+   "page": 21,
+   "quote": "Expenses for cosmetic or plastic surgery or any treatment to change appearance unless for reconstruction following an Accident, Burn(s) or Cancer or as part of medically necessary treatment",
+   "verified": true,
+   "category": "cosmetic",
+   "text": "Cosmetic or Plastic Surgery",
+   "keywords": [
+    "cosmetic",
+    "plastic surgery"
+   ]
+  },
+  {
+   "clause": "A.VI",
+   "page": 21,
+   "quote": "Expenses related to any treatment necessitated due to participation as a professional in hazardous or adventure sports",
+   "verified": true,
+   "category": "other",
+   "text": "Hazardous or Adventure Sports",
+   "keywords": [
+    "hazardous sports",
+    "adventure sports"
+   ]
+  },
+  {
+   "clause": "A.VII",
+   "page": 21,
+   "quote": "Expenses for treatment directly arising from or consequent upon any Insured Person committing or attempting to commit a breach of law with criminal intent.",
+   "verified": true,
+   "category": "other",
+   "text": "Breach of Law",
+   "keywords": [
+    "breach of law",
+    "criminal intent"
+   ]
+  },
+  {
+   "clause": "A.VIII",
+   "page": 21,
+   "quote": "Expenses incurred towards treatment in any Hospital or by any Medical Practitioner or any other provider specifically excluded by Us",
+   "verified": true,
+   "category": "other",
+   "text": "Excluded Providers",
+   "keywords": [
+    "excluded providers",
+    "blacklisted hospital"
+   ]
+  },
+  {
+   "clause": "A.IX",
+   "page": 21,
+   "quote": "Treatment for alcoholism, drug or substance abuse or any addictive condition and consequences thereof",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment for alcoholism, drug or substance abuse",
+   "keywords": [
+    "alcoholism",
+    "drug abuse",
+    "substance abuse",
+    "addiction"
+   ]
+  },
+  {
+   "clause": "A.X",
+   "page": 21,
+   "quote": "Treatments received in health hydros, nature cure clinics, spas or similar establishments",
+   "verified": true,
+   "category": "other",
+   "text": "Treatments received in health hydros, nature cure clinics, spas",
+   "keywords": [
+    "health hydros",
+    "nature cure",
+    "spas"
+   ]
+  },
+  {
+   "clause": "A.XI",
+   "page": 21,
+   "quote": "Dietary Supplements and substances that can be purchased without prescription",
+   "verified": true,
+   "category": "other",
+   "text": "Dietary Supplements and OTC substances",
+   "keywords": [
+    "dietary supplements",
+    "vitamins",
+    "minerals"
+   ]
+  },
+  {
+   "clause": "A.XII",
+   "page": 21,
+   "quote": "Expenses related to the treatment for correction of eye-sight due to refractive error less than 7.5 dioptres",
+   "verified": true,
+   "category": "other",
+   "text": "Refractive Error less than 7.5 dioptres",
+   "keywords": [
+    "refractive error",
+    "eye-sight"
+   ]
+  },
+  {
+   "clause": "A.XIII",
+   "page": 21,
+   "quote": "Expenses related to any unproven treatment, services and supplies for or in connection with any treatment.",
+   "verified": true,
+   "category": "other",
+   "text": "Unproven Treatments",
+   "keywords": [
+    "unproven treatment",
+    "experimental"
+   ]
+  },
+  {
+   "clause": "A.XIV",
+   "page": 21,
+   "quote": "Expenses related to sterility and infertility. This includes: i. Any type of contraception, sterilization ii. Assisted Reproduction services",
+   "verified": true,
+   "category": "infertility",
+   "text": "Sterility and Infertility",
+   "keywords": [
+    "sterility",
+    "infertility",
+    "contraception",
+    "sterilization",
+    "ivf"
+   ]
+  },
+  {
+   "clause": "A.XV",
+   "page": 21,
+   "quote": "Medical treatment expenses traceable to child-birth (including complicated deliveries and caesarean sections incurred during Hospitalization) except ectopic pregnancy; Expenses towards miscarriage",
+   "verified": true,
+   "category": "maternity",
+   "text": "Maternity (where Maternity cover is not applicable)",
+   "keywords": [
+    "maternity",
+    "child-birth",
+    "miscarriage"
+   ]
+  },
+  {
+   "clause": "B.I",
+   "page": 21,
+   "quote": "War (whether declared or not) and war like occurrence or invasion, acts of foreign enemies, hostilities, civil war, rebellion, revolutions, insurrections, mutiny",
+   "verified": true,
+   "category": "other",
+   "text": "War and warlike operations",
+   "keywords": [
+    "war",
+    "invasion",
+    "civil war"
+   ]
+  },
+  {
+   "clause": "B.II",
+   "page": 21,
+   "quote": "Nuclear, chemical or biological attack or weapons",
+   "verified": true,
+   "category": "other",
+   "text": "Nuclear, chemical or biological attack or weapons",
+   "keywords": [
+    "nuclear",
+    "chemical",
+    "biological attack"
+   ]
+  },
+  {
+   "clause": "B.IV",
+   "page": 22,
+   "quote": "Circumcision unless necessary for treatment of a disease, Illness or Injury not excluded hereunder, or, as may be necessitated due to an Accident",
+   "verified": true,
+   "category": "other",
+   "text": "Circumcision",
+   "keywords": [
+    "circumcision"
+   ]
+  },
+  {
+   "clause": "B.VIII",
+   "page": 22,
+   "quote": "An Insured Person committing or attempting to commit a breach of law with criminal intent, intentional self-Injury, or attempted suicide while sane or insane.",
+   "verified": true,
+   "category": "other",
+   "text": "Intentional self-injury or attempted suicide",
+   "keywords": [
+    "self-injury",
+    "suicide"
+   ]
+  }
+ ],
+ "deduction_order": [
+  "sublimit",
+  "room_rent",
+  "copay",
+  "sum_insured"
+ ],
+ "plans": [
+  {
+   "plan": "Prime",
+   "min_age": 18,
+   "max_age": 999
+  },
+  {
+   "plan": "Elite",
+   "min_age": 18,
+   "max_age": 999
+  },
+  {
+   "plan": "Premier",
+   "min_age": 18,
+   "max_age": 999
+  },
+  {
+   "plan": "Platinum",
+   "min_age": 18,
+   "max_age": 999
+  },
+  {
+   "plan": "Platinum Infinite",
+   "min_age": 18,
+   "max_age": 999
+  }
+ ],
+ "waiting_plans": [],
+ "sublimit_plans": [],
+ "unmodeled_terms": [
+  "Optional Aggregate Deductible under Section D.4 applies per policy year across all admissible claims before company liability commences."
+ ],
+ "policy_id": "78dea28e930c",
+ "pages": 31,
+ "computable": false,
+ "computable_note": "Contains terms the estimator cannot compute exactly: Optional Aggregate Deductible under Section D.4 applies per policy year across all admissible claims before company liability commences.",
+ "pdf_path": "data/library/super_health_insurance.pdf",
+ "source_providers": [
+  "gemini"
+ ]
+}

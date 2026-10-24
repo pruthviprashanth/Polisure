@@ -33,7 +33,7 @@ export default function WalletPage() {
 
   const byId = (id: string) => library?.find((p) => p.policy_id === id);
   const mine: PolicyListItem[] = wallet.map((id) => byId(id) ?? { policy_id: id, name: id, pages: 0 });
-  const samples = (library || []).filter((p) => !wallet.includes(p.policy_id));
+  const samples = (library || []).filter((p) => p.catalog !== false && !wallet.includes(p.policy_id));
 
   async function upload() {
     const f = fileRef.current?.files?.[0];
@@ -193,7 +193,7 @@ export default function WalletPage() {
         </div>
         {busy === "upload" && <Loading steps={UPLOAD_STEPS} />}
         <div>
-          <div className="label">…or add a sample policy we have already read</div>
+          <div className="label">…or add a policy from our catalog (or use Find a policy to choose by your needs)</div>
           {!library && !error ? (
             <p className="text-sm text-slate-500">Loading samples…</p>
           ) : samples.length === 0 ? (

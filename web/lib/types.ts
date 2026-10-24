@@ -38,6 +38,7 @@ export type PolicyListItem = {
   pages: number;
   computable?: boolean;
   computable_note?: string | null;
+  catalog?: boolean;
 };
 
 export type Severity = "high" | "medium" | "info";
@@ -139,6 +140,7 @@ export type ClaimResponse =
   | { status: "done"; verdict: Verdict; comparison?: Comparison | null; meta: Meta };
 
 export type RecommendRequest = {
+  claim_after_months?: number;
   profile: Profile;
   likely_claims: string[];
   assumed_bills?: Record<string, number>;
@@ -171,12 +173,18 @@ export type RankedPolicy = {
   reasons: Reason[];
   premium_note?: string | null;
   score_breakdown?: Record<string, number>;
+  eligible?: boolean;
+  ineligible_reason?: string | null;
+  terms_score?: number | null;
+  terms_breakdown?: Record<string, number>;
   total_simulated_payout?: number;
 };
 
 export type RecommendResponse = {
   ranked: RankedPolicy[];
   best_policy_id: string | null;
+  best_terms_policy_id?: string | null;
+  terms_rubric?: string[];
   why: string;
   assumptions: string[];
   disclaimer: string;

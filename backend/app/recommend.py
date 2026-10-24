@@ -8,7 +8,7 @@ from typing import Optional
 
 from . import engine, store
 from .present import inr
-from .schemas import Bill, Category, ClaimFacts, CoverageModel
+from .schemas import Bill, Category, ClaimFacts, CoverageModel, RoomRentRule
 
 DEFAULT_RENT = 3000.0
 # Illustrative defaults: (hospital days, linked charges, medicines & implants) in rupees.
@@ -18,8 +18,15 @@ DEFAULT_BILLS = {
     "dental": (1, 30000, 5000), "infertility": (1, 120000, 30000), "accident_trauma": (4, 150000, 50000),
     "other": (3, 80000, 20000),
 }
+TERMS_RUBRIC = [
+    "50 pts: share of your likely claims that are NOT blocked by a waiting period or exclusion at your claim timing",
+    "20 pts: shorter waiting periods (longest PED / specified-illness wait, capped at 48 months)",
+    "20 pts: lower co-payment (conditional co-payments count half)",
+    "10 pts: fewer listed exclusions (capped at 30)",
+    "Payouts are NOT simulated for these policies (their room-rent or other limits cannot be computed from the wording), so this is a terms-only comparison",
+]
 RUBRIC = [
-    "70 pts: simulated payout ÷ billed, summed over the claims you listed (each run as a NEW policy, so waiting periods apply)",
+    "70 pts: simulated payout ÷ billed, summed over the claims you listed (each run at your chosen claim timing after buying, so waiting periods apply)",
     "10 pts: shorter waiting periods (longest of PED / specified-illness waits that apply to your plan, capped at 48 months)",
     "10 pts: lower co-payment (conditional co-payments count half)",
     "5 pts: room-rent cap vs your preferred room (full marks if the room is within the cap)",
@@ -101,7 +108,7 @@ def _reasons(cov: CoverageModel, plan: Optional[str], results: list[dict], si: f
 
 
 def recommend(profile: dict, likely_claims: list[str], assumed_bills: Optional[dict], annual_premiums: Optional[dict],
-              policy_ids: Optional[list[str]]) -> dict:
+              policy_ids: Optional[list[str]], claim_after_months: int = 1) -> dict:
     si = float(profile.get("sum_insured") or 500000)
     age = profile.get("insured_age")
     rent = float(profile.get("preferred_room_rent_per_day") or DEFAULT_RENT)
@@ -109,11 +116,12 @@ def recommend(profile: dict, likely_claims: list[str], assumed_bills: Optional[d
     assumed_bills = {k: float(v) for k, v in (assumed_bills or {}).items() if v is not None}
     annual_premiums = annual_premiums or {}
     claims_list = [c for c in dict.fromkeys(likely_claims or [])] or ["appendectomy", "cataract", "hernia"]
-    pols = [store.load(p) for p in policy_ids] if policy_ids else store.list_all()
+    pols = [store.load(p) for p in policy_ids] if policy_ids else [m for m in store.list_all() if store.is_catalog(m)]
     pols = [p for p in pols if p is not None]
 
     assumptions = [
-        "Each claim is simulated as if the policy were newly bought (policy age 0 months), so waiting periods apply",
+        f"Each claim is simulated as if made {claim_after_months} month(s) after buying the policy, so waiting periods longer than that apply"
+        + (" (the initial 30-day wait has passed)" if claim_after_months >= 1 else " (inside the initial waiting period)"),
         f"Insured age {age if age is not None else 'unknown'}, sum insured {inr(si)}, preferred room {inr(rent)}/day"
         + ("" if profile.get("preferred_room_rent_per_day") else " (default assumed)"),
         "Premiums were not read from the policy documents" + ("; only the premiums you entered are used" if annual_premiums else ""),
@@ -127,23 +135,28 @@ def recommend(profile: dict, likely_claims: list[str], assumed_bills: Optional[d
     if defaults:
         assumptions.append("Bill sizes are illustrative for: " + ", ".join(defaults) + " (override with assumed_bills)")
 
-    ranked_ok, ranked_bad = [], []
+    ranked_ok, ranked_bad, ranked_terms = [], [], []
     for cov in pols:
         plan = engine.derive_plan(cov, age)
         item = {"policy_id": cov.policy_id, "name": cov.name, "computable": cov.computable, "score": None,
-                "scenario_results": [], "reasons": [], "premium_note": None}
-        if not cov.computable:
-            c = cov.room_rent
-            item["reasons"] = [{"text": "Payouts cannot be computed exactly for this policy: " + (cov.computable_note or ""),
-                                "clause": c.clause if c else "—", "page": (c.page or None) if c else None,
-                                "quote": c.quote if c else "", "verified": bool(c and c.verified)}]
+                "scenario_results": [], "reasons": [], "premium_note": None, "eligible": True, "ineligible_reason": None,
+                "terms_score": None}
+        if cov.plans and age is not None and plan is None:
+            lo, hi = min(b.min_age for b in cov.plans), max(b.max_age for b in cov.plans)
+            reason = f"Not available at age {age}: this policy's entry ages are {lo}-{hi}."
+            item.update(eligible=False, ineligible_reason=reason,
+                        reasons=[{"text": reason, "clause": "—", "page": None, "quote": "", "verified": False}])
             ranked_bad.append(item)
+            continue
+        if not cov.computable:
+            _terms_only(item, cov, plan, claims_list, assumed_bills, age, si, rent, ped, claim_after_months)
+            ranked_terms.append(item)
             continue
         tot_bill = tot_pay = 0.0
         for name in claims_list:
             cat, _ = _cat(name)
             bill, days, billed = _bill_for(cat, assumed_bills.get(name), rent)
-            f = ClaimFacts(category=cat, insured_age=age, sum_insured=si, policy_age_months=0,
+            f = ClaimFacts(category=cat, insured_age=age, sum_insured=si, policy_age_months=claim_after_months,
                            ped=bool(ped) if ped is not None else False, days=days, room_rent_per_day=rent,
                            is_accident=cat == Category.accident_trauma, bill=bill, confidence=1.0)
             res = engine.run(cov, f)
@@ -177,7 +190,11 @@ def recommend(profile: dict, likely_claims: list[str], assumed_bills: Optional[d
                f"across the claims you listed, given waiting periods for a new policy.")
     else:
         why = "No computable policy was available to compare."
-    return {"ranked": ranked_ok + ranked_bad, "best_policy_id": best["policy_id"] if best else None, "why": why,
+    ranked_terms.sort(key=lambda x: (-(x["terms_score"] or 0), x["name"]))
+    ranked_bad.sort(key=lambda x: x["name"])  # ineligible by age, last
+    best_terms = ranked_terms[0]["policy_id"] if ranked_terms else None
+    return {"ranked": ranked_ok + ranked_terms + ranked_bad, "best_terms_policy_id": best_terms,
+            "terms_rubric": TERMS_RUBRIC, "best_policy_id": best["policy_id"] if best else None, "why": why,
             "assumptions": assumptions, "score_rubric": RUBRIC, "disclaimer": DISCLAIMER,
             "meta": {"cached": True, "providers_used": ["cache"], "model_note": None}}
 
@@ -200,3 +217,51 @@ def typical_claims(cov: CoverageModel, age: Optional[int], si: Optional[float], 
         res = engine.run(cov, f)
         out.append({"category": name, "billed": int(round(billed)), "payout": res.payout or 0, "verdict": res.verdict})
     return out
+
+
+def _terms_only(item: dict, cov: CoverageModel, plan: Optional[str], claims_list: list[str], assumed_bills: dict,
+                age: Optional[int], si: float, rent: float, ped: Optional[bool], months: int = 1) -> None:
+    """Compare a policy whose payouts cannot be computed on the rules we can read: waiting periods, exclusions, co-pay."""
+    # Run only the gates (waiting periods / exclusions): neutralise the parts of the structure that block a payout.
+    probe = cov.model_copy(deep=True)
+    probe.computable, probe.computable_note, probe.unmodeled_terms = True, None, []
+    probe.room_rent = RoomRentRule(kind="any", clause=(cov.room_rent.clause if cov.room_rent else ""), page=(cov.room_rent.page if cov.room_rent else 0),
+                                   quote=(cov.room_rent.quote if cov.room_rent else ""), verified=True)
+    blocked = 0
+    for name in claims_list:
+        cat, _ = _cat(name)
+        bill, days, billed = _bill_for(cat, assumed_bills.get(name), rent)
+        f = ClaimFacts(category=cat, insured_age=age, sum_insured=si, policy_age_months=months, ped=bool(ped) if ped is not None else False,
+                       days=days, room_rent_per_day=rent, is_accident=cat == Category.accident_trauma, bill=bill, confidence=1.0)
+        res = engine.run(probe, f)
+        row = {"category": name, "billed": int(round(billed)), "payout": None}
+        if res.verdict == "NOT_COVERED":
+            blocked += 1
+            row.update(verdict="NOT_COVERED", note=(res.trace[0].label if res.trace else "excluded"))
+        else:
+            row.update(verdict="NEEDS_REVIEW", note="Not blocked by waiting periods or exclusions; payout not computed for this policy")
+        item["scenario_results"].append(row)
+    n = max(len(claims_list), 1)
+    wait = 20 * (1 - min(_wait_months(cov, plan), 48) / 48)
+    cp = cov.copay
+    cpay = 20.0
+    if cp and cp.percent > 0:
+        pct = min(cp.percent, 30) / (2 if cp.applies_when != "always" else 1)
+        cpay = 20 * (1 - pct / 30)
+    excl = 10 * (1 - min(len(cov.exclusions), 30) / 30)
+    claims_pts = 50 * (1 - blocked / n)
+    item["terms_score"] = round(claims_pts + wait + cpay + excl)
+    item["terms_breakdown"] = {"claims_not_blocked": round(claims_pts, 1), "waiting": round(wait, 1), "copay": round(cpay, 1), "exclusions": round(excl, 1)}
+    c = cov.room_rent
+    item["reasons"] = [{"text": "Payouts cannot be computed exactly for this policy: " + (cov.computable_note or ""),
+                        "clause": c.clause if c else "—", "page": (c.page or None) if c else None,
+                        "quote": c.quote if c else "", "verified": bool(c and c.verified)}]
+    if cp and cp.percent > 0:
+        item["reasons"].append({"text": f"{cp.percent:g}% co-payment" + (f" ({cp.condition})" if cp.condition else ""), "clause": cp.clause or "—",
+                                "page": cp.page or None, "quote": cp.quote, "verified": bool(cp.verified)})
+    for r_ in item["scenario_results"]:
+        if r_["verdict"] == "NOT_COVERED":
+            w = next((w for w in cov.specific_waits if w.category.value == r_["category"]), None) or cov.waiting_initial or cov.waiting_ped
+            item["reasons"].append({"text": f"{r_['category'].replace('_', ' ').title()}: {r_['note']}", "clause": w.clause if w else "—",
+                                    "page": (w.page or None) if w else None, "quote": w.quote if w else "", "verified": bool(w and w.verified)})
+    item["reasons"] = item["reasons"][:5]

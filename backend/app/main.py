@@ -81,7 +81,7 @@ def upload_policy(file: UploadFile = File(...)):
 @app.get("/policies")
 def list_policies():
     return [{"policy_id": m.policy_id, "name": m.name, "pages": m.pages, "computable": m.computable,
-             "computable_note": m.computable_note} for m in store.list_all()]
+             "computable_note": m.computable_note, "catalog": store.is_catalog(m)} for m in store.list_all()]
 
 
 @app.get("/policies/{policy_id}")
@@ -158,12 +158,13 @@ class RecommendRequest(BaseModel):
     assumed_bills: Optional[dict] = None
     annual_premiums: Optional[dict] = None
     policy_ids: Optional[list[str]] = None
+    claim_after_months: int = 1
 
 
 @app.post("/policies/recommend")
 def recommend_policies(req: RecommendRequest):
     from . import recommend
-    return recommend.recommend(req.profile, req.likely_claims, req.assumed_bills, req.annual_premiums, req.policy_ids)
+    return recommend.recommend(req.profile, req.likely_claims, req.assumed_bills, req.annual_premiums, req.policy_ids, max(req.claim_after_months, 0))
 
 
 @app.get("/eval/latest")

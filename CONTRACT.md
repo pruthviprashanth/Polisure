@@ -116,7 +116,7 @@ Errors: `404 {"error":"unknown_policy"}`, `503 {"error":"llm_unavailable","detai
 Priority P1 — build only after the core single-policy flow works. All of it is computed by the code engine; the LLM only phrases explanations.
 
 ### Policy library
-`GET /policies` (above) lists every ingested policy. The backend ingests every PDF in `data/library/` (plus `data/policy.pdf`, `data/policy_b.pdf`) through a paced, cached script. Each entry also carries `"computable": true|false` (false = the engine cannot compute payouts for this policy's structure, e.g. its room-rent rule needs hospital tariffs) and `"computable_note": str|null`.
+`GET /policies` (above) lists every ingested policy. The backend ingests every PDF in `data/library/` (plus `data/policy.pdf`, `data/policy_b.pdf`) through a paced, cached script. Each entry also carries `"catalog": true|false` (true = a bundled policy from `data/library/` or the samples, i.e. a candidate for "Find a policy"; false = a policy the user uploaded) and `"computable": true|false` (false = the engine cannot compute payouts for this policy's structure, e.g. its room-rent rule needs hospital tariffs) and `"computable_note": str|null`.
 The UI keeps the user's own policies ("my wallet") as a list of `policy_id` in browser localStorage; the backend is stateless about users.
 
 ### POST /claims/check — multi-policy extension
@@ -149,7 +149,7 @@ The body may carry `"policy_ids": ["id1","id2"]` instead of `"policy_id"` (one o
   "policy_ids": ["id1", "id2", "id3"]
 }
 ```
-Optional: `assumed_bills` (INR per category; otherwise the backend uses an illustrative default table, which the response states), `annual_premiums` (policy wordings contain no premiums — only user-entered ones are used), `policy_ids` (default: whole library). `policy_age_months` of a NEW purchase is 0, so waiting periods apply — the backend must model that.
+Optional: `assumed_bills` (INR per category; otherwise the backend uses an illustrative default table, which the response states), `annual_premiums` (policy wordings contain no premiums — only user-entered ones are used), `policy_ids` (default: the catalog, i.e. every policy with `catalog: true`). `claim_after_months` (optional, default 1) is how long after buying the user expects to claim: claims are simulated at that policy age, so waiting periods longer than it apply (1 = just after the shared 30-day initial wait; 24 and 48 show the longer specified-illness and pre-existing waits). The profile's `policy_age_months` is ignored by this endpoint.
 Response 200:
 ```json
 {
@@ -167,7 +167,7 @@ Response 200:
   "meta": { "cached": true, "providers_used": ["cache"], "model_note": null }
 }
 ```
-`score` is `null` for non-computable policies, which are listed last with `reasons` explaining why. The score is a transparent rubric computed in code (simulated payouts, then waiting-period length, co-pay, caps, exclusions count); the response must list what it used.
+Policies whose payouts cannot be computed are compared on the rules that can be read: they get `terms_score` (0-100, see `terms_rubric` in the response), `scenario_results` rows with `payout: null`, and are listed after the scored ones, ordered by `terms_score`; `best_terms_policy_id` is the best of them. Each ranked item also has `eligible` (bool) and `ineligible_reason` (str|null): a policy whose entry ages exclude the profile's age is not scored (`eligible:false`, `score:null`) and is listed after the ranked ones. `score` is `null` for non-computable policies, which are listed last with `reasons` explaining why. The score is a transparent rubric computed in code (simulated payouts, then waiting-period length, co-pay, caps, exclusions count); the response must list what it used.
 
 ## POST /policies/{policy_id}/ask  (JSON body) — grounded policy Q&A (chat)
 ```json

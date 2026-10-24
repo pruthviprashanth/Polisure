@@ -1,0 +1,801 @@
+{
+ "name": "New India Mediclaim Policy",
+ "room_rent": {
+  "clause": "40",
+  "page": 11,
+  "quote": "Room rent, Boarding, DMO / RMO / CMO / RMP Charges, Nursing (Including Injection / Drugs and Intra venous fluid administration expenses), not exceeding 1% of the Sum Insured per day maximum Up to Rs. as mentioned in the below table",
+  "verified": true,
+  "kind": "percent_si",
+  "value": 1.0,
+  "icu_value": 2.0,
+  "computable": true,
+  "note": "Room rent capped at 1% SI/day (max Rs 15,000 for Basic Plan; Rs 30,000 for Uplift 25L-1Cr; Actuals for Uplift 2Cr-5Cr). ICU capped at 2% SI/day (max Rs 25,000 for Basic; Rs 50,000 for Uplift 25L-1Cr; Actuals for Uplift 2Cr-5Cr)."
+ },
+ "proportionate": {
+  "clause": "40",
+  "page": 12,
+  "quote": "Proportionate Deduction is applicable on the Associate Medical Expenses, if the Insured Person opts for a higher Room than his eligible category. It shall be effected in the same proportion as the eligible rate per day bears to the actual rate per day of Room Rent.",
+  "verified": true,
+  "applies": true,
+  "applies_to": [
+   "linked"
+  ]
+ },
+ "copay": {
+  "clause": "33",
+  "page": 9,
+  "quote": "The condition of 20% Co-payment will be applicable, if the insured Person from zone 2, gets treated in zone 1.",
+  "verified": true,
+  "percent": 20.0,
+  "applies_when": "other",
+  "condition": "Applicable if the insured person residing in Zone 2 gets treated in Zone 1. Not applicable for accident hospitalization or illnesses/treatments having sub-limits."
+ },
+ "waiting_initial": {
+  "clause": "Excl03",
+  "page": 24,
+  "quote": "Expenses related to the treatment of any illness within 30 days from the first policy commencement date shall be excluded except claims arising due to an accident, provided the same are covered.",
+  "verified": true,
+  "days": 30
+ },
+ "waiting_ped": {
+  "clause": "Excl01",
+  "page": 22,
+  "quote": "Expenses related to the treatment of a pre-existing Disease (PED) and its direct complications shall be excluded until the expiry of 36 months of continuous coverage after the date of inception of the first policy",
+  "verified": true,
+  "months": 36
+ },
+ "specific_waits": [
+  {
+   "clause": "Excl02.(i)",
+   "page": 23,
+   "quote": "90 Days Waiting Period\n1. Diabetes Mellitus\n2. Hypertension\n3. Cardiac Conditions",
+   "verified": true,
+   "category": "other",
+   "months": 3,
+   "label": "Diabetes Mellitus, Hypertension, Cardiac Conditions",
+   "keywords": [
+    "diabetes mellitus",
+    "hypertension",
+    "cardiac conditions"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).1",
+   "page": 23,
+   "quote": "All internal and external benign tumours, cysts, polyps of any kind, including benign breast lumps",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Benign tumours, cysts, polyps, benign breast lumps",
+   "keywords": [
+    "benign tumours",
+    "cysts",
+    "polyps",
+    "breast lumps"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).2",
+   "page": 23,
+   "quote": "Benign ear, nose, throat disorders",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Benign ENT disorders",
+   "keywords": [
+    "ear",
+    "nose",
+    "throat",
+    "ent"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).3",
+   "page": 23,
+   "quote": "Benign prostate hypertrophy",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Benign prostate hypertrophy",
+   "keywords": [
+    "benign prostate hypertrophy",
+    "bph"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).4",
+   "page": 23,
+   "quote": "Cataract and age-related eye ailments",
+   "verified": true,
+   "category": "cataract",
+   "months": 24,
+   "label": "Cataract and age-related eye ailments",
+   "keywords": []
+  },
+  {
+   "clause": "Excl02.(ii).5",
+   "page": 23,
+   "quote": "Gastric/ Duodenal Ulcer",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Gastric / Duodenal Ulcer",
+   "keywords": [
+    "gastric ulcer",
+    "duodenal ulcer"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).6",
+   "page": 23,
+   "quote": "Gout and Rheumatism",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Gout and Rheumatism",
+   "keywords": [
+    "gout",
+    "rheumatism"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).7",
+   "page": 23,
+   "quote": "Hernia of all types",
+   "verified": true,
+   "category": "hernia",
+   "months": 24,
+   "label": "Hernia of all types",
+   "keywords": []
+  },
+  {
+   "clause": "Excl02.(ii).8",
+   "page": 23,
+   "quote": "Hydrocele",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Hydrocele",
+   "keywords": [
+    "hydrocele"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).9",
+   "page": 23,
+   "quote": "Non-Infective Arthritis",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Non-Infective Arthritis",
+   "keywords": [
+    "non-infective arthritis",
+    "arthritis"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).10",
+   "page": 23,
+   "quote": "Piles, Fissures and Fistula in anus",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Piles, Fissures and Fistula in anus",
+   "keywords": [
+    "piles",
+    "fissures",
+    "fistula"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).11",
+   "page": 23,
+   "quote": "Pilonidal sinus, Sinusitis and related disorders",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Pilonidal sinus, Sinusitis and related disorders",
+   "keywords": [
+    "pilonidal sinus",
+    "sinusitis"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).12",
+   "page": 23,
+   "quote": "Prolapse inter Vertebral Disc and Spinal Diseases unless arising from accident",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Prolapse inter Vertebral Disc and Spinal Diseases",
+   "keywords": [
+    "prolapse inter vertebral disc",
+    "spinal diseases",
+    "pivd"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).13",
+   "page": 23,
+   "quote": "Skin Disorders",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Skin Disorders",
+   "keywords": [
+    "skin disorders"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).14",
+   "page": 24,
+   "quote": "Stone in Gall Bladder and Bile duct, excluding malignancy",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Stone in Gall Bladder and Bile duct",
+   "keywords": [
+    "gall bladder stone",
+    "bile duct stone"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).15",
+   "page": 24,
+   "quote": "Stones in Urinary system",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Stones in Urinary system",
+   "keywords": [
+    "urinary stones",
+    "kidney stones"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).16",
+   "page": 24,
+   "quote": "Treatment for Menorrhagia/Fibromyoma, Myoma and Prolapsed uterus",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Menorrhagia/Fibromyoma, Myoma and Prolapsed uterus",
+   "keywords": [
+    "menorrhagia",
+    "fibromyoma",
+    "myoma",
+    "prolapsed uterus"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).17",
+   "page": 24,
+   "quote": "Varicose Veins and Varicose Ulcers",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Varicose Veins and Varicose Ulcers",
+   "keywords": [
+    "varicose veins",
+    "varicose ulcers"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).18",
+   "page": 24,
+   "quote": "Renal Failure",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Renal Failure",
+   "keywords": [
+    "renal failure"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).19",
+   "page": 24,
+   "quote": "Puberty and Menopause related Disorders",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Puberty and Menopause related Disorders",
+   "keywords": [
+    "puberty",
+    "menopause"
+   ]
+  },
+  {
+   "clause": "Excl02.(ii).20",
+   "page": 24,
+   "quote": "Internal Congenital Diseases",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Internal Congenital Diseases",
+   "keywords": [
+    "internal congenital diseases",
+    "congenital internal"
+   ]
+  },
+  {
+   "clause": "Excl02.(iii).1",
+   "page": 24,
+   "quote": "Congenital External Disease",
+   "verified": true,
+   "category": "other",
+   "months": 36,
+   "label": "Congenital External Disease",
+   "keywords": [
+    "congenital external disease",
+    "external congenital"
+   ]
+  },
+  {
+   "clause": "Excl02.(iii).2",
+   "page": 24,
+   "quote": "Joint Replacement due to Degenerative Condition",
+   "verified": true,
+   "category": "joint_replacement",
+   "months": 36,
+   "label": "Joint Replacement due to Degenerative Condition",
+   "keywords": []
+  },
+  {
+   "clause": "Excl02.(iii).3",
+   "page": 24,
+   "quote": "Age-related Osteoarthritis & Osteoporosis",
+   "verified": true,
+   "category": "other",
+   "months": 36,
+   "label": "Age-related Osteoarthritis & Osteoporosis",
+   "keywords": [
+    "osteoarthritis",
+    "osteoporosis"
+   ]
+  },
+  {
+   "clause": "Excl02.(iii).4",
+   "page": 24,
+   "quote": "Treatment of Mental Illness",
+   "verified": true,
+   "category": "other",
+   "months": 36,
+   "label": "Treatment of Mental Illness",
+   "keywords": [
+    "mental illness"
+   ]
+  },
+  {
+   "clause": "Excl02.(iii).5",
+   "page": 24,
+   "quote": "Age Related Macular Degeneration (ARMD)",
+   "verified": true,
+   "category": "other",
+   "months": 36,
+   "label": "Age Related Macular Degeneration (ARMD)",
+   "keywords": [
+    "age related macular degeneration",
+    "armd"
+   ]
+  },
+  {
+   "clause": "Excl02.(iii).6",
+   "page": 24,
+   "quote": "Genetic diseases or disorders",
+   "verified": true,
+   "category": "other",
+   "months": 36,
+   "label": "Genetic diseases or disorders",
+   "keywords": [
+    "genetic diseases",
+    "genetic disorders"
+   ]
+  }
+ ],
+ "sublimits": [
+  {
+   "clause": "40",
+   "page": 12,
+   "quote": "Our liability for payment of any claim relating to Cataract, for each eye, shall not exceed 20% of the Sum Insured subject to a maximum of Rs. As mentioned in the below table.",
+   "verified": true,
+   "category": "cataract",
+   "label": "Cataract Limit per eye",
+   "pct_si": 20.0,
+   "limit_inr": 50000.0,
+   "per": "eye",
+   "keywords": []
+  },
+  {
+   "clause": "40.a",
+   "page": 16,
+   "quote": "Artificial life maintenance, including life support machine use, where such treatment will not result in recovery or restoration of normal state of Health under any circumstances. We cover the expenses up to 10% of the Sum Insured",
+   "verified": true,
+   "category": "other",
+   "label": "Artificial Life Maintenance",
+   "pct_si": 10.0,
+   "limit_inr": null,
+   "per": "year",
+   "keywords": [
+    "artificial life maintenance",
+    "life support",
+    "vegetative state"
+   ]
+  },
+  {
+   "clause": "40.b",
+   "page": 16,
+   "quote": "Treatment for any symptoms, Illness, complications arising due to physiological conditions associated with Puberty, Menopause such as menopausal bleeding or flushing is covered only as Inpatient procedure after 24 months of continuous coverage. This cover will have a sub-limit of up to 25% of Sum Insured per policy period.",
+   "verified": true,
+   "category": "other",
+   "label": "Puberty and Menopause related Disorders",
+   "pct_si": 25.0,
+   "limit_inr": null,
+   "per": "year",
+   "keywords": [
+    "puberty",
+    "menopause"
+   ]
+  },
+  {
+   "clause": "40.c",
+   "page": 17,
+   "quote": "Age Related Macular Degeneration (ARMD) is covered after 36 months of continuous coverage only for Intravitreal Injections and anti - VEGF medication. This cover will have a sub-limit of 10% of Sum Insured per policy period",
+   "verified": true,
+   "category": "other",
+   "label": "Age Related Macular Degeneration (ARMD)",
+   "pct_si": 10.0,
+   "limit_inr": 75000.0,
+   "per": "year",
+   "keywords": [
+    "age related macular degeneration",
+    "armd"
+   ]
+  },
+  {
+   "clause": "40.d",
+   "page": 17,
+   "quote": "Genetic diseases or disorders are covered with a sub-limit of 25% of Sum Insured per policy period with 36 months waiting periods maximum up to the amount as mentioned in the below table, whichever is less.",
+   "verified": true,
+   "category": "other",
+   "label": "Genetic diseases or disorders",
+   "pct_si": 25.0,
+   "limit_inr": 375000.0,
+   "per": "year",
+   "keywords": [
+    "genetic diseases",
+    "genetic disorders"
+   ]
+  },
+  {
+   "clause": "40.e",
+   "page": 17,
+   "quote": "The following Mental Illnesses are covered after completion of 36 months of Continuous Coverage with a sub-limit up to 25% of Sum Insured per policy period up to Rs. As mentioned in the below table, whichever is less",
+   "verified": true,
+   "category": "other",
+   "label": "Mental Illness",
+   "pct_si": 25.0,
+   "limit_inr": 375000.0,
+   "per": "year",
+   "keywords": [
+    "mental illness",
+    "schizophrenia",
+    "bipolar"
+   ]
+  },
+  {
+   "clause": "40",
+   "page": 19,
+   "quote": "Congenital External Disease or Defects or anomalies shall be covered after 36 months of Continuous Coverage, but such cover for Congenital External Disease or Defects or anomalies shall be limited to 10% of the average Sum Insured in the preceding three years up to maximum of Rs. (As mentioned in the below table), whichever is less",
+   "verified": true,
+   "category": "other",
+   "label": "Congenital External Disease",
+   "pct_si": 10.0,
+   "limit_inr": 150000.0,
+   "per": "year",
+   "keywords": [
+    "congenital external disease",
+    "external anomaly"
+   ]
+  }
+ ],
+ "exclusions": [
+  {
+   "clause": "Excl04",
+   "page": 24,
+   "quote": "Expenses related to any admission primarily for diagnostics and evaluation purposes. Any diagnostic expenses which are not related or not incidental to the current diagnosis and treatment",
+   "verified": true,
+   "category": "other",
+   "text": "Expenses related to admission primarily for diagnostics and evaluation purposes.",
+   "keywords": [
+    "diagnostics",
+    "evaluation"
+   ]
+  },
+  {
+   "clause": "Excl05",
+   "page": 24,
+   "quote": "Expenses related to any admission primarily for enforced bed rest and not for receiving treatment. This also includes: Custodial care either at home or in a nursing facility",
+   "verified": true,
+   "category": "other",
+   "text": "Rest cure, rehabilitation, respite care, and custodial care.",
+   "keywords": [
+    "rest cure",
+    "rehabilitation",
+    "respite care",
+    "custodial care"
+   ]
+  },
+  {
+   "clause": "Excl06",
+   "page": 24,
+   "quote": "Expenses related to the surgical treatment of obesity that does not fulfil all the below conditions",
+   "verified": true,
+   "category": "other",
+   "text": "Surgical treatment of obesity unless specific clinical criteria/BMI conditions are met.",
+   "keywords": [
+    "obesity",
+    "weight control",
+    "bariatric"
+   ]
+  },
+  {
+   "clause": "Excl07",
+   "page": 25,
+   "quote": "Expenses related to any treatment, including surgical management, to change characteristics of the body to those of the opposite sex.",
+   "verified": true,
+   "category": "other",
+   "text": "Change-of-gender treatments.",
+   "keywords": [
+    "change of gender",
+    "sex reassignment"
+   ]
+  },
+  {
+   "clause": "Excl08",
+   "page": 25,
+   "quote": "Expenses for cosmetic or plastic surgery or any treatment to change appearance unless for reconstruction following an Accident, burn(s) or Cancer or as part of medically necessary treatment",
+   "verified": true,
+   "category": "cosmetic",
+   "text": "Cosmetic or plastic surgery unless for reconstruction following accident, burn, or cancer.",
+   "keywords": []
+  },
+  {
+   "clause": "Excl09",
+   "page": 25,
+   "quote": "Expenses related to any treatment necessitated due to participation as a professional in hazardous or adventure sports",
+   "verified": true,
+   "category": "other",
+   "text": "Participation in hazardous or adventure sports as a professional.",
+   "keywords": [
+    "hazardous sports",
+    "adventure sports"
+   ]
+  },
+  {
+   "clause": "Excl10",
+   "page": 25,
+   "quote": "Expenses for treatment directly arising from or consequent upon any Insured Person committing or attempting to commit a breach of law with criminal intent.",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment arising from breach of law with criminal intent.",
+   "keywords": [
+    "breach of law",
+    "criminal intent"
+   ]
+  },
+  {
+   "clause": "Excl11",
+   "page": 25,
+   "quote": "Expenses incurred towards treatment in any hospital or by any Medical Practitioner or any other provider specifically excluded by the Insurer",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment in excluded hospitals or by excluded providers.",
+   "keywords": [
+    "excluded providers",
+    "excluded hospitals"
+   ]
+  },
+  {
+   "clause": "Excl12",
+   "page": 25,
+   "quote": "Treatment for, Alcoholism, drug or substance abuse or any addictive condition and consequences thereof.",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment for alcoholism, drug/substance abuse, or addictive conditions.",
+   "keywords": [
+    "alcoholism",
+    "drug abuse",
+    "substance abuse",
+    "addiction"
+   ]
+  },
+  {
+   "clause": "Excl13",
+   "page": 25,
+   "quote": "Treatments received in health hydros, nature cure clinics, spas or similar establishments or private beds registered as a nursing home attached to such establishments",
+   "verified": true,
+   "category": "other",
+   "text": "Treatments in health hydros, nature cure clinics, spas, or similar establishments.",
+   "keywords": [
+    "health hydros",
+    "nature cure",
+    "spas"
+   ]
+  },
+  {
+   "clause": "Excl14",
+   "page": 25,
+   "quote": "Dietary supplements and substances that can be purchased without prescription, including but not limited to Vitamins, minerals and organic substances unless prescribed by a medical practitioner",
+   "verified": true,
+   "category": "other",
+   "text": "Non-prescription dietary supplements, vitamins, and minerals unless prescribed during hospitalization.",
+   "keywords": [
+    "dietary supplements",
+    "vitamins",
+    "minerals"
+   ]
+  },
+  {
+   "clause": "Excl15",
+   "page": 25,
+   "quote": "Expenses related to the treatment for correction of eye sight due to refractive error less than 7.5 dioptres.",
+   "verified": true,
+   "category": "other",
+   "text": "Correction of eyesight due to refractive error of less than 7.5 dioptres.",
+   "keywords": [
+    "refractive error",
+    "eye sight correction"
+   ]
+  },
+  {
+   "clause": "Excl16",
+   "page": 25,
+   "quote": "Expenses related to any unproven treatment, services and supplies for or in connection with any treatment.",
+   "verified": true,
+   "category": "other",
+   "text": "Unproven treatments, services, and supplies.",
+   "keywords": [
+    "unproven treatment"
+   ]
+  },
+  {
+   "clause": "Excl17",
+   "page": 26,
+   "quote": "Expenses related to sterility and infertility. This includes: a. Any type of contraception, sterilization b. Assisted Reproduction services including artificial insemination and advanced reproductive technologies",
+   "verified": true,
+   "category": "infertility",
+   "text": "Expenses related to sterility, infertility, contraception, sterilization, and assisted reproduction.",
+   "keywords": []
+  },
+  {
+   "clause": "Excl18",
+   "page": 26,
+   "quote": "Medical treatment expenses traceable to childbirth (including complicated deliveries and caesarean sections incurred during hospitalization) except ectopic pregnancy; Expenses towards miscarriage",
+   "verified": true,
+   "category": "maternity",
+   "text": "Maternity expenses traceable to childbirth or miscarriage (except ectopic pregnancy).",
+   "keywords": []
+  },
+  {
+   "clause": "48",
+   "page": 26,
+   "quote": "Acupressure, acupuncture, magnetic therapies.",
+   "verified": true,
+   "category": "other",
+   "text": "Acupressure, acupuncture, and magnetic therapies.",
+   "keywords": [
+    "acupressure",
+    "acupuncture",
+    "magnetic therapies"
+   ]
+  },
+  {
+   "clause": "48",
+   "page": 26,
+   "quote": "Any expenses incurred on Domiciliary Hospitalization.",
+   "verified": true,
+   "category": "other",
+   "text": "Domiciliary Hospitalization.",
+   "keywords": [
+    "domiciliary hospitalization"
+   ]
+  },
+  {
+   "clause": "48",
+   "page": 26,
+   "quote": "Bodily Injury or Illness due to wilful or deliberate exposure to danger (except in an attempt to save human life), intentional self-inflicted Injury and attempted suicide.",
+   "verified": true,
+   "category": "other",
+   "text": "Intentional self-inflicted injury, attempted suicide, or deliberate exposure to danger.",
+   "keywords": [
+    "self-inflicted injury",
+    "suicide",
+    "deliberate exposure"
+   ]
+  },
+  {
+   "clause": "48",
+   "page": 26,
+   "quote": "Circumcision unless Medically Necessary or as may be necessitated due to an Accident.",
+   "verified": true,
+   "category": "other",
+   "text": "Circumcision unless medically necessary or due to an accident.",
+   "keywords": [
+    "circumcision"
+   ]
+  },
+  {
+   "clause": "48",
+   "page": 27,
+   "quote": "Treatment and/or services taken outside the geographical limits of India",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment or services taken outside India.",
+   "keywords": [
+    "outside india",
+    "foreign treatment"
+   ]
+  },
+  {
+   "clause": "48",
+   "page": 27,
+   "quote": "War (whether declared or not) and war like occurrence or invasion, acts of foreign enemies, hostilities, civil war, rebellion, revolutions, insurrections, mutiny, military or usurped power",
+   "verified": true,
+   "category": "other",
+   "text": "War, invasion, acts of foreign enemies, civil war, or rebellion.",
+   "keywords": [
+    "war",
+    "invasion",
+    "rebellion"
+   ]
+  },
+  {
+   "clause": "48",
+   "page": 26,
+   "quote": "Nuclear, chemical or biological attack or weapons, contributed to, caused by, resulting from or from any other cause or event contributing concurrently or in any other sequence to the loss, claim or expense.",
+   "verified": true,
+   "category": "other",
+   "text": "Nuclear, chemical, or biological attack or weapons.",
+   "keywords": [
+    "nuclear",
+    "chemical",
+    "biological attack"
+   ]
+  }
+ ],
+ "deduction_order": [
+  "sublimit",
+  "room_rent",
+  "copay",
+  "sum_insured"
+ ],
+ "plans": [
+  {
+   "plan": "Basic Plan",
+   "min_age": 18,
+   "max_age": 65
+  },
+  {
+   "plan": "Uplift Plan",
+   "min_age": 18,
+   "max_age": 65
+  }
+ ],
+ "waiting_plans": [],
+ "sublimit_plans": [],
+ "unmodeled_terms": [
+  "Room rent caps and ICU caps vary across plan bands (Basic Plan vs Uplift Plan) and sum insured levels.",
+  "Proportionate deduction on associated medical expenses applies if a room higher than eligible category is selected.",
+  "Co-payment of 20% applies if an insured residing in Zone 2 opts for treatment in Zone 1.",
+  "Specific sub-limits apply for Modern Treatments/Procedures ranging from 10% to 50% SI with rupee caps depending on sum insured band."
+ ],
+ "policy_id": "998c6f7eccc8",
+ "pages": 27,
+ "computable": false,
+ "computable_note": "Contains terms the estimator cannot compute exactly: Room rent caps and ICU caps vary across plan bands (Basic Plan vs Uplift Plan) and sum insured levels.; Proportionate deduction on associated medical expenses applies if a room higher than eligible category is selected.; Co-payment of 20% applies if an insured residing in Zone 2 opts for treatment in Zone 1.",
+ "pdf_path": "data/library/new_india_mediclaim.pdf",
+ "source_providers": [
+  "gemini"
+ ]
+}

@@ -1,0 +1,613 @@
+{
+ "name": "SBI General Arogya Sanjeevani Policy",
+ "room_rent": {
+  "clause": "4.1.i",
+  "page": 4,
+  "quote": "Room Rent, Boarding, Nursing Expenses as provided by the Hospital / Nursing Home up to 2% of the sum insured subject to maximum `5,000/ par day.",
+  "verified": true,
+  "kind": "percent_si",
+  "value": 2.0,
+  "icu_value": 5.0,
+  "computable": true,
+  "note": "ICU/ICCU expenses up to 5% of sum insured subject to maximum of Rs 10,000/- per day."
+ },
+ "proportionate": {
+  "clause": "4.1.1.Note.2",
+  "page": 4,
+  "quote": "In case of admission to a room/ICU/ICCU at rates exceeding the aforesaid limits, the reimbursement/payment of all other expenses incurred at the Hospital, with the exception of cost of medicines, shall be eģected in the same proportion as the admissible rate per day bears to the actual rate per day of Room Rent/ ICU/ICCU charges.",
+  "verified": true,
+  "applies": true,
+  "applies_to": [
+   "linked"
+  ]
+ },
+ "copay": {
+  "clause": "9.3",
+  "page": 8,
+  "quote": "Each and every claim under the Policy shall be subject to a Co-payment of 5% applicable to claim amount admissible and payable as per the terms and conditions of the Policy.",
+  "verified": true,
+  "percent": 5.0,
+  "applies_when": "always",
+  "condition": null
+ },
+ "waiting_initial": {
+  "clause": "6.2.i",
+  "page": 5,
+  "quote": "Expenses related to the treatment of any illness within 30 days from the Ĥrst policy commencement date shall be excluded except claims arising due to an accident, provided the same are covered.",
+  "verified": true,
+  "days": 30
+ },
+ "waiting_ped": {
+  "clause": "6.1.a",
+  "page": 5,
+  "quote": "Expenses related to the treatment of a pre-existing Disease (PED) and its direct complications shall be excluded until the expiry of 36 months of continuous coverage after the date of inception of the Ĥrst policy with us.",
+  "verified": true,
+  "months": 36
+ },
+ "specific_waits": [
+  {
+   "clause": "6.3.a.i.1",
+   "page": 6,
+   "quote": "Benign ENT disorder",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Benign ENT disorder",
+   "keywords": [
+    "benign ent disorder"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.2",
+   "page": 6,
+   "quote": "Tonsillectomy",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Tonsillectomy",
+   "keywords": [
+    "tonsillectomy"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.3",
+   "page": 6,
+   "quote": "Adenoidectomy",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Adenoidectomy",
+   "keywords": [
+    "adenoidectomy"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.4",
+   "page": 6,
+   "quote": "Mastoidectomy",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Mastoidectomy",
+   "keywords": [
+    "mastoidectomy"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.5",
+   "page": 6,
+   "quote": "Tympanoplasty",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Tympanoplasty",
+   "keywords": [
+    "tympanoplasty"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.6",
+   "page": 6,
+   "quote": "Hysterectomy",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Hysterectomy",
+   "keywords": [
+    "hysterectomy"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.7",
+   "page": 6,
+   "quote": "All internal and external benign tumours, cysts, polyps of any kind, including benign breast lumps.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Benign tumours, cysts, polyps",
+   "keywords": [
+    "benign tumours",
+    "cysts",
+    "polyps",
+    "breast lumps"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.8",
+   "page": 6,
+   "quote": "Benign prostate hypertrophy",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Benign prostate hypertrophy",
+   "keywords": [
+    "benign prostate hypertrophy",
+    "bph"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.9",
+   "page": 6,
+   "quote": "Cataract and age-related eye ailments",
+   "verified": true,
+   "category": "cataract",
+   "months": 24,
+   "label": "Cataract and age-related eye ailments",
+   "keywords": []
+  },
+  {
+   "clause": "6.3.a.i.10",
+   "page": 6,
+   "quote": "Gastric/ Duodenal Ulcer",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Gastric/ Duodenal Ulcer",
+   "keywords": [
+    "gastric ulcer",
+    "duodenal ulcer"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.11",
+   "page": 6,
+   "quote": "Gout and Rheumatism",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Gout and Rheumatism",
+   "keywords": [
+    "gout",
+    "rheumatism"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.12",
+   "page": 6,
+   "quote": "Hernia of all types",
+   "verified": true,
+   "category": "hernia",
+   "months": 24,
+   "label": "Hernia of all types",
+   "keywords": []
+  },
+  {
+   "clause": "6.3.a.i.13",
+   "page": 6,
+   "quote": "Hydrocele",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Hydrocele",
+   "keywords": [
+    "hydrocele"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.14",
+   "page": 6,
+   "quote": "Non-Infective Arthritis",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Non-Infective Arthritis",
+   "keywords": [
+    "non-infective arthritis"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.15",
+   "page": 6,
+   "quote": "Piles, Fissures, and Fistula in Anus",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Piles, Fissures, and Fistula in Anus",
+   "keywords": [
+    "piles",
+    "fissures",
+    "fistula"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.16",
+   "page": 6,
+   "quote": "Pilonidal sinus, Sinusitis and related disorders",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Pilonidal sinus, Sinusitis and related disorders",
+   "keywords": [
+    "pilonidal sinus",
+    "sinusitis"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.17",
+   "page": 6,
+   "quote": "Prolapse inter Vertebral Disc and Spinal Diseases unless arising from accident",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Prolapse inter Vertebral Disc and Spinal Diseases",
+   "keywords": [
+    "pivd",
+    "prolapse inter vertebral disc",
+    "spinal diseases"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.18",
+   "page": 6,
+   "quote": "Calculi in urinary system, Gall Bladder and Bile duct, excluding malignancy.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Calculi in urinary system, Gall Bladder and Bile duct",
+   "keywords": [
+    "calculi",
+    "kidney stone",
+    "gallstone"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.19",
+   "page": 6,
+   "quote": "Varicose Veins and Varicose Ulcers",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Varicose Veins and Varicose Ulcers",
+   "keywords": [
+    "varicose veins",
+    "varicose ulcers"
+   ]
+  },
+  {
+   "clause": "6.3.a.i.20",
+   "page": 6,
+   "quote": "Internal Congenital Anomalies",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Internal Congenital Anomalies",
+   "keywords": [
+    "internal congenital anomalies"
+   ]
+  },
+  {
+   "clause": "6.3.a.ii.1",
+   "page": 6,
+   "quote": "Treatment for joint replacement unless arising from accident",
+   "verified": true,
+   "category": "joint_replacement",
+   "months": 36,
+   "label": "Treatment for joint replacement unless arising from accident",
+   "keywords": []
+  },
+  {
+   "clause": "6.3.a.ii.2",
+   "page": 6,
+   "quote": "Age-related Osteoarthritis & Osteoporosis",
+   "verified": true,
+   "category": "other",
+   "months": 36,
+   "label": "Age-related Osteoarthritis & Osteoporosis",
+   "keywords": [
+    "osteoarthritis",
+    "osteoporosis"
+   ]
+  }
+ ],
+ "sublimits": [
+  {
+   "clause": "4.3",
+   "page": 4,
+   "quote": "treatment of Cataract, subject to a limit of 25% of Sum Insured or `40,000/-, whichever is lower, per each eye in one policy year.",
+   "verified": true,
+   "category": "cataract",
+   "label": "Cataract Treatment",
+   "pct_si": 25.0,
+   "limit_inr": 40000.0,
+   "per": "eye",
+   "keywords": []
+  },
+  {
+   "clause": "4.6",
+   "page": 4,
+   "quote": "The following procedures will be covered (wherever medically indicated) either as in patient or as part of day care treatment in a hospital up to 50% of Sum Insured, speciĤed in the policy schedule",
+   "verified": true,
+   "category": "other",
+   "label": "Modern Treatment Procedures",
+   "pct_si": 50.0,
+   "limit_inr": null,
+   "per": "year",
+   "keywords": [
+    "uterine artery embolization",
+    "hifu",
+    "balloon sinuplasty",
+    "deep brain stimulation",
+    "oral chemotherapy",
+    "immunotherapy",
+    "intra vitreal injections",
+    "robotic surgeries",
+    "stereotactic radio surgeries",
+    "bronchial thermoplasty",
+    "vaporisation of the prostrate",
+    "ionm",
+    "stem cell therapy"
+   ]
+  }
+ ],
+ "exclusions": [
+  {
+   "clause": "7.1",
+   "page": 6,
+   "quote": "Expenses related to any admission primarily tor diagnostics and evaluation purposes. Any diagnostic expenses which are not related or not incidental to the Current diagnosis and treatment",
+   "verified": true,
+   "category": "other",
+   "text": "Investigation & Evaluation (Code- Excl04)",
+   "keywords": [
+    "investigation",
+    "evaluation",
+    "diagnostics"
+   ]
+  },
+  {
+   "clause": "7.2",
+   "page": 6,
+   "quote": "Expenses related to any admission primarily for enforced bed rest and not for receiving treatment.",
+   "verified": true,
+   "category": "other",
+   "text": "Rest Cure, rehabilitation and respite care (Code- Excl05)",
+   "keywords": [
+    "rest cure",
+    "rehabilitation",
+    "respite care",
+    "custodial care"
+   ]
+  },
+  {
+   "clause": "7.3",
+   "page": 6,
+   "quote": "Expenses related to the surgical treatment of obesity that does not fulĤl all the below conditions",
+   "verified": true,
+   "category": "other",
+   "text": "Obesity/ Weight Control (Code- Excl06)",
+   "keywords": [
+    "obesity",
+    "weight control",
+    "bariatric surgery"
+   ]
+  },
+  {
+   "clause": "7.4",
+   "page": 6,
+   "quote": "Expenses related to any treatment, including surgical management, to change characteristics of the body to those of the opposite sex.",
+   "verified": true,
+   "category": "other",
+   "text": "Change of Gender Treatments (Code- Excl 07)",
+   "keywords": [
+    "change of gender",
+    "sex reassignment"
+   ]
+  },
+  {
+   "clause": "7.5",
+   "page": 6,
+   "quote": "Expenses for cosmetic or plastic surgery or any treatment to change appearance unless for reconstruction following an Accident, burn (s) or Cancer or as part of medically necessary treatment",
+   "verified": true,
+   "category": "cosmetic",
+   "text": "Cosmetic or plastic Surgery (Code- Excl08)",
+   "keywords": []
+  },
+  {
+   "clause": "7.6",
+   "page": 6,
+   "quote": "Expenses related to any treatment necessitated due to participation as a professional in hazardous or adventure sports",
+   "verified": true,
+   "category": "other",
+   "text": "Hazardous or Adventure sports (Code- Excl09)",
+   "keywords": [
+    "hazardous sports",
+    "adventure sports"
+   ]
+  },
+  {
+   "clause": "7.7",
+   "page": 6,
+   "quote": "Expenses tor treatment directly arising from or consequent upon any Insured Person committing or attempting to commit a breach of law with criminal intent.",
+   "verified": true,
+   "category": "other",
+   "text": "Breach of law (Code- Excl10)",
+   "keywords": [
+    "breach of law",
+    "criminal intent"
+   ]
+  },
+  {
+   "clause": "7.8",
+   "page": 6,
+   "quote": "Expenses incurred towards treatment in any hospital or by any Medical Practitioner or any other provider speciĤcally excluded by the Insurer",
+   "verified": true,
+   "category": "other",
+   "text": "Excluded Providers (Code-Excl 11)",
+   "keywords": [
+    "excluded providers",
+    "blacklisted hospitals"
+   ]
+  },
+  {
+   "clause": "7.9",
+   "page": 6,
+   "quote": "Treatment for, Alcoholism. drug or substance abuse or any addictive condition and consequences thereof (Code- Excl 12)",
+   "verified": true,
+   "category": "other",
+   "text": "Alcoholism, drug or substance abuse (Code- Excl 12)",
+   "keywords": [
+    "alcoholism",
+    "drug abuse",
+    "substance abuse",
+    "addiction"
+   ]
+  },
+  {
+   "clause": "7.10",
+   "page": 6,
+   "quote": "Treatments received in heath hydros, nature cure clinics, spas or similar establishments or private beds registered as a nursing home attached to such establishments or where admission is arranged wholly or partly for domestic reasons. (Code- Exel13)",
+   "verified": true,
+   "category": "other",
+   "text": "Treatments in health hydros, nature cure clinics, spas (Code- Excl13)",
+   "keywords": [
+    "health hydros",
+    "nature cure",
+    "spas"
+   ]
+  },
+  {
+   "clause": "7.11",
+   "page": 6,
+   "quote": "Dietary supplements and substances that can be purchased without prescription, including but not limited to Vitamins, minerals and organic substances unless prescribed by a medical practitioner (Code- Excl14)",
+   "verified": true,
+   "category": "other",
+   "text": "Dietary supplements and substances without prescription (Code- Excl14)",
+   "keywords": [
+    "dietary supplements",
+    "vitamins",
+    "minerals"
+   ]
+  },
+  {
+   "clause": "7.12",
+   "page": 6,
+   "quote": "Expenses related to the treatment for correction of eyesight due to refractive error less than 7.5 dioptres.",
+   "verified": true,
+   "category": "other",
+   "text": "Refractive Error (Code- Excl15)",
+   "keywords": [
+    "refractive error",
+    "eyesight correction"
+   ]
+  },
+  {
+   "clause": "7.13",
+   "page": 6,
+   "quote": "Expenses related to any unproven treatment, services and supplies for or in connection with any treatment.",
+   "verified": true,
+   "category": "other",
+   "text": "Unproven Treatments (Code- Excl16)",
+   "keywords": [
+    "unproven treatment"
+   ]
+  },
+  {
+   "clause": "7.14",
+   "page": 7,
+   "quote": "Expenses related to sterility and infertility this includes: i. Any type of sterilization ii. Assisted Reproduction services iii. Gestational Surrogacy iv. Reversal of sterilization",
+   "verified": false,
+   "category": "infertility",
+   "text": "Sterility and Infertility (Code- Excl17)",
+   "keywords": []
+  },
+  {
+   "clause": "7.15",
+   "page": 7,
+   "quote": "Medical treatment expenses traceable to childbirth (including complicated deliveries and caesarean sections incurred during hospitalization) except ectopic pregnancy; ii. Expenses towards miscarriage",
+   "verified": true,
+   "category": "maternity",
+   "text": "Maternity Expenses (Code - Excl 18)",
+   "keywords": []
+  },
+  {
+   "clause": "7.16",
+   "page": 7,
+   "quote": "War (whether declared or not) and war like occurrence or invasion, acts of foreign enemies, hostilities, civil war, rebellion, revolutions, insurrections, mutiny, military or usurped power, seizure, capture, arrest",
+   "verified": true,
+   "category": "other",
+   "text": "War and war like occurrence",
+   "keywords": [
+    "war",
+    "invasion",
+    "civil war"
+   ]
+  },
+  {
+   "clause": "7.17",
+   "page": 7,
+   "quote": "Nuclear, chemical or biological attack or weapons, contributed to, caused by, resulting from or from any other cause or event contributing concurrently or in any other sequence to the loss, claim or expense.",
+   "verified": true,
+   "category": "other",
+   "text": "Nuclear, chemical or biological attack or weapons",
+   "keywords": [
+    "nuclear attack",
+    "chemical attack",
+    "biological attack"
+   ]
+  },
+  {
+   "clause": "7.18",
+   "page": 7,
+   "quote": "Any expenses incurred on Domiciliary Hospitalization and OPD treatment",
+   "verified": true,
+   "category": "other",
+   "text": "Domiciliary Hospitalization and OPD treatment",
+   "keywords": [
+    "domiciliary hospitalization",
+    "opd treatment"
+   ]
+  },
+  {
+   "clause": "7.19",
+   "page": 7,
+   "quote": "Treatment taken outside the geographical limits of India",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment taken outside India",
+   "keywords": [
+    "outside india",
+    "foreign treatment"
+   ]
+  }
+ ],
+ "deduction_order": [
+  "sublimit",
+  "room_rent",
+  "copay",
+  "sum_insured"
+ ],
+ "plans": [],
+ "waiting_plans": [],
+ "sublimit_plans": [],
+ "unmodeled_terms": [
+  "Room Rent / Boarding / Nursing capped at 2% of SI per day up to Rs. 5,000 per day.",
+  "ICU / ICCU expenses capped at 5% of SI per day up to Rs. 10,000 per day."
+ ],
+ "policy_id": "61453a5c2004",
+ "pages": 14,
+ "computable": false,
+ "computable_note": "Contains terms the estimator cannot compute exactly: Room Rent / Boarding / Nursing capped at 2% of SI per day up to Rs. 5,000 per day.; ICU / ICCU expenses capped at 5% of SI per day up to Rs. 10,000 per day.",
+ "pdf_path": "data/library/sbi_arogya_sanjeevani.pdf",
+ "source_providers": [
+  "gemini"
+ ]
+}

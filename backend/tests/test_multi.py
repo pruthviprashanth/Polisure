@@ -62,7 +62,7 @@ def test_unknown_policy_in_list(client, ids):
 
 def test_recommend(client, ids):
     a, b, c = ids
-    body = {"profile": {**PROFILE, "policy_age_months": 0}, "likely_claims": ["appendectomy", "cataract"],
+    body = {"profile": {**PROFILE, "policy_age_months": 0}, "likely_claims": ["appendectomy", "cataract"], "claim_after_months": 0,
             "assumed_bills": {"appendectomy": 160000}, "annual_premiums": {a: 14000}, "policy_ids": [c, b, a]}
     r = client.post("/policies/recommend", json=body).json()
     assert r["best_policy_id"] == a
@@ -84,3 +84,35 @@ def test_recommend_platinum_pays(client, ids):
     top = r["ranked"][0]
     assert top["policy_id"] == a and top["total_simulated_payout"] > 0
     assert all(x["verdict"] in ("COVERED", "PARTIAL") for x in top["scenario_results"])
+
+
+def test_recommend_marks_ineligible_by_age_and_defaults_to_catalog(client, ids):
+    from app.schemas import PlanBand
+
+    a, b, _ = ids
+    young = model()
+    young.policy_id, young.name = "polddddddddd", "Policy D (entry 18-35 only)"
+    young.plans = [PlanBand(plan="Platinum", min_age=18, max_age=35)]
+    store.save(young)
+    r = client.post("/policies/recommend", json={"profile": PROFILE, "likely_claims": ["appendectomy"], "policy_ids": [a, "polddddddddd"]}).json()
+    d = next(x for x in r["ranked"] if x["policy_id"] == "polddddddddd")
+    assert d["eligible"] is False and d["score"] is None and "entry ages" in d["ineligible_reason"]
+    assert r["best_policy_id"] == a and r["ranked"][-1]["policy_id"] == "polddddddddd"
+    # default candidate set = catalog policies only: test policies have no PDF under data/ so none qualify
+    assert client.post("/policies/recommend", json={"profile": PROFILE, "likely_claims": ["cataract"]}).json()["best_policy_id"] != "polddddddddd"
+
+
+def test_recommend_default_timing_skips_initial_wait_and_ranks_terms_only(client, ids):
+    a, b, c = ids
+    r = client.post("/policies/recommend", json={"profile": PROFILE, "likely_claims": ["appendectomy", "cataract"],
+                                                  "policy_ids": [c, a]}).json()
+    first = r["ranked"][0]
+    res = {x["category"]: x for x in first["scenario_results"]}
+    assert res["appendectomy"]["verdict"] in ("COVERED", "PARTIAL")          # 30-day wait over at 1 month
+    assert res["cataract"]["verdict"] == "NOT_COVERED"                        # 24-month wait still applies
+    terms = r["ranked"][1]
+    assert terms["policy_id"] == c and terms["score"] is None and isinstance(terms["terms_score"], int)
+    assert all(x["payout"] is None for x in terms["scenario_results"]) and r["best_terms_policy_id"] == c
+    late = client.post("/policies/recommend", json={"profile": PROFILE, "likely_claims": ["cataract"], "claim_after_months": 30,
+                                                     "policy_ids": [a]}).json()["ranked"][0]["scenario_results"][0]
+    assert late["verdict"] in ("COVERED", "PARTIAL")

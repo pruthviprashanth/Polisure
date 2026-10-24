@@ -11,7 +11,13 @@ from .schemas import CoverageModel
 
 # Friendly names for the bundled sample PDFs (the LLM-read title is often generic, e.g. 'Health Insurance Policy Retail').
 SAMPLE_NAMES = {"policy.pdf": "United India Individual Health Insurance Policy (sample)",
-                "policy_b.pdf": "SBI General Health Insurance Policy - Retail (sample)"}
+                "policy_b.pdf": "SBI General Health Insurance Policy - Retail (sample)",
+                "sbi_arogya_premier.pdf": "SBI General Arogya Premier Policy",
+                "sbi_arogya_sanjeevani.pdf": "SBI General Arogya Sanjeevani Policy",
+                "sbi_arogya_plus.pdf": "SBI General Arogya Plus Policy",
+                "super_health_insurance.pdf": "SBI General Super Health Insurance Policy",
+                "star_health_assure.pdf": "Star Health Assure Insurance Policy",
+                "new_india_mediclaim.pdf": "New India Mediclaim Policy"}
 
 
 class NotAPdf(Exception):
@@ -41,6 +47,11 @@ def list_all() -> list[CoverageModel]:
         except Exception:
             continue
     return out
+
+
+def is_catalog(m: CoverageModel) -> bool:
+    """Catalog = the bundled policies (data/policy*.pdf and data/library/*.pdf), as opposed to a user's own upload."""
+    return m.pdf_path.startswith("data/") and not m.pdf_path.startswith("data/cache/")
 
 
 def pdf_file(m: CoverageModel) -> Optional[Path]:
@@ -78,7 +89,7 @@ def ingest(pdf_bytes: bytes, source: Optional[Path] = None, purpose: str = "cove
         rel = _rel(dest)
     ext, provs = extraction.extract_coverage(pages, purpose=purpose)
     model = extraction.finalize(ext, pages, pid, rel, provs)
-    if source is not None and source.parent == config.DATA and source.name in SAMPLE_NAMES:
+    if source is not None and source.parent in (config.DATA, config.LIBRARY) and source.name in SAMPLE_NAMES:
         model.name = SAMPLE_NAMES[source.name]
     save(model)
     return model, False, provs

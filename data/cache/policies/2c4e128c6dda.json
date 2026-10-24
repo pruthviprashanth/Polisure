@@ -1,0 +1,636 @@
+{
+ "name": "Star Health Assure Insurance Policy",
+ "room_rent": {
+  "clause": "1.i",
+  "page": 4,
+  "quote": "Sum Insured in lakhs (Rs.) 5/7.5: Up to 1% of Sum Insured per day. 10/15/20/25: Any Room (Except suite or above category). 50/75/100/200: Any room",
+  "verified": false,
+  "kind": "percent_si",
+  "value": 1.0,
+  "icu_value": null,
+  "computable": true,
+  "note": "Up to 1% SI per day for SI 5/7.5 Lakhs; Any Room (except suite) for SI 10-25 Lakhs; Any room for SI 50-200 Lakhs"
+ },
+ "proportionate": {
+  "clause": "1.i",
+  "page": 4,
+  "quote": "Associated Medical expenses which vary based on the room occupied by the Insured Person will be considered in proportion to the room rent stated in the policy schedule or actuals whichever is less.",
+  "verified": true,
+  "applies": true,
+  "applies_to": [
+   "linked"
+  ]
+ },
+ "copay": {
+  "clause": "29",
+  "page": 8,
+  "quote": "This policy is subject to co-payment of 10% of each and every claim amount for fresh as well as renewal policies for Insured Person whose age at the time of entry is 61 years and above.",
+  "verified": true,
+  "percent": 10.0,
+  "applies_when": "always",
+  "condition": "Insured Person whose age at the time of entry is 61 years and above"
+ },
+ "waiting_initial": {
+  "clause": "3.i",
+  "page": 11,
+  "quote": "Expenses related to the treatment of any illness within 30 days from the first policy commencement date shall be excluded except claims arising due to an accident",
+  "verified": true,
+  "days": 30
+ },
+ "waiting_ped": {
+  "clause": "1.A",
+  "page": 10,
+  "quote": "Applicable for 3 year Policy Term: ... excluded until the expiry of 30 months ... Applicable for 1 year and 2 year Policy Term: ... excluded until the expiry of 36 months",
+  "verified": false,
+  "months": 36
+ },
+ "specific_waits": [
+  {
+   "clause": "2.F.1",
+   "page": 10,
+   "quote": "Treatment of Cataract and diseases of the anterior and posterior chamber of the Eye, Diseases of ENT, Diseases related to Thyroid, Benign diseases of the breast.",
+   "verified": true,
+   "category": "cataract",
+   "months": 24,
+   "label": "Cataract",
+   "keywords": [
+    "cataract"
+   ]
+  },
+  {
+   "clause": "2.F.1",
+   "page": 10,
+   "quote": "Diseases of ENT, Diseases related to Thyroid, Benign diseases of the breast.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "ENT, Thyroid, Benign breast diseases",
+   "keywords": [
+    "ent",
+    "thyroid",
+    "breast"
+   ]
+  },
+  {
+   "clause": "2.F.2",
+   "page": 10,
+   "quote": "Subcutaneous Benign Lumps, Sebaceous cyst, Dermoid cyst, Mucous cyst lip / cheek, Carpal Tunnel Syndrome, Trigger Finger, Lipoma, Neurofibroma, Fibroadenoma, Ganglion and similar pathology.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Benign Lumps and Cysts",
+   "keywords": [
+    "benign lumps",
+    "cyst",
+    "lipoma",
+    "carpal tunnel"
+   ]
+  },
+  {
+   "clause": "2.F.3",
+   "page": 11,
+   "quote": "All treatments (Conservative, Operative treatment) and all types of intervention for Diseases related to Tendon, Ligament, Fascia, Bones and Joint Including Arthroscopy and Arthroplasty / Joint Replacement",
+   "verified": true,
+   "category": "joint_replacement",
+   "months": 24,
+   "label": "Joint Replacement and Bone/Joint Diseases",
+   "keywords": [
+    "arthroplasty",
+    "joint replacement",
+    "arthroscopy"
+   ]
+  },
+  {
+   "clause": "2.F.4",
+   "page": 11,
+   "quote": "All types of treatment for Degenerative disc and Vertebral diseases including Replacement of bones and joints and Degenerative diseases of the Musculo-skeletal system, Prolapse of Intervertebral Disc",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Degenerative Disc and Vertebral Diseases",
+   "keywords": [
+    "degenerative disc",
+    "prolapse of intervertebral disc",
+    "vertebral"
+   ]
+  },
+  {
+   "clause": "2.F.5",
+   "page": 11,
+   "quote": "Hepato-pancreato-biliary diseases including Gall bladder and Pancreatic calculi. All types of management for Kidney calculi and Genitourinary tract calculi.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Calculi diseases",
+   "keywords": [
+    "gall bladder",
+    "calculi",
+    "kidney calculi"
+   ]
+  },
+  {
+   "clause": "2.F.6",
+   "page": 11,
+   "quote": "All types of Hernia.",
+   "verified": true,
+   "category": "hernia",
+   "months": 24,
+   "label": "Hernia",
+   "keywords": [
+    "hernia"
+   ]
+  },
+  {
+   "clause": "2.F.7",
+   "page": 11,
+   "quote": "Desmoid Tumor, Umbilical Granuloma, Umbilical Sinus, Umbilical Fistula.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Desmoid Tumor, Umbilical Sinus/Fistula",
+   "keywords": [
+    "desmoid tumor",
+    "umbilical sinus",
+    "umbilical fistula"
+   ]
+  },
+  {
+   "clause": "2.F.8",
+   "page": 11,
+   "quote": "Diseases of Cervix, Uterus, Fallopian tubes, Ovaries, Uterine Bleeding, Pelvic Inflammatory Diseases.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Gynaecological disorders",
+   "keywords": [
+    "cervix",
+    "uterus",
+    "ovaries",
+    "pelvic inflammatory"
+   ]
+  },
+  {
+   "clause": "2.F.9",
+   "page": 11,
+   "quote": "All Diseases of Prostate, Stricture Urethra, all Obstructive Uropathies.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Prostate and Urological disorders",
+   "keywords": [
+    "prostate",
+    "stricture urethra",
+    "uropathies"
+   ]
+  },
+  {
+   "clause": "2.F.10",
+   "page": 11,
+   "quote": "Benign Tumours of Epididymis, Spermatocele, Varicocele, Hydrocele.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Hydrocele, Varicocele, Spermatocele",
+   "keywords": [
+    "hydrocele",
+    "varicocele",
+    "spermatocele"
+   ]
+  },
+  {
+   "clause": "2.F.11",
+   "page": 11,
+   "quote": "Fistula, Fissure in Ano, Hemorrhoids, Pilonidal Sinus and Fistula, Rectal Prolapse, Stress Incontinence.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Piles, Fistula, Fissure",
+   "keywords": [
+    "fistula",
+    "fissure",
+    "hemorrhoids",
+    "piles",
+    "pilonidal sinus"
+   ]
+  },
+  {
+   "clause": "2.F.12",
+   "page": 11,
+   "quote": "Varicose veins and Varicose ulcers.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Varicose veins",
+   "keywords": [
+    "varicose veins",
+    "varicose ulcers"
+   ]
+  },
+  {
+   "clause": "2.F.13",
+   "page": 11,
+   "quote": "All types of transplant and related surgeries.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Organ Transplant",
+   "keywords": [
+    "transplant"
+   ]
+  },
+  {
+   "clause": "2.F.14",
+   "page": 11,
+   "quote": "Congenital Internal disease / defect – {except for Unborn in Coverage (16) and New born in Coverage(18)}.",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Congenital Internal Disease",
+   "keywords": [
+    "congenital internal"
+   ]
+  },
+  {
+   "clause": "15.i",
+   "page": 6,
+   "quote": "Benefit under this section is subject to a waiting period of 24 months from the date of first commencement of Star Health Assure Insurance policy",
+   "verified": true,
+   "category": "maternity",
+   "months": 24,
+   "label": "Delivery Expenses",
+   "keywords": [
+    "maternity",
+    "delivery"
+   ]
+  },
+  {
+   "clause": "17.i",
+   "page": 7,
+   "quote": "A waiting period of 24 months from the date of first inception of this policy with the Company for the Insured Person.",
+   "verified": true,
+   "category": "infertility",
+   "months": 24,
+   "label": "Assisted Reproduction Treatment",
+   "keywords": [
+    "assisted reproduction",
+    "infertility"
+   ]
+  }
+ ],
+ "sublimits": [
+  {
+   "clause": "14",
+   "page": 6,
+   "quote": "payable up to 10% of Sum Insured not exceeding Rs.5 lakhs per policy period per policy year.",
+   "verified": true,
+   "category": "other",
+   "label": "Chronic Severe Refractory Asthma",
+   "pct_si": 10.0,
+   "limit_inr": 500000.0,
+   "per": "year",
+   "keywords": [
+    "asthma",
+    "chronic severe refractory asthma"
+   ]
+  },
+  {
+   "clause": "15",
+   "page": 6,
+   "quote": "Expenses for a Delivery including Delivery by Caesarean section (including pre-natal and post natal expenses) up-to 10% of the Sum Insured is payable",
+   "verified": true,
+   "category": "maternity",
+   "label": "Delivery Expenses",
+   "pct_si": 10.0,
+   "limit_inr": null,
+   "per": "year",
+   "keywords": [
+    "delivery",
+    "caesarean",
+    "maternity"
+   ]
+  },
+  {
+   "clause": "17",
+   "page": 7,
+   "quote": "Limit of Liability in a policy year (Rs.) 5,00,000/-, 7,50,000/-: 1,00,000/-; 10,00,000/-, 15,00,000/-, 20,00,000/-, 25,00,000/-: 2,00,000/-; 50,00,000/-, 75,00,000/-, 1,00,00,000/-, 2,00,00,000/-: 4,00,000/-",
+   "verified": true,
+   "category": "infertility",
+   "label": "Assisted Reproduction Treatment",
+   "pct_si": null,
+   "limit_inr": 400000.0,
+   "per": "year",
+   "keywords": [
+    "assisted reproduction",
+    "sub-fertility",
+    "infertility"
+   ]
+  },
+  {
+   "clause": "18",
+   "page": 7,
+   "quote": "Limit Per Policy Period (Rs.) 5,00,000/-, 7,50,000/-, 15,00,000/-, 20,00,000/-, 25,00,000/-: 2,00,000/-; 50,00,000/-, 75,00,000/-, 1,00,00,000/-, 2,00,00,000/-: 4,00,000/-",
+   "verified": true,
+   "category": "other",
+   "label": "New Born Baby Treatment",
+   "pct_si": null,
+   "limit_inr": 400000.0,
+   "per": "year",
+   "keywords": [
+    "new born",
+    "baby"
+   ]
+  }
+ ],
+ "exclusions": [
+  {
+   "clause": "Excl 04",
+   "page": 12,
+   "quote": "Expenses related to any admission primarily for diagnostics and evaluation purposes only are excluded.",
+   "verified": true,
+   "category": "other",
+   "text": "Investigation & Evaluation",
+   "keywords": [
+    "investigation",
+    "evaluation",
+    "diagnostics"
+   ]
+  },
+  {
+   "clause": "Excl 05",
+   "page": 12,
+   "quote": "Expenses related to any admission primarily for enforced bed rest and not for receiving treatment.",
+   "verified": true,
+   "category": "other",
+   "text": "Rest Cure, rehabilitation and respite care",
+   "keywords": [
+    "rest cure",
+    "rehabilitation",
+    "custodial care"
+   ]
+  },
+  {
+   "clause": "Excl 06",
+   "page": 12,
+   "quote": "Expenses related to the surgical treatment of obesity that does not fulfil all the below conditions",
+   "verified": true,
+   "category": "other",
+   "text": "Obesity/ Weight Control",
+   "keywords": [
+    "obesity",
+    "weight control"
+   ]
+  },
+  {
+   "clause": "Excl 07",
+   "page": 12,
+   "quote": "Expenses related to any treatment, including surgical management, to change characteristics of the body to those of the opposite sex.",
+   "verified": true,
+   "category": "other",
+   "text": "Change-of-Gender treatments",
+   "keywords": [
+    "change-of-gender",
+    "sex change"
+   ]
+  },
+  {
+   "clause": "Excl 08",
+   "page": 12,
+   "quote": "Expenses for cosmetic or plastic surgery or any treatment to change appearance unless for reconstruction following an Accident, Burn(s) or Cancer",
+   "verified": true,
+   "category": "cosmetic",
+   "text": "Cosmetic or plastic Surgery",
+   "keywords": [
+    "cosmetic",
+    "plastic surgery"
+   ]
+  },
+  {
+   "clause": "Excl 09",
+   "page": 12,
+   "quote": "Expenses related to any treatment necessitated due to participation as a professional in hazardous or adventure sports",
+   "verified": true,
+   "category": "other",
+   "text": "Hazardous or Adventure sports",
+   "keywords": [
+    "hazardous sports",
+    "adventure sports"
+   ]
+  },
+  {
+   "clause": "Excl 10",
+   "page": 12,
+   "quote": "Expenses for treatment directly arising from or consequent upon any Insured Person committing or attempting to commit a breach of law with criminal intent.",
+   "verified": true,
+   "category": "other",
+   "text": "Breach of law",
+   "keywords": [
+    "breach of law",
+    "criminal intent"
+   ]
+  },
+  {
+   "clause": "Excl 11",
+   "page": 12,
+   "quote": "Expenses incurred towards treatment in any hospital or by any Medical Practitioner or any other provider specifically excluded by the Insurer",
+   "verified": true,
+   "category": "other",
+   "text": "Excluded Providers",
+   "keywords": [
+    "excluded providers",
+    "blacklisted hospitals"
+   ]
+  },
+  {
+   "clause": "Excl 12",
+   "page": 13,
+   "quote": "Treatment for Alcoholism, drug or substance abuse or any addictive condition and consequences thereof",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment for Alcoholism, drug or substance abuse",
+   "keywords": [
+    "alcoholism",
+    "drug abuse",
+    "substance abuse"
+   ]
+  },
+  {
+   "clause": "Excl 13",
+   "page": 13,
+   "quote": "Treatments received in health hydros, nature cure clinics, spas or similar establishments",
+   "verified": true,
+   "category": "other",
+   "text": "Spas, nature cure clinics, health hydros",
+   "keywords": [
+    "health hydros",
+    "nature cure",
+    "spa"
+   ]
+  },
+  {
+   "clause": "Excl 14",
+   "page": 13,
+   "quote": "Dietary supplements and substances that can be purchased without prescription",
+   "verified": true,
+   "category": "other",
+   "text": "Dietary supplements and OTC substances",
+   "keywords": [
+    "dietary supplements",
+    "vitamins"
+   ]
+  },
+  {
+   "clause": "Excl 15",
+   "page": 13,
+   "quote": "Expenses related to the treatment for correction of eye sight due to refractive error less than 7.5 dioptres.",
+   "verified": true,
+   "category": "other",
+   "text": "Refractive Error less than 7.5 dioptres",
+   "keywords": [
+    "refractive error",
+    "eye sight correction"
+   ]
+  },
+  {
+   "clause": "Excl 16",
+   "page": 13,
+   "quote": "Expenses related to any unproven treatment, services and supplies for or in connection with any treatment.",
+   "verified": true,
+   "category": "other",
+   "text": "Unproven Treatments",
+   "keywords": [
+    "unproven treatment"
+   ]
+  },
+  {
+   "clause": "Excl 17",
+   "page": 13,
+   "quote": "Expenses related to sterility and infertility. (Except to the extent covered under Coverage 17)",
+   "verified": false,
+   "category": "infertility",
+   "text": "Sterility and Infertility",
+   "keywords": [
+    "sterility",
+    "infertility",
+    "contraception"
+   ]
+  },
+  {
+   "clause": "Excl 18",
+   "page": 13,
+   "quote": "Medical treatment expenses traceable to childbirth (including complicated deliveries and caesarean sections incurred during hospitalization) except ectopic pregnancy (Except to the extent covered under Coverage 15)",
+   "verified": false,
+   "category": "maternity",
+   "text": "Maternity",
+   "keywords": [
+    "maternity",
+    "childbirth"
+   ]
+  },
+  {
+   "clause": "Excl 19",
+   "page": 13,
+   "quote": "Circumcision (unless necessary for treatment of a disease not excluded under this policy or necessitated due to an accident), Preputioplasty, Frenuloplasty, Preputial Dilatation and Removal of SMEGMA",
+   "verified": true,
+   "category": "other",
+   "text": "Circumcision and related procedures",
+   "keywords": [
+    "circumcision",
+    "preputioplasty",
+    "smegma"
+   ]
+  },
+  {
+   "clause": "Excl 20",
+   "page": 13,
+   "quote": "Congenital External Condition / Defects / Anomalies (except to the extent covered under Coverage 18)",
+   "verified": true,
+   "category": "other",
+   "text": "Congenital External Condition / Defects / Anomalies",
+   "keywords": [
+    "congenital external"
+   ]
+  },
+  {
+   "clause": "Excl 21",
+   "page": 13,
+   "quote": "Convalescence, general debility, run-down condition, Nutritional deficiency states",
+   "verified": true,
+   "category": "other",
+   "text": "Convalescence, general debility, nutritional deficiency",
+   "keywords": [
+    "convalescence",
+    "general debility",
+    "nutritional deficiency"
+   ]
+  },
+  {
+   "clause": "Excl 22",
+   "page": 14,
+   "quote": "Intentional self-injury",
+   "verified": true,
+   "category": "other",
+   "text": "Intentional self-injury",
+   "keywords": [
+    "intentional self-injury",
+    "suicide"
+   ]
+  },
+  {
+   "clause": "Excl 24",
+   "page": 14,
+   "quote": "Injury/disease caused by or arising from or attributable to war, invasion, act of foreign enemy, warlike operations",
+   "verified": true,
+   "category": "other",
+   "text": "War and warlike operations",
+   "keywords": [
+    "war",
+    "invasion"
+   ]
+  },
+  {
+   "clause": "Excl 25",
+   "page": 14,
+   "quote": "Injury or disease caused by or contributed to by nuclear weapons/ materials",
+   "verified": true,
+   "category": "other",
+   "text": "Nuclear weapons / materials",
+   "keywords": [
+    "nuclear weapons",
+    "radiation"
+   ]
+  },
+  {
+   "clause": "Excl 32",
+   "page": 14,
+   "quote": "Dental treatment or surgery unless necessitated due to accidental injuries and requiring hospitalization (Dental implants are not payable)",
+   "verified": true,
+   "category": "dental",
+   "text": "Dental treatment or surgery",
+   "keywords": [
+    "dental",
+    "dental implants"
+   ]
+  }
+ ],
+ "deduction_order": [
+  "sublimit",
+  "room_rent",
+  "copay",
+  "sum_insured"
+ ],
+ "plans": [],
+ "waiting_plans": [],
+ "sublimit_plans": [],
+ "unmodeled_terms": [
+  "Coronary stent/implants pricing capped as per DPCO/NPPA guidelines",
+  "Optional Aggregate Deductible of Rs. 50,000 or Rs. 1,00,000 per policy year"
+ ],
+ "policy_id": "2c4e128c6dda",
+ "pages": 18,
+ "computable": false,
+ "computable_note": "Contains terms the estimator cannot compute exactly: Coronary stent/implants pricing capped as per DPCO/NPPA guidelines; Optional Aggregate Deductible of Rs. 50,000 or Rs. 1,00,000 per policy year",
+ "pdf_path": "data/library/star_health_assure.pdf",
+ "source_providers": [
+  "gemini"
+ ]
+}
