@@ -74,6 +74,12 @@ class _Run:
                             plan=plan, room_cap_per_day=None if cap is None else rupees(cap), blocked=blocked)
 
 
+def _match(cat: Category, keywords: list[str], f: ClaimFacts, text: str) -> bool:
+    if cat not in (Category.other, Category.unknown) and cat == f.category:
+        return True
+    return any(k and k.lower() in text for k in keywords)
+
+
 def _applies(plan: Optional[str], plans: list[str]) -> bool:
     return not plans or (plan is not None and plan in plans)
 
@@ -135,7 +141,7 @@ def run(cov: CoverageModel, facts: ClaimFacts) -> EngineResult:
     # 4. specific-illness waiting
     if waiting_on and not f.is_accident:
         for sw in cov.specific_waits:
-            if sw.category == f.category and age_m < sw.months:
+            if _match(sw.category, sw.keywords, f, text) and age_m < sw.months:
                 r.add("waiting_specific", f"{sw.label or sw.category.value}: {sw.months}-month waiting period not over (policy age {age_m})", billed, D(0), sw)
                 return r.finish("NOT_COVERED", billed, D(0), plan=plan,
                                 blocked={"kind": "specific", "months_needed": sw.months})
@@ -165,7 +171,7 @@ def run(cov: CoverageModel, facts: ClaimFacts) -> EngineResult:
 
     for step in order:
         if step == "sublimit":
-            sl = next((s for s in cov.sublimits if s.category == f.category), None)
+            sl = next((s for s in cov.sublimits if _match(s.category, s.keywords, f, text)), None)
             if sl and _applies(plan, cov.sublimit_plans):
                 caps = []
                 if sl.pct_si is not None:

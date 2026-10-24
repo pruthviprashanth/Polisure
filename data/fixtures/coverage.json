@@ -1,0 +1,199 @@
+{
+ "name": "United India Individual Health Insurance Policy",
+ "room_rent": {
+  "clause": "III.A.1.i",
+  "page": 2,
+  "quote": "up to 1% of Sum Insured per day or actual expenses whichever is less",
+  "verified": false,
+  "kind": "percent_si",
+  "value": 1.0,
+  "icu_value": 2.0,
+  "computable": true,
+  "note": null
+ },
+ "proportionate": {
+  "clause": "1.1(i)",
+  "page": 2,
+  "quote": "shall be effected in the same proportion as the admissible rate per day bears to the actual rate per day of Room Rent",
+  "verified": false,
+  "applies": true,
+  "applies_to": [
+   "linked"
+  ]
+ },
+ "copay": {
+  "clause": "6",
+  "page": 2,
+  "quote": "Co-Payment Not Applicable",
+  "verified": false,
+  "percent": 0.0,
+  "applies_when": "always",
+  "condition": null
+ },
+ "waiting_initial": {
+  "clause": "9.A.3",
+  "page": 5,
+  "quote": "Expenses related to the treatment of any illness within 30 days from the first policy commencement date shall be excluded",
+  "verified": false,
+  "days": 30
+ },
+ "waiting_ped": {
+  "clause": "9.A.1",
+  "page": 5,
+  "quote": "until the expiry of 48 months of continuous coverage after the date of inception of the first policy with us",
+  "verified": false,
+  "months": 48
+ },
+ "specific_waits": [
+  {
+   "clause": "9.A.2 Table A",
+   "page": 5,
+   "quote": "Cataract",
+   "verified": false,
+   "category": "cataract",
+   "months": 24,
+   "label": "Cataract",
+   "keywords": []
+  },
+  {
+   "clause": "9.A.2 Table A",
+   "page": 5,
+   "quote": "Hernia of all types",
+   "verified": false,
+   "category": "hernia",
+   "months": 24,
+   "label": "Hernia",
+   "keywords": []
+  },
+  {
+   "clause": "9.A.2 Table B",
+   "page": 5,
+   "quote": "Joint Replacement due to Degenerative",
+   "verified": false,
+   "category": "joint_replacement",
+   "months": 48,
+   "label": "Joint replacement (degenerative)",
+   "keywords": []
+  }
+ ],
+ "sublimits": [
+  {
+   "clause": "1.2",
+   "page": 3,
+   "quote": "Up to 25% of Sum Insured or",
+   "verified": false,
+   "category": "cataract",
+   "label": "Cataract",
+   "pct_si": 25.0,
+   "limit_inr": 40000.0,
+   "per": "eye",
+   "keywords": []
+  },
+  {
+   "clause": "1.2",
+   "page": 3,
+   "quote": "Hernia & Hysterectomy",
+   "verified": false,
+   "category": "hernia",
+   "label": "Hernia & hysterectomy",
+   "pct_si": 25.0,
+   "limit_inr": 100000.0,
+   "per": "claim",
+   "keywords": []
+  },
+  {
+   "clause": "1.2",
+   "page": 3,
+   "quote": "Up to 70% of the Sum Insured",
+   "verified": false,
+   "category": "joint_replacement",
+   "label": "Major surgeries (joint replacement)",
+   "pct_si": 70.0,
+   "limit_inr": null,
+   "per": "claim",
+   "keywords": []
+  }
+ ],
+ "exclusions": [
+  {
+   "clause": "Excl18",
+   "page": 7,
+   "quote": "Medical treatment expenses traceable to childbirth",
+   "verified": false,
+   "category": "maternity",
+   "text": "Maternity",
+   "keywords": [
+    "childbirth",
+    "caesarean",
+    "delivery"
+   ]
+  },
+  {
+   "clause": "Excl08",
+   "page": 6,
+   "quote": "Expenses for cosmetic or plastic surgery or any treatment to change appearance",
+   "verified": false,
+   "category": "cosmetic",
+   "text": "Cosmetic or plastic surgery",
+   "keywords": [
+    "cosmetic",
+    "plastic surgery"
+   ]
+  },
+  {
+   "clause": "Excl17",
+   "page": 7,
+   "quote": "Expenses related to sterility and infertility",
+   "verified": false,
+   "category": "infertility",
+   "text": "Sterility and infertility",
+   "keywords": [
+    "infertility",
+    "ivf"
+   ]
+  },
+  {
+   "clause": "C.11",
+   "page": 8,
+   "quote": "Dental treatment or surgery of any kind unless necessitated by disease or accident",
+   "verified": false,
+   "category": "dental",
+   "text": "Dental treatment",
+   "keywords": [
+    "dental"
+   ]
+  }
+ ],
+ "deduction_order": [
+  "sublimit",
+  "room_rent",
+  "copay",
+  "sum_insured"
+ ],
+ "plans": [
+  {
+   "plan": "Platinum",
+   "min_age": 18,
+   "max_age": 35
+  },
+  {
+   "plan": "Gold",
+   "min_age": 36,
+   "max_age": 60
+  },
+  {
+   "plan": "Senior Citizen",
+   "min_age": 61,
+   "max_age": 65
+  }
+ ],
+ "waiting_plans": [
+  "Gold",
+  "Senior Citizen"
+ ],
+ "sublimit_plans": [
+  "Gold",
+  "Senior Citizen"
+ ],
+ "unmodeled_terms": []
+}

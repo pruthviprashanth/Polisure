@@ -61,6 +61,7 @@ class SpecificWait(Cite):
     category: Category
     months: int
     label: str = ""
+    keywords: list[str] = Field(default_factory=list, description="lowercase words for conditions not in the Category enum (e.g. 'piles', 'bph')")
 
 
 class SubLimit(Cite):
@@ -69,6 +70,7 @@ class SubLimit(Cite):
     pct_si: Optional[float] = Field(None, description="percent of sum insured cap, if any")
     limit_inr: Optional[float] = Field(None, description="rupee cap, if any (the lower of the two applies)")
     per: Literal["eye", "claim", "year"] = "claim"
+    keywords: list[str] = Field(default_factory=list)
 
 
 class Exclusion(Cite):
