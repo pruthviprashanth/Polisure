@@ -281,6 +281,20 @@ async def gaps(policy_id: str, insured_age: int, sum_insured: int, preferred_roo
         metrics["sublimits"] = [{"label": "Cataract (per eye)", "cap_inr": min(r(sum_insured * Decimal("0.25")), 40000)},
                                 {"label": "Hernia & hysterectomy", "cap_inr": min(r(sum_insured * Decimal("0.25")), 100000)},
                                 {"label": "Major surgeries", "cap_inr": r(sum_insured * Decimal("0.7"))}]
+    gold = plan in ("Gold", "Senior Citizen")
+    metrics["summary"] = {"copay_percent": 0, "copay_condition": None, "exclusions": 23, "sublimits": len(metrics["sublimits"]),
+                          "longest_wait_months": 48 if gold else 0, "plan": plan}
+    metrics["typical_claims"] = [
+        {"category": "appendectomy", "billed": 142000, "payout": 142000 if preferred_room_rent_per_day <= cap else 112000,
+         "verdict": "COVERED" if preferred_room_rent_per_day <= cap else "PARTIAL"},
+        {"category": "cataract", "billed": 50000, "payout": 0 if gold and policy_age_months < 24 else min(40000, 50000),
+         "verdict": "NOT_COVERED" if gold and policy_age_months < 24 else "PARTIAL"},
+        {"category": "hernia", "billed": 96000, "payout": 0 if gold and policy_age_months < 24 else 96000,
+         "verdict": "NOT_COVERED" if gold and policy_age_months < 24 else "COVERED"},
+        {"category": "joint_replacement", "billed": 560000, "payout": 0 if gold and policy_age_months < 48 else 350000,
+         "verdict": "NOT_COVERED" if gold and policy_age_months < 48 else "PARTIAL"},
+        {"category": "maternity", "billed": 95000, "payout": 0, "verdict": "NOT_COVERED"},
+    ]
     return {"plan": plan, "gaps": out, "metrics": metrics, "meta": meta(True)}
 
 

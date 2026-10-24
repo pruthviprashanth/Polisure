@@ -101,6 +101,45 @@ export function PedSelect({
   );
 }
 
+export function Choice({
+  id,
+  label,
+  value,
+  onChange,
+  options,
+  hint,
+}: {
+  id: string;
+  label: string;
+  value: boolean | null;
+  onChange: (v: boolean | null) => void;
+  options: { v: boolean | null; l: string }[];
+  hint?: string;
+}) {
+  return (
+    <fieldset>
+      <legend className="label">{label}</legend>
+      <div className="flex gap-1" role="radiogroup" id={id}>
+        {options.map((o) => (
+          <button
+            key={o.l}
+            type="button"
+            role="radio"
+            aria-checked={value === o.v}
+            onClick={() => onChange(o.v)}
+            className={`flex-1 rounded-lg border px-2 py-2 text-sm ${
+              value === o.v ? "border-teal-700 bg-teal-700 text-white" : "border-slate-300 bg-white text-slate-800 hover:bg-slate-50"
+            }`}
+          >
+            {o.l}
+          </button>
+        ))}
+      </div>
+      {hint && <p className="mt-1 text-xs text-slate-500">{hint}</p>}
+    </fieldset>
+  );
+}
+
 export function planForAge(age: number): string {
   if (age >= 18 && age <= 35) return "Platinum";
   if (age >= 36 && age <= 60) return "Gold";

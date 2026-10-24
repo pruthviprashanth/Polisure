@@ -118,3 +118,20 @@ def test_ask_figure_guard(client, pid, monkeypatch):
     monkeypatch.setattr(llm, "extract", lambda *a, **k: (qa.AnswerLLM(answer="You will receive ₹9,99,999 always.", citations=[]), "mock"))
     b = client.post(f"/policies/{pid}/ask", json={"question": "what do I get"}).json()
     assert b["note"] == "figure_guard" and "9,99,999" not in b["answer"]
+
+
+def test_structured_answers_override_and_gap_metrics(client, pid):
+    BILL = {"room": 24000, "linked": 96000, "meds_implants": 40000, "other": 0}
+    base = {"policy_id": pid, "profile": PROFILE, "incident_text": TEXT, "bill": BILL}
+    r = client.post("/claims/check", json={**base, "answers": {"sum_insured_used": 450000}}).json()
+    assert r["verdict"]["payout"] == 50000          # 5,00,000 - 4,50,000 remaining caps the claim
+    assert client.post("/claims/check", json=base).json()["verdict"]["payout"] == 115000
+    young = {**PROFILE, "policy_age_months": 0}
+    r = client.post("/claims/check", json={**base, "profile": young, "answers": {"is_accident": True}}).json()
+    assert r["verdict"]["verdict"] != "NOT_COVERED"  # accident skips the 30-day wait
+    r = client.post("/claims/check", json={**base, "profile": young, "answers": {"is_accident": False}}).json()
+    assert r["verdict"]["verdict"] == "NOT_COVERED"
+    g = client.get(f"/policies/{pid}/gaps", params={"insured_age": 45, "sum_insured": 500000, "ped": False, "policy_age_months": 12}).json()["metrics"]
+    cats = {c["category"]: c for c in g["typical_claims"]}
+    assert cats["cataract"]["verdict"] == "NOT_COVERED" and cats["appendectomy"]["payout"] > 0
+    assert g["summary"]["longest_wait_months"] == 48 and g["summary"]["exclusions"] > 0

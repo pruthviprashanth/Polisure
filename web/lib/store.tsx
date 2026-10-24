@@ -37,6 +37,9 @@ export type ClaimDraft = {
   bill: Record<keyof Bill, number | null>;
   showBill: boolean;
   compare: boolean;
+  isAccident: boolean | null;
+  isPlanned: boolean | null;
+  usedSum: number | null;
   answers: Record<string, number | boolean | string | null>;
   questions: Question[] | null;
 };
@@ -45,6 +48,9 @@ export const EMPTY_DRAFT: ClaimDraft = {
   bill: { room: null, linked: null, meds_implants: null, other: null },
   showBill: false,
   compare: true,
+  isAccident: null,
+  isPlanned: null,
+  usedSum: null,
   answers: {},
   questions: null,
 };
@@ -89,7 +95,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setWalletState(loadLS<string[]>("polisure.wallet", []));
     setClaimState(loadLS<ClaimRun | null>("polisure.claim", null));
     const d = loadLS<Partial<ClaimDraft>>("polisure.draft", {});
-    setDraftState({ ...EMPTY_DRAFT, text: d.text ?? "", bill: { ...EMPTY_DRAFT.bill, ...(d.bill ?? {}) }, showBill: d.showBill ?? false, compare: d.compare ?? true });
+    setDraftState({ ...EMPTY_DRAFT, text: d.text ?? "", bill: { ...EMPTY_DRAFT.bill, ...(d.bill ?? {}) }, showBill: d.showBill ?? false, compare: d.compare ?? true, isAccident: d.isAccident ?? null, isPlanned: d.isPlanned ?? null, usedSum: d.usedSum ?? null });
     setReady(true);
   }, []);
 
@@ -114,7 +120,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const setDraft = useCallback((f: (d: ClaimDraft) => ClaimDraft) => {
     setDraftState((d) => {
       const n = f(d);
-      saveLS("polisure.draft", { text: n.text, bill: n.bill, showBill: n.showBill, compare: n.compare });
+      saveLS("polisure.draft", { text: n.text, bill: n.bill, showBill: n.showBill, compare: n.compare, isAccident: n.isAccident, isPlanned: n.isPlanned, usedSum: n.usedSum });
       return n;
     });
   }, []);

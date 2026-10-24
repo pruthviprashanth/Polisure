@@ -184,4 +184,14 @@ def gap_metrics(m: CoverageModel, age: Optional[int], si: Optional[float], rent:
             if caps:
                 out["sublimits"].append({"label": (sl.label or sl.category.value) + (f" (per {sl.per})" if sl.per != "claim" else ""),
                                          "cap_inr": round(min(caps))})
+    waits = [w["months"] for w in out["waiting"]]
+    out["summary"] = {
+        "copay_percent": m.copay.percent if m.copay else 0,
+        "copay_condition": m.copay.condition if m.copay else None,
+        "exclusions": len(m.exclusions),
+        "sublimits": len(out["sublimits"]),
+        "longest_wait_months": max(waits, default=0),
+        "plan": plan,
+    }
     return out
+

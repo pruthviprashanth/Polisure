@@ -159,6 +159,23 @@ export function WhatIfChart({ payout, cfs }: { payout: number | null; cfs: Count
 }
 
 // ------------------------------------------------------------------ gap report
+const TONE: Record<string, string> = {
+  green: "border-emerald-300 bg-emerald-50 text-emerald-900",
+  amber: "border-amber-300 bg-amber-50 text-amber-900",
+  indigo: "border-indigo-300 bg-indigo-50 text-indigo-900",
+  slate: "border-slate-300 bg-white text-slate-900",
+};
+
+function Tile({ label, value, note, tone }: { label: string; value: string; note: string; tone: keyof typeof TONE }) {
+  return (
+    <div className={`rounded-xl border p-3 ${TONE[tone]}`}>
+      <div className="text-xs font-medium uppercase tracking-wide opacity-80">{label}</div>
+      <div className="mt-0.5 text-2xl font-semibold tabular-nums">{value}</div>
+      <div className="text-xs opacity-80">{note}</div>
+    </div>
+  );
+}
+
 export function GapCharts({ m }: { m: GapMetrics }) {
   const room = m.room && m.room.preferred_per_day
     ? [
@@ -166,8 +183,54 @@ export function GapCharts({ m }: { m: GapMetrics }) {
         { name: "Your preferred room", value: m.room.preferred_per_day },
       ]
     : null;
+  const sm = m.summary;
+  const typical = (m.typical_claims ?? []).map((c) => ({ name: prettyCategory(c.category), Billed: c.billed, Payout: c.payout, verdict: c.verdict }));
   return (
     <div className="grid gap-3 md:grid-cols-2">
+      {sm && (
+        <div className="grid grid-cols-2 gap-3 md:col-span-2 lg:grid-cols-4">
+          <Tile
+            label="Co-payment"
+            value={sm.copay_percent > 0 ? `${sm.copay_percent}%` : "None"}
+            note={sm.copay_percent > 0 ? sm.copay_condition || "of every eligible claim" : "You pay no fixed share"}
+            tone={sm.copay_percent > 0 ? "amber" : "green"}
+          />
+          <Tile
+            label="Longest waiting period"
+            value={sm.longest_wait_months ? `${sm.longest_wait_months} mo` : "None"}
+            note={sm.longest_wait_months ? "before some conditions are paid" : `none on the ${sm.plan ?? "this"} plan`}
+            tone={sm.longest_wait_months ? "amber" : "green"}
+          />
+          <Tile label="Sub-limits" value={String(sm.sublimits)} note="treatments with a fixed cap" tone={sm.sublimits ? "indigo" : "green"} />
+          <Tile label="Listed exclusions" value={String(sm.exclusions)} note="not covered at all" tone="slate" />
+        </div>
+      )}
+      {typical.length > 0 && (
+        <div className="md:col-span-2">
+          <ChartCard
+            title="What typical claims would pay on this policy"
+            note={`Illustrative bill sizes, your profile and a policy age of ${m.policy_age_months} months. Zero bars are waiting periods or exclusions.`}
+            label="Billed amount and estimated payout for five typical claims"
+          >
+            <ResponsiveContainer width="100%" height={260}>
+              <BarChart data={typical} margin={{ top: 16, right: 8 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+                <YAxis tickFormatter={short} width={48} tick={{ fontSize: 11 }} />
+                <Tooltip formatter={tipMoney} />
+                <Legend />
+                <Bar dataKey="Billed" fill="#cbd5e1" isAnimationActive={false} />
+                <Bar dataKey="Payout" fill={TEAL} isAnimationActive={false}>
+                  {typical.map((t, i) => (
+                    <Cell key={i} fill={t.verdict === "NOT_COVERED" ? RED : t.verdict === "PARTIAL" ? AMBER : t.verdict === "NEEDS_REVIEW" ? INDIGO : GREEN} />
+                  ))}
+                  <LabelList dataKey="Payout" position="top" formatter={(x: unknown) => (Number(x) ? tipMoney(x) : "₹0")} style={{ fontSize: 11 }} />
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartCard>
+        </div>
+      )}
       {room && m.room && (
         <ChartCard
           title="Room rent vs cap (per day)"

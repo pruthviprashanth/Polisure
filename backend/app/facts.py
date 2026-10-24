@@ -158,13 +158,22 @@ def build_facts(incident_text: str, profile: Profile, bill_in: Optional[dict], a
         missing.append("days")
     if rent is None and (bill["room"] or 0) > 0 and days:
         rent = bill["room"] / days
+    # Structured form answers beat the LLM's reading of the free text.
+    is_accident = _bool(ans.get("is_accident"))
+    is_accident = obj.is_accident if is_accident is None else is_accident
+    is_planned = _bool(ans.get("is_planned"))
+    is_planned = obj.is_planned if is_planned is None else is_planned
+    remaining = _num(ans.get("remaining_sum_insured"))
+    used = _num(ans.get("sum_insured_used"))
+    if remaining is None and used is not None and profile.sum_insured is not None:
+        remaining = max(profile.sum_insured - used, 0)
     facts = ClaimFacts(
         diagnosis_text=obj.diagnosis_text, category=obj.category, procedure=obj.procedure,
-        is_accident=obj.is_accident, is_planned=obj.is_planned, insured_age=profile.insured_age,
+        is_accident=is_accident, is_planned=is_planned, insured_age=profile.insured_age,
         policy_age_months=age_m, ped=ped, days=int(days) if days else None, icu_days=obj.icu_days,
         units=max(obj.units, 1), network_hospital=_bool(ans.get("network_hospital")) if _bool(ans.get("network_hospital")) is not None else obj.network_hospital,
         room_rent_per_day=rent, bill=Bill(**{k: (v or 0) for k, v in bill.items()}),
-        sum_insured=profile.sum_insured, remaining_sum_insured=_num(ans.get("remaining_sum_insured")),
+        sum_insured=profile.sum_insured, remaining_sum_insured=remaining,
         missing=missing, confidence=obj.confidence)
     return facts, prov
 

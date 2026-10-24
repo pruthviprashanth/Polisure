@@ -57,6 +57,8 @@ export type GapMetrics = {
   waiting: { label: string; months: number; detail?: string }[];
   sublimits: { label: string; cap_inr: number }[];
   policy_age_months: number;
+  summary?: { copay_percent: number; copay_condition: string | null; exclusions: number; sublimits: number; longest_wait_months: number; plan: string | null };
+  typical_claims?: { category: string; billed: number; payout: number; verdict: VerdictKind }[];
 };
 
 export type GapsResponse = { plan: string; gaps: Gap[]; metrics?: GapMetrics; meta: Meta };

@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 
-from . import claims, config, llm, present, qa, store
+from . import claims, config, llm, present, qa, recommend as reco, store
 from .schemas import CoverageModel
 
 
@@ -99,8 +99,9 @@ def get_gaps(policy_id: str, insured_age: Optional[int] = None, sum_insured: Opt
     if m is None:
         return err(404, "unknown_policy")
     plan, gaps = present.gaps(m, insured_age, sum_insured, ped, preferred_room_rent_per_day, policy_age_months)
-    return {"plan": plan, "gaps": gaps, "metrics": present.gap_metrics(m, insured_age, sum_insured, preferred_room_rent_per_day, policy_age_months),
-            "meta": _meta(True, ["cache"])}
+    metrics = present.gap_metrics(m, insured_age, sum_insured, preferred_room_rent_per_day, policy_age_months)
+    metrics["typical_claims"] = reco.typical_claims(m, insured_age, sum_insured, ped, preferred_room_rent_per_day, policy_age_months)
+    return {"plan": plan, "gaps": gaps, "metrics": metrics, "meta": _meta(True, ["cache"])}
 
 
 class ClaimRequest(BaseModel):

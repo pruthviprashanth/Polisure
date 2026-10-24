@@ -180,3 +180,23 @@ def recommend(profile: dict, likely_claims: list[str], assumed_bills: Optional[d
     return {"ranked": ranked_ok + ranked_bad, "best_policy_id": best["policy_id"] if best else None, "why": why,
             "assumptions": assumptions, "score_rubric": RUBRIC, "disclaimer": DISCLAIMER,
             "meta": {"cached": True, "providers_used": ["cache"], "model_note": None}}
+
+
+TYPICAL = ["appendectomy", "cataract", "hernia", "joint_replacement", "maternity"]
+
+
+def typical_claims(cov: CoverageModel, age: Optional[int], si: Optional[float], ped: Optional[bool],
+                   rent: Optional[float], policy_age_months: int) -> list[dict]:
+    """What a few typical claims would pay on this policy for this profile (illustrative bill sizes)."""
+    if not cov.computable or not si:
+        return []
+    out = []
+    for name in TYPICAL:
+        cat = Category(name)
+        bill, days, billed = _bill_for(cat, None, rent or DEFAULT_RENT)
+        f = ClaimFacts(category=cat, insured_age=age, sum_insured=si, policy_age_months=policy_age_months,
+                       ped=bool(ped) if ped is not None else False, days=days, room_rent_per_day=rent or DEFAULT_RENT,
+                       bill=bill, confidence=1.0)
+        res = engine.run(cov, f)
+        out.append({"category": name, "billed": int(round(billed)), "payout": res.payout or 0, "verdict": res.verdict})
+    return out

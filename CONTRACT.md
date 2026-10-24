@@ -56,7 +56,7 @@ Raw `application/pdf` (UI opens `…/pdf#page=N` in an iframe).
 ```
 `severity` ∈ `high|medium|info`.
 
-Optional extra `metrics` (for charts; computed in code): `{ "room": { "cap_per_day": 5000, "preferred_per_day": 8000, "payable_pct": 62.5, "proportionate": true } | null, "waiting": [ { "label": "Pre-existing diseases", "months": 48, "detail"?: str } ], "sublimits": [ { "label": "Cataract (per eye)", "cap_inr": 40000 } ], "policy_age_months": 24 }`. The optional query parameter `policy_age_months` (default 0) marks how long the policy has run. `waiting` and `sublimits` are empty when they do not apply to the plan.
+Optional extra `metrics` (for charts; computed in code): `{ "room": { "cap_per_day": 5000, "preferred_per_day": 8000, "payable_pct": 62.5, "proportionate": true } | null, "waiting": [ { "label": "Pre-existing diseases", "months": 48, "detail"?: str } ], "sublimits": [ { "label": "Cataract (per eye)", "cap_inr": 40000 } ], "policy_age_months": 24 }`. The optional query parameter `policy_age_months` (default 0) marks how long the policy has run. `waiting` and `sublimits` are empty when they do not apply to the plan. Further optional keys: `summary` `{ copay_percent, copay_condition, exclusions, sublimits, longest_wait_months, plan }` and `typical_claims` `[ { category, billed, payout, verdict } ]` (what a few typical claims would pay on this policy for the profile, illustrative bill sizes, empty if the policy is not computable).
 
 ## POST /claims/check  (JSON body)
 ```json
@@ -68,7 +68,7 @@ Optional extra `metrics` (for charts; computed in code): `{ "room": { "cap_per_d
   "answers": { "ped": false }
 }
 ```
-`bill` and `answers` are optional. Response 200 is ONE of:
+`bill` and `answers` are optional. `answers` may carry any `needs_info` field plus these optional structured details, which take priority over the model's reading of `incident_text`: `is_accident` (bool), `is_planned` (bool), `sum_insured_used` (₹ already claimed this policy year; the payout is capped at sum insured minus this) or `remaining_sum_insured`. Response 200 is ONE of:
 
 **A. Needs more info**
 ```json

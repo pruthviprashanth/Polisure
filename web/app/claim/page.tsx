@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { NumberField, PedSelect } from "@/components/ProfileForm";
+import { Choice, NumberField, PedSelect } from "@/components/ProfileForm";
 import { ErrorBox, Loading } from "@/components/ui";
 import { api } from "@/lib/api";
 import { useStore } from "@/lib/store";
@@ -46,7 +46,7 @@ const PROGRESS = [
 export default function ClaimPage() {
   const router = useRouter();
   const { ready, policy, profile, setProfile, wallet, draft, setDraft, job, runClaim } = useStore();
-  const { text, bill, showBill, answers, questions, compare } = draft;
+  const { text, bill, showBill, answers, questions, compare, isAccident, isPlanned, usedSum } = draft;
   const setText = (t: string) => setDraft((d) => ({ ...d, text: t }));
   const setBill = (b: typeof bill) => setDraft((d) => ({ ...d, bill: b }));
   const setShowBill = (f: (s: boolean) => boolean) => setDraft((d) => ({ ...d, showBill: f(d.showBill) }));
@@ -84,6 +84,10 @@ export default function ClaimPage() {
     const req: ClaimRequest = { profile, incident_text: text.trim() };
     if (multi) req.policy_ids = walletIds;
     else req.policy_id = policy?.policy_id;
+    // Structured details from the "More details" section override the model's reading of the text.
+    if (isAccident !== null) extra.is_accident = isAccident;
+    if (isPlanned !== null) extra.is_planned = isPlanned;
+    if (usedSum !== null && usedSum > 0) extra.sum_insured_used = usedSum;
     if (Object.keys(b).length) req.bill = b;
     if (Object.keys(extra).length) req.answers = extra;
     return req;
@@ -208,6 +212,50 @@ export default function ClaimPage() {
             ))}
           </div>
         )}
+      </section>
+
+
+      <section className="card space-y-3" aria-labelledby="more">
+        <div>
+          <h2 id="more" className="h2">
+            More details <span className="text-sm font-normal text-slate-500">(optional, makes the estimate more accurate)</span>
+          </h2>
+          <p className="text-sm text-slate-600">Anything you fill in here is used as-is instead of being guessed from your description.</p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Choice
+            id="cause"
+            label="What caused the admission?"
+            value={isAccident}
+            onChange={(v) => setDraft((d) => ({ ...d, isAccident: v }))}
+            options={[
+              { v: false, l: "Illness" },
+              { v: true, l: "Accident" },
+              { v: null, l: "Not sure" },
+            ]}
+            hint="Accidents skip waiting periods"
+          />
+          <Choice
+            id="admission"
+            label="Admission type"
+            value={isPlanned}
+            onChange={(v) => setDraft((d) => ({ ...d, isPlanned: v }))}
+            options={[
+              { v: true, l: "Planned" },
+              { v: false, l: "Emergency" },
+              { v: null, l: "Not sure" },
+            ]}
+            hint="Recorded with the claim; planned stays need pre-authorisation"
+          />
+          <NumberField
+            id="used-sum"
+            label="Sum insured already claimed this year"
+            prefix="₹"
+            value={usedSum}
+            onChange={(n) => setDraft((d) => ({ ...d, usedSum: n }))}
+            hint="Earlier claims lower what is left to pay from"
+          />
+        </div>
       </section>
 
       {questions && (
