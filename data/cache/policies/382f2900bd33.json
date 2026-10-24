@@ -596,6 +596,8 @@
  "pages": 19,
  "computable": true,
  "computable_note": null,
+ "estimate_quality": "exact",
+ "best_case_assumptions": [],
  "pdf_path": "data/policy.pdf",
  "source_providers": [
   "gemini"

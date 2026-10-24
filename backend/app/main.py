@@ -81,7 +81,8 @@ def upload_policy(file: UploadFile = File(...)):
 @app.get("/policies")
 def list_policies():
     return [{"policy_id": m.policy_id, "name": m.name, "pages": m.pages, "computable": m.computable,
-             "computable_note": m.computable_note, "catalog": store.is_catalog(m)} for m in store.list_all()]
+             "computable_note": m.computable_note, "catalog": store.is_catalog(m),
+             "estimate_quality": m.estimate_quality, "assumptions": m.best_case_assumptions} for m in store.list_all()]
 
 
 @app.get("/policies/{policy_id}")
@@ -111,6 +112,8 @@ def get_gaps(policy_id: str, insured_age: Optional[int] = None, sum_insured: Opt
     plan, gaps = present.gaps(m, insured_age, sum_insured, ped, preferred_room_rent_per_day, policy_age_months)
     metrics = present.gap_metrics(m, insured_age, sum_insured, preferred_room_rent_per_day, policy_age_months)
     metrics["typical_claims"] = reco.typical_claims(m, insured_age, sum_insured, ped, preferred_room_rent_per_day, policy_age_months)
+    metrics["estimate_quality"] = m.estimate_quality
+    metrics["assumptions"] = m.best_case_assumptions
     return {"plan": plan, "gaps": gaps, "metrics": metrics, "meta": _meta(True, ["cache"])}
 
 

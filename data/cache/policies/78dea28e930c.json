@@ -540,6 +540,10 @@
  "pages": 31,
  "computable": false,
  "computable_note": "Contains terms the estimator cannot compute exactly: Optional Aggregate Deductible under Section D.4 applies per policy year across all admissible claims before company liability commences.",
+ "estimate_quality": "best_case",
+ "best_case_assumptions": [
+  "you did not choose the optional deductible"
+ ],
  "pdf_path": "data/library/super_health_insurance.pdf",
  "source_providers": [
   "gemini"

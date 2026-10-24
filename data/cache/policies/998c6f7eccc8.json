@@ -794,6 +794,12 @@
  "pages": 27,
  "computable": false,
  "computable_note": "Contains terms the estimator cannot compute exactly: Room rent caps and ICU caps vary across plan bands (Basic Plan vs Uplift Plan) and sum insured levels.; Proportionate deduction on associated medical expenses applies if a room higher than eligible category is selected.; Co-payment of 20% applies if an insured residing in Zone 2 opts for treatment in Zone 1.",
+ "estimate_quality": "best_case",
+ "best_case_assumptions": [
+  "your room (and ICU) is within the policy's room-rent limit",
+  "treatment is in your own zone, so no zonal co-payment applies",
+  "the claim is not for a modern-treatment procedure with its own sub-limit"
+ ],
  "pdf_path": "data/library/new_india_mediclaim.pdf",
  "source_providers": [
   "gemini"

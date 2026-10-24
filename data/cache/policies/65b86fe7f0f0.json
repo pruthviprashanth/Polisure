@@ -427,6 +427,8 @@
  "pages": 27,
  "computable": false,
  "computable_note": "Contains terms the estimator cannot compute exactly: Admissible claims under Room, Board & Nursing Expenses including ICU restricted to maximum 25% of Sum Insured per illness/injury.; Medical Practitioner/Surgeon/Consultant Fees restricted to maximum 40% of Sum Insured per illness/injury.; OT, Anesthesia, Blood, Oxygen, Medicines, Consumables, Diagnostics, Implants restricted to maximum 40% of Sum Insured per illness/injury.",
+ "estimate_quality": "terms_only",
+ "best_case_assumptions": [],
  "pdf_path": "data/policy_b.pdf",
  "source_providers": [
   "gemini"

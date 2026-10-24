@@ -183,7 +183,7 @@ def build_facts(incident_text: str, profile: Profile, bill_in: Optional[dict], a
         is_accident=is_accident, is_planned=is_planned, insured_age=profile.insured_age,
         policy_age_months=age_m, ped=ped, days=int(days) if days else None, icu_days=obj.icu_days,
         units=max(obj.units, 1), network_hospital=_bool(ans.get("network_hospital")) if _bool(ans.get("network_hospital")) is not None else obj.network_hospital,
-        room_rent_per_day=rent, bill=Bill(**{k: (v or 0) for k, v in bill.items()}),
+        room_rent_per_day=rent, room_limit_per_day=_num(ans.get("room_limit_per_day")), bill=Bill(**{k: (v or 0) for k, v in bill.items()}),
         sum_insured=profile.sum_insured, remaining_sum_insured=remaining,
         missing=missing, confidence=obj.confidence)
     return facts, prov

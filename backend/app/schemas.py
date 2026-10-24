@@ -108,6 +108,9 @@ class CoverageModel(CoverageExtract):
     pages: int = 0
     computable: bool = True
     computable_note: Optional[str] = None
+    # exact = payouts computed exactly; best_case = an upper bound that assumes the listed things; terms_only = no payout
+    estimate_quality: Literal["exact", "best_case", "terms_only"] = "exact"
+    best_case_assumptions: list[str] = Field(default_factory=list)
     pdf_path: str = ""
     source_providers: list[str] = Field(default_factory=list)
 
@@ -135,6 +138,7 @@ class ClaimFacts(BaseModel):
     units: int = Field(1, description="e.g. number of eyes for cataract")
     network_hospital: Optional[bool] = None
     room_rent_per_day: Optional[float] = None
+    room_limit_per_day: Optional[float] = Field(None, description="the policy's room-rent limit per day, if the user knows it (used for best-case policies)")
     bill: Bill = Field(default_factory=Bill)
     sum_insured: Optional[float] = None
     remaining_sum_insured: Optional[float] = None
@@ -175,6 +179,8 @@ class Verdict(BaseModel):
     why: str = ""
     next_steps: list[str] = Field(default_factory=list)
     abstain_reason: Optional[str] = None
+    estimate_quality: Literal["exact", "best_case"] = "exact"
+    assumptions: list[str] = Field(default_factory=list)
     disclaimer: str = "This is an estimate of the insurer's likely decision, not a legal ruling."
 
 

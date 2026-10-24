@@ -629,6 +629,11 @@
  "pages": 18,
  "computable": false,
  "computable_note": "Contains terms the estimator cannot compute exactly: Coronary stent/implants pricing capped as per DPCO/NPPA guidelines; Optional Aggregate Deductible of Rs. 50,000 or Rs. 1,00,000 per policy year",
+ "estimate_quality": "best_case",
+ "best_case_assumptions": [
+  "no coronary stent is used (stent prices are capped by regulation)",
+  "you did not choose the optional deductible"
+ ],
  "pdf_path": "data/library/star_health_assure.pdf",
  "source_providers": [
   "gemini"

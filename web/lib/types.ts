@@ -39,7 +39,11 @@ export type PolicyListItem = {
   computable?: boolean;
   computable_note?: string | null;
   catalog?: boolean;
+  estimate_quality?: EstimateQuality;
+  assumptions?: string[];
 };
+
+export type EstimateQuality = "exact" | "best_case" | "terms_only";
 
 export type Severity = "high" | "medium" | "info";
 
@@ -58,6 +62,8 @@ export type GapMetrics = {
   waiting: { label: string; months: number; detail?: string }[];
   sublimits: { label: string; cap_inr: number }[];
   policy_age_months: number;
+  estimate_quality?: EstimateQuality;
+  assumptions?: string[];
   summary?: { copay_percent: number; copay_condition: string | null; exclusions: number; sublimits: number; longest_wait_months: number; plan: string | null };
   typical_claims?: { category: string; billed: number; payout: number; verdict: VerdictKind }[];
 };
@@ -102,10 +108,13 @@ export type Verdict = {
   why: string;
   next_steps: string[];
   abstain_reason: string | null;
+  estimate_quality?: "exact" | "best_case";
+  assumptions?: string[];
   disclaimer: string;
 };
 
 export type ComparisonResult = {
+  estimate_quality?: EstimateQuality;
   policy_id: string;
   name: string;
   computable: boolean;
@@ -176,6 +185,8 @@ export type RankedPolicy = {
   eligible?: boolean;
   ineligible_reason?: string | null;
   terms_score?: number | null;
+  estimate_quality?: EstimateQuality;
+  assumptions?: string[];
   terms_breakdown?: Record<string, number>;
   total_simulated_payout?: number;
 };
@@ -184,6 +195,7 @@ export type RecommendResponse = {
   ranked: RankedPolicy[];
   best_policy_id: string | null;
   best_terms_policy_id?: string | null;
+  best_case_policy_id?: string | null;
   terms_rubric?: string[];
   why: string;
   assumptions: string[];

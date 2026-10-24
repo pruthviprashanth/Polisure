@@ -710,6 +710,11 @@
  "pages": 16,
  "computable": false,
  "computable_note": "The wording lists room rent as covered but states no limit; the limit and any co-payment are set in the policy schedule, which is not part of this document.",
+ "estimate_quality": "best_case",
+ "best_case_assumptions": [
+  "your room (and ICU) is within the policy's room-rent limit",
+  "no co-payment applies (any co-payment is set in the policy schedule)"
+ ],
  "pdf_path": "data/library/sbi_arogya_plus.pdf",
  "source_providers": [
   "gemini"

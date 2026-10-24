@@ -32,6 +32,9 @@ Response 200:
 `key` values: `room_rent, icu_rent, proportionate, copay, waiting_initial, waiting_ped, waiting_specific, sublimit_<name>, exclusion_<n>` (free-form extras allowed; UI must render any key generically).
 Errors: `400 {"error": "..."}` (not a PDF / no text layer), `503 {"error":"llm_unavailable","detail":"..."}`.
 
+## Estimate quality (best-case estimates)
+A policy is `estimate_quality: "exact"` (payouts computed exactly), `"best_case"` (the wording leaves out limits that can only lower the payout: room-rent limit set in the schedule, optional deductible, zonal co-pay, stent price caps, modern-treatment sub-limits; the engine returns an upper bound that states its assumptions) or `"terms_only"` (no payout; compared on waiting periods, exclusions and co-pay). `GET /policies` entries carry `estimate_quality` and `assumptions` (the best-case assumptions, `[]` otherwise); `computable` is true only for `exact`. A Verdict from a best-case policy has `estimate_quality: "best_case"` and `assumptions: [str]` (`"exact"` and `[]` otherwise), and `why` starts with "Best-case estimate…". In a multi-policy comparison each result carries `estimate_quality`; exact estimates are ranked above best-case ones (they are not directly comparable). `answers.room_limit_per_day` (optional number) is the user's room-rent limit from their schedule: for a best-case policy it replaces the room assumption. `/policies/recommend` items carry `estimate_quality` and `assumptions`; best-case items are scored on their upper-bound payouts and listed after the exact ones (`best_case_policy_id`), before terms-only items. `GET .../gaps` `metrics` carries `estimate_quality` and `assumptions`.
+
 ## GET /session
 `{ "boot_id": "<random hex, new on every backend start>" }`. The web app compares it with the value it saved; if it differs (a new launch) it clears everything it stored in the browser, so each launch starts fresh. Unreachable backend = keep the saved state.
 

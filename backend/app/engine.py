@@ -7,6 +7,7 @@ from decimal import ROUND_HALF_UP, Decimal
 from typing import Optional
 
 from .schemas import Category, ClaimFacts, CoverageModel, Cite, Citation, TraceStep
+from .extraction import ROOM_ASSUMPTION
 
 D = Decimal
 BUCKETS = ("room", "linked", "meds_implants", "other")
@@ -40,6 +41,8 @@ class EngineResult:
     plan: Optional[str] = None
     room_cap_per_day: Optional[int] = None
     blocked: Optional[dict] = None  # {"kind": "waiting_initial|ped|specific", "months_needed": n}
+    quality: str = "exact"          # "best_case" when the payout is an upper bound under `assumptions`
+    assumptions: list = field(default_factory=list)
 
 
 class _Run:
@@ -48,6 +51,8 @@ class _Run:
         self.trace: list[TraceStep] = []
         self.cites: dict[tuple, Citation] = {}
         self.used_unverified: list[str] = []
+        self.quality = "exact"
+        self.assumptions: list[str] = []
 
     def use(self, c: Optional[Cite]) -> tuple[str, Optional[int]]:
         if c is None:
@@ -72,7 +77,9 @@ class _Run:
             blocked = None
         return EngineResult(verdict=verdict, billed=rupees(billed), payout=None if payout is None else rupees(payout),
                             trace=self.trace, citations=list(self.cites.values()), abstain_reason=reason,
-                            plan=plan, room_cap_per_day=None if cap is None else rupees(cap), blocked=blocked)
+                            plan=plan, room_cap_per_day=None if cap is None else rupees(cap), blocked=blocked,
+                            quality=self.quality if verdict != "NEEDS_REVIEW" else "exact",
+                            assumptions=list(self.assumptions) if verdict != "NEEDS_REVIEW" else [])
 
 
 def _kw(k: str, text: str) -> bool:
@@ -90,8 +97,11 @@ def _applies(plan: Optional[str], plans: list[str]) -> bool:
     return not plans or (plan is not None and plan in plans)
 
 
-def run(cov: CoverageModel, facts: ClaimFacts) -> EngineResult:
+def run(cov: CoverageModel, facts: ClaimFacts, best_case: bool = False) -> EngineResult:
+    """best_case=True lets a policy with estimate_quality "best_case" produce an upper-bound payout that states its
+    assumptions; without it (or for terms-only policies) a policy that is not computable gives NEEDS_REVIEW."""
     r = _Run(cov, facts)
+    bc = best_case and not cov.computable and cov.estimate_quality == "best_case"
     f = facts
     bill = {k: dec(getattr(f.bill, k)) for k in BUCKETS}
     billed = sum(bill.values(), D(0))
@@ -101,7 +111,7 @@ def run(cov: CoverageModel, facts: ClaimFacts) -> EngineResult:
     def review(reason, cap=None):
         return r.finish("NEEDS_REVIEW", billed, None, reason, plan, cap)
 
-    if not cov.computable:
+    if not cov.computable and not bc:
         return review(cov.computable_note or "This policy's structure cannot be computed exactly by the engine.")
     if f.sum_insured is None or si <= 0:
         return review("Sum insured is unknown.")
@@ -155,7 +165,7 @@ def run(cov: CoverageModel, facts: ClaimFacts) -> EngineResult:
     # unsupported structure
     if f.icu_days and f.icu_days > 0:
         return review("An ICU stay was reported; ICU limits are not modelled by this estimator.")
-    if cov.unmodeled_terms:
+    if cov.unmodeled_terms and not bc:
         return review("This policy has terms the estimator cannot compute exactly: " + "; ".join(cov.unmodeled_terms[:3]))
 
     # steps 5-8 in deduction order
@@ -163,12 +173,24 @@ def run(cov: CoverageModel, facts: ClaimFacts) -> EngineResult:
     scale = D(1)
     rr, prop = cov.room_rent, cov.proportionate
     cap_day: Optional[Decimal] = None
-    if rr and rr.kind == "percent_si":
-        cap_day = si * dec(rr.value) / 100
-    elif rr and rr.kind == "fixed":
-        cap_day = dec(rr.value)
-    elif rr is None or rr.kind == "unknown":
-        return review("The policy's room-rent rule could not be read.")
+    room_assumed = False
+    if bc:
+        r.quality = "best_case"
+        r.assumptions = list(cov.best_case_assumptions)
+        if ROOM_ASSUMPTION in r.assumptions:
+            if f.room_limit_per_day:   # the user told us the limit from their schedule: use it instead of assuming
+                cap_day = dec(f.room_limit_per_day)
+                r.assumptions = [a for a in r.assumptions if a != ROOM_ASSUMPTION]
+                r.assumptions.insert(0, f"your room limit of ₹{rupees(cap_day):,}/day (entered by you) is correct")
+            else:
+                room_assumed = True
+    if cap_day is None and not room_assumed:
+        if rr and rr.kind == "percent_si":
+            cap_day = si * dec(rr.value) / 100
+        elif rr and rr.kind == "fixed":
+            cap_day = dec(rr.value)
+        elif rr is None or rr.kind == "unknown":
+            return review("The policy's room-rent rule could not be read.")
 
     order = [s for s in (cov.deduction_order or []) if s in ("sublimit", "room_rent", "copay", "sum_insured")]
     for s in ("sublimit", "room_rent", "copay", "sum_insured"):
@@ -191,6 +213,8 @@ def run(cov: CoverageModel, facts: ClaimFacts) -> EngineResult:
                     if cur > 0:
                         scale = scale * new / cur
                     cur = new
+        elif step == "room_rent" and room_assumed:
+            r.add("room_assumed", "Room limit not applied — assumed within the policy's limit (best case)", bill["room"] * scale, bill["room"] * scale)
         elif step == "room_rent" and cap_day is not None:
             days = f.days
             rent = dec(f.room_rent_per_day) if f.room_rent_per_day else (bill["room"] / days if days else None)
@@ -229,6 +253,8 @@ def run(cov: CoverageModel, facts: ClaimFacts) -> EngineResult:
                         return review("Co-payment applies only at non-network hospitals; whether the hospital is in the network is unknown.", cap_day)
                     apply = f.network_hospital is False
                 elif cp.applies_when == "other":
+                    if bc:
+                        continue   # covered by the stated best-case assumptions
                     return review("A conditional co-payment applies that the estimator cannot evaluate.", cap_day)
                 else:
                     apply = True

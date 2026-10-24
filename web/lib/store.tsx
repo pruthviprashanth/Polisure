@@ -49,6 +49,7 @@ export type ClaimDraft = {
   isAccident: boolean | null;
   isPlanned: boolean | null;
   usedSum: number | null;
+  roomLimit: number | null;
   answers: Record<string, number | boolean | string | null>;
   questions: Question[] | null;
 };
@@ -60,6 +61,7 @@ export const EMPTY_DRAFT: ClaimDraft = {
   isAccident: null,
   isPlanned: null,
   usedSum: null,
+  roomLimit: null,
   answers: {},
   questions: null,
 };
@@ -128,6 +130,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         isAccident: d.isAccident ?? null,
         isPlanned: d.isPlanned ?? null,
         usedSum: d.usedSum ?? null,
+        roomLimit: d.roomLimit ?? null,
       });
       setReady(true);
     })();
@@ -176,7 +179,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const setDraft = useCallback((f: (d: ClaimDraft) => ClaimDraft) => {
     setDraftState((d) => {
       const n = f(d);
-      saveLS("polisure.draft", { text: n.text, bill: n.bill, showBill: n.showBill, compare: n.compare, isAccident: n.isAccident, isPlanned: n.isPlanned, usedSum: n.usedSum });
+      saveLS("polisure.draft", { text: n.text, bill: n.bill, showBill: n.showBill, compare: n.compare, isAccident: n.isAccident, isPlanned: n.isPlanned, usedSum: n.usedSum, roomLimit: n.roomLimit });
       return n;
     });
   }, []);

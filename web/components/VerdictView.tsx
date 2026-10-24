@@ -20,7 +20,7 @@ export function VerdictView({ v, policyId, policyName }: { v: Verdict; policyId?
             <dd className="text-2xl font-semibold">{inr(v.billed)}</dd>
           </div>
           <div>
-            <dt className="text-sm text-slate-500">Estimated payout</dt>
+            <dt className="text-sm text-slate-500">{v.estimate_quality === "best_case" ? "Best-case payout (up to)" : "Estimated payout"}</dt>
             <dd className="text-2xl font-semibold text-teal-800">{v.payout === null ? "Not estimated" : inr(v.payout)}</dd>
           </div>
           {v.payout !== null && v.billed !== null && v.billed > v.payout && (
@@ -31,6 +31,24 @@ export function VerdictView({ v, policyId, policyName }: { v: Verdict; policyId?
           )}
         </dl>
       </section>
+
+      {v.estimate_quality === "best_case" && !review && (
+        <section className="rounded-xl border border-indigo-300 bg-indigo-50 p-4" role="note">
+          <h2 className="font-semibold text-indigo-900">Best-case estimate, not an exact figure</h2>
+          <p className="mt-1 text-sm text-indigo-900">
+            This policy&apos;s wording leaves out some limits, so the payout below is an upper bound. It assumes:
+          </p>
+          <ul className="mt-1 list-disc pl-5 text-sm text-indigo-900">
+            {(v.assumptions ?? []).map((a, i) => (
+              <li key={i}>{a}</li>
+            ))}
+          </ul>
+          <p className="mt-2 text-sm text-indigo-900">
+            Your policy schedule states the real limits. Enter the room-rent limit under <strong>More details</strong> on the claim
+            page to refine this.
+          </p>
+        </section>
+      )}
 
       {review && v.abstain_reason && (
         <section className="rounded-xl border border-indigo-300 bg-indigo-50 p-4" role="note">

@@ -7,7 +7,7 @@ import { usePdf } from "@/components/PdfModal";
 import { GapCharts } from "@/components/charts";
 import { ClauseChip, ErrorBox, Loading, MetaBadge, Quote, VerifiedBadge } from "@/components/ui";
 import { api } from "@/lib/api";
-import { SEVERITY_STYLE } from "@/lib/format";
+import { SEVERITY_STYLE, qualityLabel } from "@/lib/format";
 import { useStore } from "@/lib/store";
 import type { PolicyListItem, SummaryItem } from "@/lib/types";
 
@@ -178,9 +178,9 @@ export default function MyPolicyPage() {
                   className={`btn btn-secondary ${policy?.policy_id === p.policy_id ? "ring-2 ring-teal-600" : ""}`}
                 >
                   {p.name} <span className="text-xs text-slate-500">{p.pages} pp</span>
-                  {p.computable === false && (
+                  {qualityLabel(p.estimate_quality, p.computable) && (
                     <span className="ml-1 rounded bg-indigo-100 px-1.5 py-0.5 text-xs text-indigo-900" title={p.computable_note || undefined}>
-                      payouts can&apos;t be computed exactly
+                      {qualityLabel(p.estimate_quality, p.computable)}
                     </span>
                   )}
                 </button>

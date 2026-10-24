@@ -46,7 +46,7 @@ const PROGRESS = [
 export default function ClaimPage() {
   const router = useRouter();
   const { ready, policy, profile, setProfile, wallet, draft, setDraft, job, runClaim } = useStore();
-  const { text, bill, showBill, answers, questions, compare, isAccident, isPlanned, usedSum } = draft;
+  const { text, bill, showBill, answers, questions, compare, isAccident, isPlanned, usedSum, roomLimit } = draft;
   const setText = (t: string) => setDraft((d) => ({ ...d, text: t }));
   const setBill = (b: typeof bill) => setDraft((d) => ({ ...d, bill: b }));
   const setShowBill = (f: (s: boolean) => boolean) => setDraft((d) => ({ ...d, showBill: f(d.showBill) }));
@@ -68,6 +68,7 @@ export default function ClaimPage() {
   }, []);
 
   // Until the library loads, trust the stored wallet; afterwards drop ids the server no longer knows.
+  const hasBestCase = library.some((p) => p.estimate_quality === "best_case" && (wallet.includes(p.policy_id) || p.policy_id === policy?.policy_id));
   const walletIds = library.length ? wallet.filter((id) => library.some((p) => p.policy_id === id)) : wallet;
   const multi = compare && walletIds.length >= 2;
 
@@ -88,6 +89,7 @@ export default function ClaimPage() {
     if (isAccident !== null) extra.is_accident = isAccident;
     if (isPlanned !== null) extra.is_planned = isPlanned;
     if (usedSum !== null && usedSum > 0) extra.sum_insured_used = usedSum;
+    if (roomLimit !== null && roomLimit > 0) extra.room_limit_per_day = roomLimit;
     if (Object.keys(b).length) req.bill = b;
     if (Object.keys(extra).length) req.answers = extra;
     return req;
@@ -256,6 +258,18 @@ export default function ClaimPage() {
             hint="Earlier claims lower what is left to pay from"
           />
         </div>
+        {hasBestCase && (
+          <div className="max-w-sm">
+            <NumberField
+              id="room-limit"
+              label="Room-rent limit in your policy schedule (per day)"
+              prefix="₹"
+              value={roomLimit}
+              onChange={(n) => setDraft((d) => ({ ...d, roomLimit: n }))}
+              hint="Some of your policies leave this out of the wording, so their results are best-case. Entering it makes them more exact."
+            />
+          </div>
+        )}
       </section>
 
       {questions && (

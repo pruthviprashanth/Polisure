@@ -119,7 +119,13 @@ export default function WalletPage() {
                   </div>
                   {p.pages > 0 && <span className="text-sm text-slate-500">{p.pages} pages</span>}
                 </div>
-                {!computable && (
+                {p.estimate_quality === "best_case" && (
+                  <div className="rounded-lg bg-indigo-50 p-2 text-sm text-indigo-950">
+                    <span className="mr-1 rounded bg-indigo-700 px-1.5 py-0.5 text-xs font-semibold text-white">Best-case estimates</span>
+                    Claim payouts are an upper bound assuming: {(p.assumptions ?? []).join("; ")}.
+                  </div>
+                )}
+                {!computable && p.estimate_quality !== "best_case" && (
                   <div className="rounded-lg bg-amber-50 p-2 text-sm text-amber-950">
                     <span className="mr-1 rounded bg-amber-400 px-1.5 py-0.5 text-xs font-semibold text-amber-950">
                       Can&apos;t compute payouts

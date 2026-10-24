@@ -34,3 +34,10 @@ export const SEVERITY_STYLE: Record<string, { box: string; tag: string; label: s
 export function prettyCategory(c: string): string {
   return c.replace(/_/g, " ").replace(/^\w/, (m) => m.toUpperCase());
 }
+
+/** Short label for how a policy's payouts are estimated. */
+export function qualityLabel(q?: string | null, computable?: boolean): string | null {
+  if (q === "best_case") return "best-case estimates";
+  if (q === "terms_only" || (q === undefined && computable === false)) return "payouts can't be computed";
+  return null;
+}

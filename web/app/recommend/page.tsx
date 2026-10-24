@@ -5,7 +5,7 @@ import { Fragment, useEffect, useState } from "react";
 import { NumberField, ProfileForm } from "@/components/ProfileForm";
 import { ClauseChip, Disclaimer, ErrorBox, Loading, MetaBadge, VerdictBadge, VerifiedBadge } from "@/components/ui";
 import { api } from "@/lib/api";
-import { inr, prettyCategory } from "@/lib/format";
+import { inr, prettyCategory, qualityLabel } from "@/lib/format";
 import { useStore } from "@/lib/store";
 import type { PolicyListItem, RecommendResponse } from "@/lib/types";
 
@@ -83,7 +83,7 @@ export default function RecommendPage() {
   }
 
   const shown = result ? (showAll ? result.ranked : result.ranked.slice(0, 5)) : [];
-  const chartRanked = result ? result.ranked.filter((r) => r.computable && r.eligible !== false).slice(0, 5) : [];
+  const chartRanked = result ? result.ranked.filter((r) => (r.computable || r.estimate_quality === "best_case") && r.eligible !== false).slice(0, 5) : [];
 
   return (
     <div className="space-y-6">
@@ -163,7 +163,7 @@ export default function RecommendPage() {
           ) : (
             <>
               Comparing <strong>{candidates.length}</strong> {onlyWallet ? "of my policies" : "catalog policies"}
-              {candidates.some((p) => p.computable === false) && ` (${candidates.filter((p) => p.computable === false).length} can't be computed exactly and rank last)`}.
+              {` (${candidates.filter((p) => p.computable !== false).length} exact, ${candidates.filter((p) => p.estimate_quality === "best_case").length} best-case, ${candidates.filter((p) => p.estimate_quality === "terms_only").length} terms-only)`}.
             </>
           )}
         </p>
@@ -183,7 +183,7 @@ export default function RecommendPage() {
               <NumberField
                 key={p.policy_id}
                 id={`prem-${p.policy_id}`}
-                label={`${p.name}${p.computable === false ? " (can't compute payouts)" : ""}`}
+                label={`${p.name}${qualityLabel(p.estimate_quality, p.computable) ? ` (${qualityLabel(p.estimate_quality, p.computable)})` : ""}`}
                 prefix="₹"
                 placeholder="annual premium"
                 value={premiums[p.policy_id] ?? null}
@@ -222,13 +222,16 @@ export default function RecommendPage() {
           <ol className="space-y-3">
             {shown.map((r, i) => {
               const best = r.policy_id === result.best_policy_id;
-              const group = r.eligible === false ? "ineligible" : r.computable ? "scored" : "terms";
-              const prevGroup = i === 0 ? "" : shown[i - 1].eligible === false ? "ineligible" : shown[i - 1].computable ? "scored" : "terms";
+              const groupOf = (x: typeof r) => (x.eligible === false ? "ineligible" : x.computable ? "scored" : x.estimate_quality === "best_case" ? "bestcase" : "terms");
+              const group = groupOf(r);
+              const prevGroup = i === 0 ? "" : groupOf(shown[i - 1]);
               const heading =
                 group === prevGroup
                   ? null
                   : group === "scored"
-                    ? { t: "Ranked on simulated payouts", d: "Payouts for your likely claims were computed from these policies' rules." }
+                    ? { t: "Ranked on simulated payouts", d: "Payouts for your likely claims were computed exactly from these policies' rules." }
+                    : group === "bestcase"
+                      ? { t: "Best-case estimates", d: "These wordings leave some limits out (often the room-rent limit, which is in the policy schedule). Payouts are upper bounds under the stated assumptions, so they are not directly comparable with the exact ones above." }
                     : group === "terms"
                       ? { t: "Compared on terms only", d: "Their room-rent or other limits cannot be computed from the wording (often set in the schedule), so payouts are not simulated. Ranked on waiting periods, exclusions and co-pay." }
                       : { t: "Not available at your age", d: "These policies do not accept your age." };
@@ -248,12 +251,15 @@ export default function RecommendPage() {
                     {!best && r.policy_id === result.best_terms_policy_id && (
                       <span className="rounded bg-indigo-700 px-2 py-0.5 text-xs font-semibold text-white">Best on terms</span>
                     )}
+                    {r.estimate_quality === "best_case" && r.eligible !== false && (
+                      <span className="rounded bg-indigo-700 px-2 py-0.5 text-xs font-semibold text-white">Best case</span>
+                    )}
                     {r.eligible === false ? (
                       <span className="rounded bg-slate-300 px-2 py-0.5 text-xs font-semibold text-slate-800">Not eligible</span>
-                    ) : r.computable ? (
+                    ) : r.computable || r.estimate_quality === "best_case" ? (
                       <span className="text-right">
                         <span className="block text-2xl font-semibold text-teal-800 tabular-nums">{r.score ?? "—"}</span>
-                        <span className="block text-xs text-slate-500">score / 100</span>
+                        <span className="block text-xs text-slate-500">{r.computable ? "score / 100" : "best-case score / 100"}</span>
                       </span>
                     ) : (
                       <span className="text-right">

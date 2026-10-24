@@ -135,12 +135,12 @@ def recommend(profile: dict, likely_claims: list[str], assumed_bills: Optional[d
     if defaults:
         assumptions.append("Bill sizes are illustrative for: " + ", ".join(defaults) + " (override with assumed_bills)")
 
-    ranked_ok, ranked_bad, ranked_terms = [], [], []
+    ranked_ok, ranked_bad, ranked_terms, ranked_best = [], [], [], []
     for cov in pols:
         plan = engine.derive_plan(cov, age)
         item = {"policy_id": cov.policy_id, "name": cov.name, "computable": cov.computable, "score": None,
                 "scenario_results": [], "reasons": [], "premium_note": None, "eligible": True, "ineligible_reason": None,
-                "terms_score": None}
+                "terms_score": None, "estimate_quality": cov.estimate_quality if not cov.computable else "exact", "assumptions": []}
         if cov.plans and age is not None and plan is None:
             lo, hi = min(b.min_age for b in cov.plans), max(b.max_age for b in cov.plans)
             reason = f"Not available at age {age}: this policy's entry ages are {lo}-{hi}."
@@ -148,7 +148,8 @@ def recommend(profile: dict, likely_claims: list[str], assumed_bills: Optional[d
                         reasons=[{"text": reason, "clause": "—", "page": None, "quote": "", "verified": False}])
             ranked_bad.append(item)
             continue
-        if not cov.computable:
+        best_case = (not cov.computable) and cov.estimate_quality == "best_case"
+        if not cov.computable and not best_case:
             _terms_only(item, cov, plan, claims_list, assumed_bills, age, si, rent, ped, claim_after_months)
             ranked_terms.append(item)
             continue
@@ -159,7 +160,7 @@ def recommend(profile: dict, likely_claims: list[str], assumed_bills: Optional[d
             f = ClaimFacts(category=cat, insured_age=age, sum_insured=si, policy_age_months=claim_after_months,
                            ped=bool(ped) if ped is not None else False, days=days, room_rent_per_day=rent,
                            is_accident=cat == Category.accident_trauma, bill=bill, confidence=1.0)
-            res = engine.run(cov, f)
+            res = engine.run(cov, f, best_case=best_case)
             r = {"category": name, "billed": int(round(billed)), "payout": res.payout if res.payout is not None else 0,
                  "verdict": res.verdict}
             if res.blocked:
@@ -173,14 +174,29 @@ def recommend(profile: dict, likely_claims: list[str], assumed_bills: Optional[d
             item["scenario_results"].append(r)
             tot_bill += billed
             tot_pay += r["payout"]
+        if best_case and item["scenario_results"] and all(s["verdict"] == "NEEDS_REVIEW" for s in item["scenario_results"]):
+            # Not a single claim could be estimated (e.g. a rule it needs is unverified): no score, compare on terms only.
+            why = next((s.get("note") for s in item["scenario_results"] if s.get("note")), None)
+            item.update(scenario_results=[], estimate_quality="terms_only", assumptions=[])
+            _terms_only(item, cov, plan, claims_list, assumed_bills, age, si, rent, ped, claim_after_months)
+            if why:
+                item["reasons"].insert(0, {"text": "No payout estimate was possible: " + why, "clause": "—", "page": None, "quote": "", "verified": False})
+                item["reasons"] = item["reasons"][:6]
+            ranked_terms.append(item)
+            continue
         ratio = tot_pay / tot_bill if tot_bill else 0
         item["score"], item["score_breakdown"] = _score(cov, plan, ratio, si, rent)
         item["total_simulated_payout"] = int(round(tot_pay))
         item["reasons"] = _reasons(cov, plan, item["scenario_results"], si, rent)
+        if best_case:
+            item["assumptions"] = list(cov.best_case_assumptions)
+            item["reasons"].insert(0, {"text": "Best-case estimate (an upper bound) that assumes: " + "; ".join(cov.best_case_assumptions),
+                                       "clause": "—", "page": None, "quote": "", "verified": False})
+            item["reasons"] = item["reasons"][:6]
         prem = annual_premiums.get(cov.policy_id)
         if prem:
             item["premium_note"] = f"{inr(prem)}/yr → simulated payout across your likely claims per ₹ of premium: {tot_pay / float(prem):.2f}"
-        ranked_ok.append(item)
+        (ranked_best if best_case else ranked_ok).append(item)
 
     ranked_ok.sort(key=lambda x: (-x["score"], -x["total_simulated_payout"]))
     best = ranked_ok[0] if ranked_ok else None
@@ -190,10 +206,12 @@ def recommend(profile: dict, likely_claims: list[str], assumed_bills: Optional[d
                f"across the claims you listed, given waiting periods for a new policy.")
     else:
         why = "No computable policy was available to compare."
+    ranked_best.sort(key=lambda x: (-x["score"], -x["total_simulated_payout"]))
     ranked_terms.sort(key=lambda x: (-(x["terms_score"] or 0), x["name"]))
     ranked_bad.sort(key=lambda x: x["name"])  # ineligible by age, last
     best_terms = ranked_terms[0]["policy_id"] if ranked_terms else None
-    return {"ranked": ranked_ok + ranked_terms + ranked_bad, "best_terms_policy_id": best_terms,
+    return {"ranked": ranked_ok + ranked_best + ranked_terms + ranked_bad, "best_terms_policy_id": best_terms,
+            "best_case_policy_id": ranked_best[0]["policy_id"] if ranked_best else None,
             "terms_rubric": TERMS_RUBRIC, "best_policy_id": best["policy_id"] if best else None, "why": why,
             "assumptions": assumptions, "score_rubric": RUBRIC, "disclaimer": DISCLAIMER,
             "meta": {"cached": True, "providers_used": ["cache"], "model_note": None}}
@@ -205,7 +223,8 @@ TYPICAL = ["appendectomy", "cataract", "hernia", "joint_replacement", "maternity
 def typical_claims(cov: CoverageModel, age: Optional[int], si: Optional[float], ped: Optional[bool],
                    rent: Optional[float], policy_age_months: int) -> list[dict]:
     """What a few typical claims would pay on this policy for this profile (illustrative bill sizes)."""
-    if not cov.computable or not si:
+    best_case = (not cov.computable) and cov.estimate_quality == "best_case"
+    if (not cov.computable and not best_case) or not si:
         return []
     out = []
     for name in TYPICAL:
@@ -214,7 +233,7 @@ def typical_claims(cov: CoverageModel, age: Optional[int], si: Optional[float], 
         f = ClaimFacts(category=cat, insured_age=age, sum_insured=si, policy_age_months=policy_age_months,
                        ped=bool(ped) if ped is not None else False, days=days, room_rent_per_day=rent or DEFAULT_RENT,
                        bill=bill, confidence=1.0)
-        res = engine.run(cov, f)
+        res = engine.run(cov, f, best_case=best_case)
         out.append({"category": name, "billed": int(round(billed)), "payout": res.payout or 0, "verdict": res.verdict})
     return out
 

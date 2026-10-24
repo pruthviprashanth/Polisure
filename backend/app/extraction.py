@@ -150,17 +150,58 @@ def finalize(ext: CoverageExtract, pages: list[str], policy_id: str, pdf_rel: st
     return m
 
 
+ROOM_ASSUMPTION = "your room (and ICU) is within the policy's room-rent limit"
+_ASSUMABLE = [
+    (re.compile(r"room|icu|iccu|boarding|nursing|proportion|tariff|entitle", re.I), ROOM_ASSUMPTION),
+    (re.compile(r"deductible", re.I), "you did not choose the optional deductible"),
+    (re.compile(r"zon", re.I), "treatment is in your own zone, so no zonal co-payment applies"),
+    (re.compile(r"stent|nppa|dpco", re.I), "no coronary stent is used (stent prices are capped by regulation)"),
+    (re.compile(r"modern treatment|modern procedure", re.I), "the claim is not for a modern-treatment procedure with its own sub-limit"),
+]
+
+
 def set_computable(m: CoverageModel) -> None:
-    """(Re)derive the computable flag and note from the rules; used by finalize and by re-verification of cached models."""
-    computable, note = True, None
+    """Derive computable / estimate_quality / assumptions from the rules.
+
+    exact:      the engine can compute payouts exactly.
+    best_case:  every blocker is something that can only LOWER the payout (room limit, optional deductible, zonal
+                co-pay, stent price caps, modern-treatment sub-limits), so the engine can give an upper bound that
+                states those assumptions.
+    terms_only: a blocker changes the covered amount in a way we cannot bound (e.g. per-illness caps on fees), or
+                the room-rent rule could not be read at all: no payout, compare on terms only.
+    """
     rr = m.room_rent
-    if rr is None or rr.kind == "unknown":
-        computable, note = False, (rr.note if rr and rr.note else "The room-rent rule could not be read from this policy.")
+    m.best_case_assumptions = []
+    if rr is None:
+        m.computable, m.estimate_quality = False, "terms_only"
+        m.computable_note = "The room-rent rule could not be read from this policy."
+        return
+    notes, assume, blockers = [], [], False
+    if rr.kind == "unknown":
+        notes.append(rr.note or "The room-rent rule could not be read from this policy.")
+        assume.append(ROOM_ASSUMPTION)
+        if "schedule" in (rr.note or "").lower():
+            assume.append("no co-payment applies (any co-payment is set in the policy schedule)")
     elif not rr.computable:
-        computable, note = False, rr.note or "The room-rent limit depends on hospital tariffs or the 'entitled category', so payouts cannot be computed exactly."
-    elif m.unmodeled_terms:
-        computable, note = False, "Contains terms the estimator cannot compute exactly: " + "; ".join(m.unmodeled_terms[:3])
-    m.computable, m.computable_note = computable, note
+        notes.append(rr.note or "The room-rent limit depends on hospital tariffs or the 'entitled category', so payouts cannot be computed exactly.")
+        assume.append(ROOM_ASSUMPTION)
+    for t in m.unmodeled_terms:
+        hit = next((txt for pat, txt in _ASSUMABLE if pat.search(t)), None)
+        notes.append(t)
+        if hit:
+            assume.append(hit)
+        else:
+            blockers = True
+    if not notes:
+        m.computable, m.estimate_quality, m.computable_note = True, "exact", None
+        return
+    m.computable = False
+    m.computable_note = ("Contains terms the estimator cannot compute exactly: " + "; ".join(notes[:3])) if m.unmodeled_terms else notes[0]
+    if blockers:
+        m.estimate_quality = "terms_only"
+    else:
+        m.estimate_quality, m.best_case_assumptions = "best_case", list(dict.fromkeys(assume))
+
 
 
 _NOISE = re.compile(r"ambulance|check-?up|domiciliary|pre-?\s?hospital|post-?\s?hospital|daily cash|cash allowance", re.I)

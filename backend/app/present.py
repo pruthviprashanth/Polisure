@@ -95,7 +95,10 @@ def gaps(m: CoverageModel, age: Optional[int], si: Optional[float], ped: Optiona
                     "page": (c.page or None) if c else None, "quote": c.quote if c else "",
                     "verified": bool(c and c.verified)})
 
-    if not m.computable:
+    if m.estimate_quality == "best_case":
+        add("medium", "Payouts are best-case estimates for this policy",
+            "Its wording leaves some limits out (" + "; ".join(m.best_case_assumptions) + "). Claim estimates are an upper bound under those assumptions.", m.room_rent)
+    elif not m.computable:
         add("high", "Payouts for this policy cannot be computed exactly", m.computable_note or "", m.room_rent)
     if m.plans and age is not None and plan is None:
         add("info", "Age is outside the policy's entry bands", f"Age {age} does not fall in any plan band, so plan-specific rules are unclear.", None)

@@ -29,25 +29,32 @@ export function ComparisonView({ c }: { c: Comparison }) {
             <tbody>
               {c.results.map((r) => {
                 const rec = r.policy_id === c.recommended_policy_id;
+                const best = r.estimate_quality === "best_case" && r.verdict.verdict !== "NEEDS_REVIEW";
+                const usable = r.computable || best;
                 return (
                   <tr
                     key={r.policy_id}
-                    className={`border-b border-slate-100 ${rec ? "bg-emerald-50" : ""} ${r.computable ? "" : "text-slate-500"}`}
+                    className={`border-b border-slate-100 ${rec ? "bg-emerald-50" : ""} ${usable ? "" : "text-slate-500"}`}
                   >
                     <td className="py-2 pr-3">
                       <div className="font-medium">{r.name}</div>
                       {rec && <span className="rounded bg-emerald-700 px-1.5 py-0.5 text-xs font-semibold text-white">Recommended</span>}
-                      {!r.computable && (
+                      {best && (
+                        <span className="ml-1 rounded bg-indigo-700 px-1.5 py-0.5 text-xs font-semibold text-white" title={(r.verdict.assumptions ?? []).join("; ")}>
+                          Best case
+                        </span>
+                      )}
+                      {!usable && (
                         <div className="line-clamp-2 text-xs" title={r.verdict.abstain_reason || undefined}>
                           Can&apos;t compute payouts: {r.verdict.abstain_reason || "structure not supported"}
                         </div>
                       )}
                     </td>
-                    <td className={`py-2 pr-3 ${r.computable ? "" : "opacity-60"}`}>
+                    <td className={`py-2 pr-3 ${usable ? "" : "opacity-60"}`}>
                       <VerdictBadge verdict={r.verdict.verdict} size="sm" />
                     </td>
                     <td className="py-2 pr-3 text-right font-semibold tabular-nums">
-                      {r.verdict.payout === null ? "—" : inr(r.verdict.payout)}
+                      {r.verdict.payout === null ? "—" : `${best ? "up to " : ""}${inr(r.verdict.payout)}`}
                     </td>
                     <td className="py-2 text-right">
                       <button type="button" className="text-sm text-teal-800 underline" onClick={() => setTab(r.policy_id)}>

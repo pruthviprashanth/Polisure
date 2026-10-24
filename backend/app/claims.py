@@ -32,7 +32,7 @@ def counterfactuals(cov: CoverageModel, f: ClaimFacts, res: engine.EngineResult)
     base, out = res.payout, []
 
     def add(change: str, f2: ClaimFacts) -> None:
-        r2 = engine.run(cov, f2)
+        r2 = engine.run(cov, f2, best_case=True)
         if r2.payout is not None and r2.verdict != "NEEDS_REVIEW" and r2.payout != base:
             out.append(Counterfactual(change=change, new_payout=r2.payout, delta=r2.payout - base))
 
@@ -55,9 +55,9 @@ def _verdict_for(cov: CoverageModel, f: ClaimFacts, low_conf: bool) -> tuple[Ver
     if low_conf:
         res = engine.EngineResult("NEEDS_REVIEW", 0, None, abstain_reason="The incident description was too unclear to read reliably.")
     else:
-        res = engine.run(cov, f)
+        res = engine.run(cov, f, best_case=True)
     v = Verdict(verdict=res.verdict, billed=res.billed, payout=res.payout, trace=res.trace, citations=res.citations,
-                abstain_reason=res.abstain_reason)
+                abstain_reason=res.abstain_reason, estimate_quality=res.quality, assumptions=res.assumptions)
     if v.verdict == "NEEDS_REVIEW" and not v.abstain_reason:
         v.abstain_reason = "The estimate could not be made reliably."
     v.counterfactuals = counterfactuals(cov, f, res)
@@ -71,11 +71,11 @@ def _questions(covs: list[CoverageModel], f: ClaimFacts) -> list[dict]:
     if f.ped is None and not f.is_accident:
         for c in covs:
             plan = engine.derive_plan(c, f.insured_age)
-            if c.computable and c.waiting_ped and c.waiting_ped.months > (f.policy_age_months or 0) and \
+            if (c.computable or c.estimate_quality == "best_case") and c.waiting_ped and c.waiting_ped.months > (f.policy_age_months or 0) and \
                     (not c.waiting_plans or plan in c.waiting_plans):
                 fields.append("ped")
                 break
-    if f.network_hospital is None and any(c.computable and c.copay and c.copay.applies_when == "non_network" and c.copay.percent > 0 for c in covs):
+    if f.network_hospital is None and any((c.computable or c.estimate_quality == "best_case") and c.copay and c.copay.applies_when == "non_network" and c.copay.percent > 0 for c in covs):
         fields.append("network_hospital")
     return [factsmod.question(x) for x in dict.fromkeys(fields)]
 
@@ -89,7 +89,8 @@ def _combined(ordered: list[tuple[CoverageModel, Verdict]], billed: int) -> Opti
         pay = min(remaining, v.payout)
         split.append({"policy_id": c.policy_id, "payout": pay})
         remaining -= pay
-    return {"possible": True, "total_payout": sum(s["payout"] for s in split), "split": split, "note": COMBINED_NOTE}
+    note = COMBINED_NOTE + (" Includes best-case estimates, so the true total may be lower." if any(v.estimate_quality == "best_case" for _, v in payers) else "")
+    return {"possible": True, "total_payout": sum(s["payout"] for s in split), "split": split, "note": note}
 
 
 def check(policy_ids: list[str], profile: dict, incident_text: str, bill: Optional[dict], answers: Optional[dict],
@@ -116,7 +117,8 @@ def check(policy_ids: list[str], profile: dict, incident_text: str, bill: Option
     # rank: computable policies with a payout, best first
     def key(r):
         c, v, _ = r
-        return (0 if v.verdict != "NEEDS_REVIEW" else 1, -(v.payout or 0))
+        # exact estimates rank above best-case upper bounds (they are not directly comparable), then by payout
+        return (0 if v.verdict != "NEEDS_REVIEW" else 1, 0 if v.estimate_quality == "exact" else 1, -(v.payout or 0))
 
     ranked = sorted(results, key=key)
     best_c, best_v, _ = ranked[0]
@@ -131,6 +133,9 @@ def check(policy_ids: list[str], profile: dict, incident_text: str, bill: Option
                 why, steps = explain.template(v)
         else:
             why, steps = explain.template(v)
+        if v.estimate_quality == "best_case" and v.verdict != "NEEDS_REVIEW":
+            why = ("Best-case estimate (an upper bound, assuming " + "; ".join(v.assumptions) + "). ") + why
+            steps = ["Check the room-rent limit and any co-payment in your policy schedule, or enter the limit under More details to refine this"] + steps
         v.why, v.next_steps = why, steps
     if recommended is None and len(covs) > 1:
         best_v.next_steps = ["Ask each insurer or TPA to confirm coverage for this claim"] + best_v.next_steps
@@ -139,7 +144,7 @@ def check(policy_ids: list[str], profile: dict, incident_text: str, bill: Option
     if len(covs) >= 2:
         reason = _reason(ranked, recommended)
         out["comparison"] = {
-            "results": [{"policy_id": c.policy_id, "name": c.name, "computable": c.computable, "verdict": v.model_dump()}
+            "results": [{"policy_id": c.policy_id, "name": c.name, "computable": c.computable, "estimate_quality": v.estimate_quality if v.verdict != "NEEDS_REVIEW" else c.estimate_quality, "verdict": v.model_dump()}
                         for c, v, _ in results],
             "recommended_policy_id": recommended,
             "recommendation_reason": reason,
@@ -153,11 +158,15 @@ def _reason(ranked, recommended: Optional[str]) -> str:
         return ("None of these policies could be computed reliably for this claim (see each result). "
                 "Ask the insurers to confirm coverage.")
     (c1, v1, _), (c2, v2, _) = ranked[0], ranked[1]
+    if (v1.payout or 0) == 0 and v1.verdict != "NEEDS_REVIEW":
+        return "None of the policies that could be computed is estimated to pay for this claim."
     if v2.verdict == "NEEDS_REVIEW":
         return f"Only {c1.name} could be computed for this claim; the other policy needs manual review."
+    if v1.estimate_quality == "exact" and v2.estimate_quality == "best_case":
+        return (f"{c1.name} is an exact estimate ({inr(v1.payout)}). {c2.name} is only a best case of up to {inr(v2.payout)} "
+                "(it assumes your room is within its limit), so the two are not directly comparable. Enter your room limit to refine it.")
     diff = (v1.payout or 0) - (v2.payout or 0)
-    if (v1.payout or 0) == 0:
-        return "None of the computable policies is estimated to pay for this claim."
+    tail = " Both are best-case estimates." if v1.estimate_quality == "best_case" else ""
     if diff == 0:
-        return f"Both policies are estimated to pay the same ({inr(v1.payout)}); the first listed is shown."
-    return f"Pays {inr(diff)} more than the alternative for this claim ({inr(v1.payout)} vs {inr(v2.payout)})."
+        return f"Both policies are estimated to pay the same ({inr(v1.payout)}); the first listed is shown.{tail}"
+    return f"Pays {inr(diff)} more than the alternative for this claim ({inr(v1.payout)} vs {inr(v2.payout)}).{tail}"

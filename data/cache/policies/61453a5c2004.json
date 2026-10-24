@@ -606,6 +606,10 @@
  "pages": 14,
  "computable": false,
  "computable_note": "Contains terms the estimator cannot compute exactly: Room Rent / Boarding / Nursing capped at 2% of SI per day up to Rs. 5,000 per day.; ICU / ICCU expenses capped at 5% of SI per day up to Rs. 10,000 per day.",
+ "estimate_quality": "best_case",
+ "best_case_assumptions": [
+  "your room (and ICU) is within the policy's room-rent limit"
+ ],
  "pdf_path": "data/library/sbi_arogya_sanjeevani.pdf",
  "source_providers": [
   "gemini"
