@@ -281,7 +281,7 @@ def detect_category(text: str) -> str:
              ("joint", "joint_replacement"), ("deliver", "maternity"), ("maternity", "maternity"), ("pregnan", "maternity"),
              ("caesarean", "maternity"), ("cosmetic", "cosmetic"), ("append", "appendectomy")]
     for kw, cat in rules:
-        if kw in t:
+        if re.search(r"\b" + kw, t):
             return cat
     return "other"
 
