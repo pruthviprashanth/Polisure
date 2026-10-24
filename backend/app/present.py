@@ -131,8 +131,10 @@ def gaps(m: CoverageModel, age: Optional[int], si: Optional[float], ped: Optiona
         for w in m.specific_waits:
             by.setdefault(w.months, []).append(w)
         for mo, ws in sorted(by.items()):
-            names = ", ".join(w.label or w.category.value for w in ws)
-            add("medium", f"{names} have a {mo}-month waiting period", f"These are not covered until {mo} months of continuous cover (accidents excepted).", ws[0])
+            labels = [w.label or w.category.value for w in ws]
+            names = ", ".join(labels[:3]) + (f" and {len(labels) - 3} more" if len(labels) > 3 else "")
+            add("medium", f"{names} have a {mo}-month waiting period",
+                f"Not covered until {mo} months of continuous cover (accidents excepted): {'; '.join(labels)}.", ws[0])
     if m.sublimits and ((not m.sublimit_plans) or (plan in m.sublimit_plans)):
         for sl in m.sublimits:
             bits = []

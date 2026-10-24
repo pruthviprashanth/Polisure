@@ -1,0 +1,603 @@
+{
+ "name": "Individual Health Insurance Policy",
+ "room_rent": {
+  "clause": "8.A.1.i",
+  "page": 2,
+  "quote": "Room, Boarding and Nursing expenses (all inclusive) incurred as provided by the Hospital/Nursing Home up to 1% of Sum Insured per day or actual expenses whichever is less.",
+  "verified": true,
+  "kind": "percent_si",
+  "value": 1.0,
+  "icu_value": 2.0,
+  "computable": true,
+  "note": "Charges for accommodation in Intensive Care Unit (ICU)/ Intensive Cardiac Care Unit (ICCU) up to 2% of Sum Insured per day or actual expenses whichever is less."
+ },
+ "proportionate": {
+  "clause": "8.A.1.1.i",
+  "page": 2,
+  "quote": "In case of admission to a room at rates exceeding the aforesaid limits in Clause III.A.1.i of the policy wordings, the reimbursement/payment of all associated medical expenses incurred at the Hospital shall be effected in the same proportion as the admissible rate per day bears to the actual rate per day of Room Rent.",
+  "verified": true,
+  "applies": true,
+  "applies_to": [
+   "linked"
+  ]
+ },
+ "copay": {
+  "clause": "6",
+  "page": 2,
+  "quote": "Co-Payment\nNot Applicable.",
+  "verified": true,
+  "percent": 0.0,
+  "applies_when": "always",
+  "condition": null
+ },
+ "waiting_initial": {
+  "clause": "9.A.3.i",
+  "page": 5,
+  "quote": "Expenses related to the treatment of any illness within 30 days from the first policy commencement date shall be excluded except claims arising due to an accident, provided the same are covered.",
+  "verified": true,
+  "days": 30
+ },
+ "waiting_ped": {
+  "clause": "9.A.1.i",
+  "page": 5,
+  "quote": "Expenses related to the treatment of a pre-existing disease (PED) and its direct complications shall be excluded until the expiry of 48 months of continuous coverage after the date of inception of the first policy with us.",
+  "verified": true,
+  "months": 48
+ },
+ "specific_waits": [
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Table A. 24 Months’ waiting period\nCataract",
+   "verified": true,
+   "category": "cataract",
+   "months": 24,
+   "label": "Cataract",
+   "keywords": []
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Piles, Fissures and Fistula-in-Ano",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Piles, Fissures and Fistula-in-Ano",
+   "keywords": [
+    "piles",
+    "fissures",
+    "fistula-in-ano",
+    "fistula"
+   ]
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Benign Prostatic Hypertrophy",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Benign Prostatic Hypertrophy",
+   "keywords": [
+    "benign prostatic hypertrophy",
+    "bph"
+   ]
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Sinusitis and related disorders",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Sinusitis and related disorders",
+   "keywords": [
+    "sinusitis"
+   ]
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Treatment for Menorrhagia/ Fibromyoma, Myoma and Prolapse of Uterus",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Treatment for Menorrhagia/ Fibromyoma, Myoma and Prolapse of Uterus",
+   "keywords": [
+    "menorrhagia",
+    "fibromyoma",
+    "myoma",
+    "prolapse of uterus"
+   ]
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Gout and Rheumatism",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Gout and Rheumatism",
+   "keywords": [
+    "gout",
+    "rheumatism"
+   ]
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Hernia of all types",
+   "verified": true,
+   "category": "hernia",
+   "months": 24,
+   "label": "Hernia of all types",
+   "keywords": []
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Calculus diseases",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Calculus diseases",
+   "keywords": [
+    "calculus diseases",
+    "stones",
+    "calculus"
+   ]
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Hydrocele",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Hydrocele",
+   "keywords": [
+    "hydrocele"
+   ]
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Congenital Internal diseases",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Congenital Internal diseases",
+   "keywords": [
+    "congenital internal diseases"
+   ]
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Table B. 48 Months’ waiting period\nJoint Replacement due to Degenerative condition, unless necessitated due to an accident.",
+   "verified": true,
+   "category": "joint_replacement",
+   "months": 48,
+   "label": "Joint Replacement due to Degenerative condition",
+   "keywords": []
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Age-related Osteoarthritis & Osteoporosis",
+   "verified": true,
+   "category": "other",
+   "months": 48,
+   "label": "Age-related Osteoarthritis & Osteoporosis",
+   "keywords": [
+    "osteoarthritis",
+    "osteoporosis"
+   ]
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "Age-related Macular Degeneration (ARMD)",
+   "verified": true,
+   "category": "other",
+   "months": 48,
+   "label": "Age-related Macular Degeneration (ARMD)",
+   "keywords": [
+    "age-related macular degeneration",
+    "armd"
+   ]
+  },
+  {
+   "clause": "9.A.2.vi",
+   "page": 5,
+   "quote": "All Neurodegenerative disorders",
+   "verified": true,
+   "category": "other",
+   "months": 48,
+   "label": "All Neurodegenerative disorders",
+   "keywords": [
+    "neurodegenerative disorders"
+   ]
+  }
+ ],
+ "sublimits": [
+  {
+   "clause": "8.A.1.2",
+   "page": 3,
+   "quote": "Cataract | Up to 25% of Sum Insured or Rs. 40,000 per eye, whichever is less",
+   "verified": true,
+   "category": "cataract",
+   "label": "Cataract",
+   "pct_si": 25.0,
+   "limit_inr": 40000.0,
+   "per": "eye",
+   "keywords": []
+  },
+  {
+   "clause": "8.A.1.2",
+   "page": 3,
+   "quote": "Hernia & Hysterectomy | Up to 25% of Sum Insured or Rs. 1,00,000, whichever is less",
+   "verified": true,
+   "category": "hernia",
+   "label": "Hernia",
+   "pct_si": 25.0,
+   "limit_inr": 100000.0,
+   "per": "claim",
+   "keywords": []
+  },
+  {
+   "clause": "8.A.1.2",
+   "page": 3,
+   "quote": "Hernia & Hysterectomy | Up to 25% of Sum Insured or Rs. 1,00,000, whichever is less",
+   "verified": true,
+   "category": "other",
+   "label": "Hysterectomy",
+   "pct_si": 25.0,
+   "limit_inr": 100000.0,
+   "per": "claim",
+   "keywords": [
+    "hysterectomy"
+   ]
+  },
+  {
+   "clause": "8.A.1.2",
+   "page": 3,
+   "quote": "Major surgeries which include Cardiac Surgeries; Brain Tumour Surgeries; Pace Maker Implantation for Sick Sinus Syndrome; Cancer Surgeries; Hip, Knee, Joint Replacement Surgery; Organ Transplant | Up to 70% of the Sum Insured",
+   "verified": true,
+   "category": "joint_replacement",
+   "label": "Hip, Knee, Joint Replacement Surgery",
+   "pct_si": 70.0,
+   "limit_inr": null,
+   "per": "claim",
+   "keywords": []
+  },
+  {
+   "clause": "8.A.1.2",
+   "page": 3,
+   "quote": "Major surgeries which include Cardiac Surgeries; Brain Tumour Surgeries; Pace Maker Implantation for Sick Sinus Syndrome; Cancer Surgeries; Hip, Knee, Joint Replacement Surgery; Organ Transplant | Up to 70% of the Sum Insured",
+   "verified": true,
+   "category": "other",
+   "label": "Major Surgeries",
+   "pct_si": 70.0,
+   "limit_inr": null,
+   "per": "claim",
+   "keywords": [
+    "cardiac surgeries",
+    "brain tumour surgeries",
+    "pace maker implantation",
+    "cancer surgeries",
+    "organ transplant"
+   ]
+  }
+ ],
+ "exclusions": [
+  {
+   "clause": "9.B.4",
+   "page": 6,
+   "quote": "Expenses related to any admission primarily for diagnostics and evaluation purposes only are excluded. Any diagnostic expenses which are not related or not incidental to the current diagnosis and treatment are excluded.",
+   "verified": true,
+   "category": "other",
+   "text": "Investigation & Evaluation",
+   "keywords": [
+    "investigation",
+    "evaluation",
+    "diagnostic"
+   ]
+  },
+  {
+   "clause": "9.B.5",
+   "page": 6,
+   "quote": "Expenses related to any admission primarily for enforced bed rest and not for receiving treatment. This also includes: Custodial care... Any services for people who are terminally ill",
+   "verified": false,
+   "category": "other",
+   "text": "Rest Cure, Rehabilitation and Respite Care",
+   "keywords": [
+    "rest cure",
+    "rehabilitation",
+    "respite care",
+    "custodial care"
+   ]
+  },
+  {
+   "clause": "9.B.6",
+   "page": 6,
+   "quote": "Expenses related to the surgical treatment of obesity that does not fulfil all the below conditions",
+   "verified": true,
+   "category": "other",
+   "text": "Obesity/Weight Control",
+   "keywords": [
+    "obesity",
+    "weight control"
+   ]
+  },
+  {
+   "clause": "9.B.7",
+   "page": 6,
+   "quote": "Expenses related to any treatment, including surgical management, to change characteristics of the body to those of the opposite sex.",
+   "verified": true,
+   "category": "other",
+   "text": "Change-of-Gender treatments",
+   "keywords": [
+    "change of gender",
+    "gender"
+   ]
+  },
+  {
+   "clause": "9.B.8",
+   "page": 6,
+   "quote": "Expenses for cosmetic or plastic surgery or any treatment to change appearance unless for reconstruction following an Accident, Burn(s) or Cancer or as part of the medically necessary treatment",
+   "verified": true,
+   "category": "cosmetic",
+   "text": "Cosmetic or Plastic Surgery",
+   "keywords": []
+  },
+  {
+   "clause": "9.B.9",
+   "page": 6,
+   "quote": "Expenses related to any treatment necessitated due to participation as a professional in hazardous or adventure sports",
+   "verified": true,
+   "category": "other",
+   "text": "Hazardous or Adventure Sports",
+   "keywords": [
+    "hazardous sports",
+    "adventure sports"
+   ]
+  },
+  {
+   "clause": "9.B.10",
+   "page": 6,
+   "quote": "Expenses for treatment directly arising from or consequent upon any Insured Person committing or attempting to commit a breach of law with criminal intent.",
+   "verified": true,
+   "category": "other",
+   "text": "Breach of Law",
+   "keywords": [
+    "breach of law",
+    "criminal intent"
+   ]
+  },
+  {
+   "clause": "9.B.11",
+   "page": 6,
+   "quote": "Expenses incurred towards treatment in any hospital or by any Medical Practitioner or any other provider specifically excluded by the Insurer",
+   "verified": true,
+   "category": "other",
+   "text": "Excluded Providers",
+   "keywords": [
+    "excluded providers"
+   ]
+  },
+  {
+   "clause": "9.B.12",
+   "page": 6,
+   "quote": "Treatment for Alcoholism, drug or substance abuse or any addictive condition and consequences thereof.",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment for Alcoholism, drug or substance abuse",
+   "keywords": [
+    "alcoholism",
+    "drug abuse",
+    "substance abuse"
+   ]
+  },
+  {
+   "clause": "9.B.13",
+   "page": 7,
+   "quote": "Treatments received in health hydros, nature cure clinics, spas or similar establishments or private beds registered as a nursing home attached to such establishments",
+   "verified": true,
+   "category": "other",
+   "text": "Treatments in health hydros, spas",
+   "keywords": [
+    "health hydros",
+    "nature cure",
+    "spas"
+   ]
+  },
+  {
+   "clause": "9.B.14",
+   "page": 7,
+   "quote": "Dietary supplements and substances that can be purchased without a prescription, including but not limited to Vitamins, minerals and organic substances unless prescribed by a medical practitioner",
+   "verified": true,
+   "category": "other",
+   "text": "Dietary supplements",
+   "keywords": [
+    "dietary supplements",
+    "vitamins"
+   ]
+  },
+  {
+   "clause": "9.B.15",
+   "page": 7,
+   "quote": "Expenses related to the treatment for correction of eyesight due to refractive error less than 7.5 dioptres.",
+   "verified": true,
+   "category": "other",
+   "text": "Refractive Error",
+   "keywords": [
+    "refractive error",
+    "eyesight"
+   ]
+  },
+  {
+   "clause": "9.B.16",
+   "page": 7,
+   "quote": "Expenses related to any unproven treatment, services and supplies for or in connection with any treatment.",
+   "verified": true,
+   "category": "other",
+   "text": "Unproven Treatments",
+   "keywords": [
+    "unproven treatments"
+   ]
+  },
+  {
+   "clause": "9.B.17",
+   "page": 7,
+   "quote": "Expenses related to sterility and infertility. This includes: Any type of contraception, sterilization; Assisted Reproduction services... Gestational Surrogacy; Reversal of sterilization",
+   "verified": false,
+   "category": "infertility",
+   "text": "Sterility and Infertility",
+   "keywords": []
+  },
+  {
+   "clause": "9.B.18",
+   "page": 7,
+   "quote": "Medical treatment expenses traceable to childbirth (including complicated deliveries and caesarean sections incurred during hospitalisation) except ectopic pregnancy; Expenses towards miscarriage... and lawful medical te",
+   "verified": true,
+   "category": "maternity",
+   "text": "Maternity",
+   "keywords": []
+  },
+  {
+   "clause": "9.C.1",
+   "page": 7,
+   "quote": "All expenses caused by or arising from or attributable to foreign invasion, an act of foreign enemies, hostilities, warlike operations",
+   "verified": true,
+   "category": "other",
+   "text": "War, invasion, hostilities",
+   "keywords": [
+    "war",
+    "foreign invasion"
+   ]
+  },
+  {
+   "clause": "9.C.2",
+   "page": 7,
+   "quote": "All Illnesses/expenses caused by ionizing radiation or contamination by radioactivity from any nuclear fuel... nuclear/chemical/biological attack.",
+   "verified": false,
+   "category": "other",
+   "text": "Nuclear contamination",
+   "keywords": [
+    "nuclear",
+    "radiation",
+    "radioactivity"
+   ]
+  },
+  {
+   "clause": "9.C.3",
+   "page": 7,
+   "quote": "Any expenses incurred on Out-patient treatment (OPD treatment).",
+   "verified": true,
+   "category": "other",
+   "text": "Out-patient treatment",
+   "keywords": [
+    "opd",
+    "out-patient"
+   ]
+  },
+  {
+   "clause": "9.C.8",
+   "page": 7,
+   "quote": "Congenital External Diseases or Defects or anomalies.",
+   "verified": true,
+   "category": "other",
+   "text": "Congenital External Diseases",
+   "keywords": [
+    "congenital external"
+   ]
+  },
+  {
+   "clause": "9.C.11",
+   "page": 8,
+   "quote": "Dental treatment or surgery of any kind unless necessitated by disease or accident and requiring hospitalisation.",
+   "verified": true,
+   "category": "dental",
+   "text": "Dental treatment",
+   "keywords": []
+  },
+  {
+   "clause": "9.C.12",
+   "page": 8,
+   "quote": "Intentional self-inflicted Injury or attempted suicide.",
+   "verified": true,
+   "category": "other",
+   "text": "Intentional self-inflicted Injury",
+   "keywords": [
+    "self-inflicted",
+    "suicide"
+   ]
+  },
+  {
+   "clause": "9.C.13",
+   "page": 8,
+   "quote": "Routine eye-examination expenses, cost of spectacles, contact lenses.",
+   "verified": true,
+   "category": "other",
+   "text": "Routine eye-examination, spectacles",
+   "keywords": [
+    "eye-examination",
+    "spectacles",
+    "contact lenses"
+   ]
+  },
+  {
+   "clause": "9.C.18",
+   "page": 8,
+   "quote": "Vaccination or inoculation of any kind unless post animal bite.",
+   "verified": true,
+   "category": "other",
+   "text": "Vaccination or inoculation",
+   "keywords": [
+    "vaccination",
+    "inoculation"
+   ]
+  }
+ ],
+ "deduction_order": [
+  "sublimit",
+  "room_rent",
+  "copay",
+  "sum_insured"
+ ],
+ "plans": [
+  {
+   "plan": "Platinum",
+   "min_age": 18,
+   "max_age": 35
+  },
+  {
+   "plan": "Gold",
+   "min_age": 36,
+   "max_age": 60
+  },
+  {
+   "plan": "Senior Citizen",
+   "min_age": 61,
+   "max_age": 65
+  }
+ ],
+ "waiting_plans": [
+  "Gold",
+  "Senior Citizen"
+ ],
+ "sublimit_plans": [
+  "Gold",
+  "Senior Citizen"
+ ],
+ "unmodeled_terms": [],
+ "policy_id": "382f2900bd33",
+ "pages": 19,
+ "computable": true,
+ "computable_note": null,
+ "pdf_path": "data/policy.pdf",
+ "source_providers": [
+  "gemini"
+ ]
+}

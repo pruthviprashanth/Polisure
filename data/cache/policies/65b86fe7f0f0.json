@@ -1,0 +1,434 @@
+{
+ "name": "Health Insurance Policy Retail",
+ "room_rent": {
+  "clause": "SCOPE OF COVER 1",
+  "page": 6,
+  "quote": "Room, Board & Nursing expenses as charged by the Hospital/Nursing Home Excluding registration and service Expenses are covered up to 1% of the Sum Insured per day and if admitted into Intensive Care Unit up to 2% of the Sum Insured per day",
+  "verified": true,
+  "kind": "percent_si",
+  "value": 1.0,
+  "icu_value": 2.0,
+  "computable": true,
+  "note": "Maximum up to 25% of the Sum Insured per illness/injury for Room, Board & Nursing Expenses including ICU."
+ },
+ "proportionate": {
+  "clause": "SCOPE OF COVER 3",
+  "page": 6,
+  "quote": "In case the insured opts for a room with rent higher than the entitled category as under point no. 1, the charges payable under point 1, 2 and 3 shall be limited to the charges applicable to the entitled category.",
+  "verified": true,
+  "applies": true,
+  "applies_to": [
+   "linked"
+  ]
+ },
+ "copay": {
+  "clause": "SCOPE OF COVER 17",
+  "page": 8,
+  "quote": "Co-pay: For all admissible claims in non-network hospitals, Insured shall bear 10% of the admissible claim in addition to the excess as per terms of insurance",
+  "verified": true,
+  "percent": 10.0,
+  "applies_when": "non_network",
+  "condition": null
+ },
+ "waiting_initial": {
+  "clause": "EXCLUSIONS 2",
+  "page": 9,
+  "quote": "Medical Expenses incurred for any disease / illness or diagnosable within 30 days, of the commencement (Commencement Date of first Health Insurance Policy with us) of the Policy Period except those incurred as a result of Accidental Bodily Injury.",
+  "verified": true,
+  "days": 30
+ },
+ "waiting_ped": {
+  "clause": "EXCLUSIONS 1",
+  "page": 8,
+  "quote": "Benefits will not be available for Any condition, whether diagnosed or not, ailment or injury or related condition(s) for which Insured has been diagnosed, received medical treatment, had signs and / or symptoms, prior to inception of Insured’s first Policy, until 48 consecutive months have elapsed",
+  "verified": true,
+  "months": 48
+ },
+ "specific_waits": [
+  {
+   "clause": "EXCLUSIONS 3",
+   "page": 9,
+   "quote": "Exclusions applicable to first year of cover from commencement of the Policy, from the following Diseases / Illness and its related complications:\nAny types of gastric or duodenal ulcers,\nTonsillectomy, Adenoidectomy, Mastoidectomy, Tympanoplasty\nSurgery on all internal or external tumor /cysts/nodules/polyps of any kind including breast lumps\nAll types of Hernia and Hydrocele\nAnal Fissures, Fistula and Piles",
+   "verified": true,
+   "category": "hernia",
+   "months": 12,
+   "label": "Hernia and Hydrocele",
+   "keywords": [
+    "hernia",
+    "hydrocele"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 3",
+   "page": 9,
+   "quote": "Any types of gastric or duodenal ulcers,\nTonsillectomy, Adenoidectomy, Mastoidectomy, Tympanoplasty\nSurgery on all internal or external tumor /cysts/nodules/polyps of any kind including breast lumps\nAll types of Hernia and Hydrocele\nAnal Fissures, Fistula and Piles",
+   "verified": true,
+   "category": "other",
+   "months": 12,
+   "label": "Gastric or duodenal ulcers, ENT surgeries, tumors/cysts/nodules/polyps, fissures/fistula/piles",
+   "keywords": [
+    "gastric ulcers",
+    "duodenal ulcers",
+    "tonsillectomy",
+    "adenoidectomy",
+    "mastoidectomy",
+    "tympanoplasty",
+    "tumor",
+    "cysts",
+    "nodules",
+    "polyps",
+    "breast lumps",
+    "anal fissures",
+    "fistula",
+    "piles"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 4",
+   "page": 10,
+   "quote": "Exclusions applicable to first two years of cover from commencement of the Policy, from the following Diseases / Illness and its related complications:\nCataract",
+   "verified": true,
+   "category": "cataract",
+   "months": 24,
+   "label": "Cataract",
+   "keywords": [
+    "cataract"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 4",
+   "page": 10,
+   "quote": "Benign Prostatic Hypertrophy\nHysterectomy/ myomectomy for menorrhagia or fibromyoma or prolapse of uterus\nHypertension, Heart Disease and related complications\nDiabetes and related complications",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "BPH, Hysterectomy/Myomectomy, Hypertension, Heart Disease, Diabetes",
+   "keywords": [
+    "benign prostatic hypertrophy",
+    "hysterectomy",
+    "myomectomy",
+    "menorrhagia",
+    "fibromyoma",
+    "prolapse of uterus",
+    "hypertension",
+    "heart disease",
+    "diabetes"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 4",
+   "page": 10,
+   "quote": "Non infective Arthritis, Treatment of Spondylosis / Spondylitis, Gout & Rheumatism\nSurgery of Genitourinary tract\nCalculus Diseases of any etiology\nSinusitis and related disorders\nSurgery for prolapsed intervertebral disc unless arising from accident\nSurgery of varicose veins and varicose ulcers\nChronic Renal failure including dialysis",
+   "verified": true,
+   "category": "other",
+   "months": 24,
+   "label": "Arthritis, Spondylosis, Calculus, Sinusitis, PIVD, Varicose Veins, CRF",
+   "keywords": [
+    "arthritis",
+    "spondylosis",
+    "spondylitis",
+    "gout",
+    "rheumatism",
+    "genitourinary",
+    "calculus",
+    "sinusitis",
+    "prolapsed intervertebral disc",
+    "varicose veins",
+    "varicose ulcers",
+    "chronic renal failure",
+    "dialysis"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 5",
+   "page": 10,
+   "quote": "Medical Expenses incurred during or in connection with joint replacement surgery due to Degenerative condition, Age related osteoarthritis and Osteoporosis unless such joint replacement surgery is necessitated by accidental Bodily Injury.",
+   "verified": true,
+   "category": "joint_replacement",
+   "months": 36,
+   "label": "Joint Replacement Surgery",
+   "keywords": [
+    "joint replacement surgery",
+    "osteoarthritis",
+    "osteoporosis"
+   ]
+  }
+ ],
+ "sublimits": [
+  {
+   "clause": "SCOPE OF COVER 4",
+   "page": 6,
+   "quote": "Cataract Treatment: Our obligation to make payment in respect of any claim for treatment of Cataract including surgery thereof under the policy is limited to 15 % of the Sum Insured subject to a maximum of INR 25000 per eye",
+   "verified": true,
+   "category": "cataract",
+   "label": "Cataract Treatment",
+   "pct_si": 15.0,
+   "limit_inr": 25000.0,
+   "per": "eye",
+   "keywords": [
+    "cataract"
+   ]
+  }
+ ],
+ "exclusions": [
+  {
+   "clause": "EXCLUSIONS 6",
+   "page": 11,
+   "quote": "Treatment outside India.",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment outside India.",
+   "keywords": [
+    "treatment outside india"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 7",
+   "page": 11,
+   "quote": "Epidemics recognized by WHO or/and Indian government. Government screening programs, etc are not covered by this policy.",
+   "verified": true,
+   "category": "other",
+   "text": "Epidemics recognized by WHO or/and Indian government. Government screening programs, etc are not covered by this policy.",
+   "keywords": [
+    "epidemics",
+    "screening programs"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 8",
+   "page": 11,
+   "quote": "War, invasion, acts of foreign enemies, hostilities (whether war be declared or not), civil war, commotion, unrest, rebellion, revolution, insurrection, military or usurped power or confiscation or nationalisation",
+   "verified": true,
+   "category": "other",
+   "text": "War, invasion, acts of foreign enemies, hostilities, civil war, commotion, unrest, rebellion, revolution, insurrection, military or usurped power.",
+   "keywords": [
+    "war",
+    "invasion",
+    "hostilities",
+    "civil war",
+    "rebellion"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 9",
+   "page": 11,
+   "quote": "Injury or Disease directly or indirectly caused by or contributed to by nuclear weapons/materials.",
+   "verified": true,
+   "category": "other",
+   "text": "Injury or Disease directly or indirectly caused by or contributed to by nuclear weapons/materials.",
+   "keywords": [
+    "nuclear weapons",
+    "nuclear materials"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 10",
+   "page": 11,
+   "quote": "Circumcision unless necessary for treatment of a disease, illness or injury not excluded hereunder, or, as may be necessitated due to an accident",
+   "verified": true,
+   "category": "other",
+   "text": "Circumcision unless necessary for treatment of a disease, illness or injury, or necessitated due to an accident.",
+   "keywords": [
+    "circumcision"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 11",
+   "page": 11,
+   "quote": "Cosmetic or aesthetic treatments of any description, treatment or surgery for change of life/gender, Lasik treatment for refractive error. Any form of plastic surgery (unless necessary for the treatment of Illness or accidental Bodily Injury).",
+   "verified": true,
+   "category": "cosmetic",
+   "text": "Cosmetic or aesthetic treatments, gender change, Lasik treatment, plastic surgery (unless necessary for illness/injury).",
+   "keywords": [
+    "cosmetic",
+    "aesthetic",
+    "lasik",
+    "plastic surgery"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 12",
+   "page": 11,
+   "quote": "The cost of spectacles, contact lenses, hearing aids, crutches, wheelchairs, artificial limbs, dentures, artificial teeth and all other external appliances. Prosthesis and/or devices.",
+   "verified": true,
+   "category": "other",
+   "text": "Cost of spectacles, contact lenses, hearing aids, crutches, wheelchairs, artificial limbs, dentures, artificial teeth and external appliances.",
+   "keywords": [
+    "spectacles",
+    "contact lenses",
+    "hearing aids",
+    "crutches",
+    "wheelchairs",
+    "artificial limbs",
+    "dentures"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 15",
+   "page": 11,
+   "quote": "Dental treatment or surgery of any kind unless required as a result of Accidental Bodily Injury to natural teeth requiring hospitalization treatment.",
+   "verified": true,
+   "category": "dental",
+   "text": "Dental treatment or surgery of any kind unless required as a result of Accidental Bodily Injury to natural teeth requiring hospitalization.",
+   "keywords": [
+    "dental treatment",
+    "dental surgery"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 16",
+   "page": 11,
+   "quote": "Convalescence, general debility, “Run-down” condition, rest cure, Congenital Internal and /or external illness/disease/defect.",
+   "verified": true,
+   "category": "other",
+   "text": "Convalescence, general debility, rest cure, Congenital Internal and /or external illness/disease/defect.",
+   "keywords": [
+    "convalescence",
+    "general debility",
+    "rest cure",
+    "congenital"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 17",
+   "page": 11,
+   "quote": "Intentional self-injury (including but not limited to the use or misuse of any intoxicating drugs or alcohol) and any violation of law or participation in an event/activity that is against law with a criminal intent.",
+   "verified": true,
+   "category": "other",
+   "text": "Intentional self-injury, drug/alcohol misuse, violation of law.",
+   "keywords": [
+    "intentional self-injury",
+    "suicide",
+    "violation of law"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 18",
+   "page": 11,
+   "quote": "Any complications arising out of or ailments requiring treatment due to use or abuse of any substance, drug or alcohol and treatment for de-addiction.",
+   "verified": true,
+   "category": "other",
+   "text": "Complications or treatment due to substance, drug or alcohol abuse and de-addiction.",
+   "keywords": [
+    "substance abuse",
+    "drug abuse",
+    "alcohol abuse",
+    "de-addiction"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 19",
+   "page": 11,
+   "quote": "Any condition directly or indirectly caused by or associated with Human Immunodeficiency Virus or Variant/mutant viruses and or any syndrome or condition of a similar kind commonly referred to as AIDS.",
+   "verified": true,
+   "category": "other",
+   "text": "HIV / AIDS or variant viruses.",
+   "keywords": [
+    "hiv",
+    "aids"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 20",
+   "page": 11,
+   "quote": "Venereal disease or any sexually transmitted disease or sickness.",
+   "verified": true,
+   "category": "other",
+   "text": "Venereal disease or sexually transmitted disease.",
+   "keywords": [
+    "venereal disease",
+    "std"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 21",
+   "page": 11,
+   "quote": "Treatment arising from or traceable to pregnancy childbirth, miscarriage, abortion or complications of any of this, including caesarian section. However, this exclusion will not apply to abdominal operation for extra uterine pregnancy",
+   "verified": true,
+   "category": "maternity",
+   "text": "Pregnancy, childbirth, miscarriage, abortion or caesarean section, except ectopic pregnancy.",
+   "keywords": [
+    "pregnancy",
+    "childbirth",
+    "miscarriage",
+    "abortion",
+    "caesarian"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 22",
+   "page": 11,
+   "quote": "Any fertility, sub fertility or assisted conception operation or sterilization procedure and related treatment.",
+   "verified": true,
+   "category": "infertility",
+   "text": "Fertility, sub fertility, assisted conception operation or sterilization procedure.",
+   "keywords": [
+    "fertility",
+    "sub fertility",
+    "assisted conception",
+    "sterilization"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 26",
+   "page": 11,
+   "quote": "Treatment for any mental illness or psychiatric or psychological ailment / condition.",
+   "verified": true,
+   "category": "other",
+   "text": "Mental illness or psychiatric or psychological ailment / condition.",
+   "keywords": [
+    "mental illness",
+    "psychiatric",
+    "psychological"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 37",
+   "page": 12,
+   "quote": "Treatment for obesity, weight reduction or weight management.",
+   "verified": true,
+   "category": "other",
+   "text": "Treatment for obesity, weight reduction or weight management.",
+   "keywords": [
+    "obesity",
+    "weight reduction",
+    "weight management"
+   ]
+  },
+  {
+   "clause": "EXCLUSIONS 38",
+   "page": 12,
+   "quote": "Experimental and unproven treatment.",
+   "verified": true,
+   "category": "other",
+   "text": "Experimental and unproven treatment.",
+   "keywords": [
+    "experimental",
+    "unproven"
+   ]
+  }
+ ],
+ "deduction_order": [
+  "sublimit",
+  "room_rent",
+  "copay",
+  "sum_insured"
+ ],
+ "plans": [],
+ "waiting_plans": [],
+ "sublimit_plans": [],
+ "unmodeled_terms": [
+  "Admissible claims under Room, Board & Nursing Expenses including ICU restricted to maximum 25% of Sum Insured per illness/injury.",
+  "Medical Practitioner/Surgeon/Consultant Fees restricted to maximum 40% of Sum Insured per illness/injury.",
+  "OT, Anesthesia, Blood, Oxygen, Medicines, Consumables, Diagnostics, Implants restricted to maximum 40% of Sum Insured per illness/injury.",
+  "Zonal co-payment/differential payout depending on Benefit Plan location vs treatment location (e.g. Plan B paying 80% in Location A, Plan C paying 70% in Location A and 80% in Location B)."
+ ],
+ "policy_id": "65b86fe7f0f0",
+ "pages": 27,
+ "computable": false,
+ "computable_note": "Contains terms the estimator cannot compute exactly: Admissible claims under Room, Board & Nursing Expenses including ICU restricted to maximum 25% of Sum Insured per illness/injury.; Medical Practitioner/Surgeon/Consultant Fees restricted to maximum 40% of Sum Insured per illness/injury.; OT, Anesthesia, Blood, Oxygen, Medicines, Consumables, Diagnostics, Implants restricted to maximum 40% of Sum Insured per illness/injury.",
+ "pdf_path": "data/policy_b.pdf",
+ "source_providers": [
+  "gemini"
+ ]
+}

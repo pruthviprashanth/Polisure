@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data"
-CACHE = DATA / "cache"
+CACHE = Path(os.environ["POLISURE_CACHE"]) if os.environ.get("POLISURE_CACHE") else DATA / "cache"
 LLM_CACHE_DIR = CACHE / "llm"
 POLICY_DIR = CACHE / "policies"
 PDF_DIR = CACHE / "pdfs"

@@ -1,6 +1,7 @@
 """Deterministic claim engine. No LLM, Decimal only. Every step appends to the trace."""
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Optional
@@ -74,10 +75,15 @@ class _Run:
                             plan=plan, room_cap_per_day=None if cap is None else rupees(cap), blocked=blocked)
 
 
+def _kw(k: str, text: str) -> bool:
+    return bool(k) and re.search(r"" + re.escape(k.lower()) + r"", text) is not None
+
+
 def _match(cat: Category, keywords: list[str], f: ClaimFacts, text: str) -> bool:
     if cat not in (Category.other, Category.unknown) and cat == f.category:
         return True
-    return any(k and k.lower() in text for k in keywords)
+    cname = f.category.value.replace("_", " ")
+    return any(_kw(k, text) or (f.category not in (Category.other, Category.unknown) and k.lower() == cname) for k in keywords)
 
 
 def _applies(plan: Optional[str], plans: list[str]) -> bool:
@@ -122,7 +128,7 @@ def run(cov: CoverageModel, facts: ClaimFacts) -> EngineResult:
     text = f"{f.diagnosis_text} {f.procedure}".lower()
     for ex in cov.exclusions:
         hit = (ex.category not in (Category.other, Category.unknown) and ex.category == f.category) or \
-              any(k and k.lower() in text for k in ex.keywords)
+              any(_kw(k, text) for k in ex.keywords)
         if hit:
             if f.is_accident and "accident" in (ex.quote + ex.text).lower():
                 return review("The matching exclusion has an accident exception, so the outcome needs a human check.")

@@ -24,8 +24,9 @@ Rules:
 - sublimits: monetary caps per disease/procedure. pct_si = percent of sum insured, limit_inr = rupee cap (the lower of the two applies), per='eye'|'claim'|'year'. Same category/keywords rule.
 - exclusions: permanent exclusions (one per item, up to 25). category when it fits the enum, else 'other' with keywords.
 - plans: age bands per plan if the policy has plans. waiting_plans / sublimit_plans: the plan names those rules apply to ('Only applicable for Gold & Senior Citizen' -> ['Gold','Senior Citizen']); empty list = applies to all.
-- unmodeled_terms: payout-relevant terms a simple calculator cannot handle (excess/deductible, per-illness sub-caps on room/doctor/other charges, tariff-based room limits). One short string each.
-- deduction_order: keep the default unless the wording says otherwise.
+- sublimits: ONLY caps on in-patient treatment of a disease/procedure. Do NOT list ambulance, health check-up, pre/post-hospitalisation, domiciliary or daily-cash limits.
+- unmodeled_terms: ONLY terms that change the payout of an ordinary in-patient claim and that a simple calculator cannot handle: an excess/deductible per claim, per-illness sub-caps on room/doctor/other charges, tariff-based or 'entitled category' room limits. Do NOT list pre/post-hospitalisation, domiciliary, ambulance, optional covers, or anything already captured in other fields. Empty list if none. One short string each.
+- deduction_order: always return exactly ["sublimit","room_rent","copay","sum_insured"].
 Category enum: appendectomy, cataract, hernia, joint_replacement, maternity, cosmetic, dental, infertility, accident_trauma, other, unknown."""
 
 
@@ -141,6 +142,7 @@ def extract_coverage(pages: list[str], purpose: str = "coverage") -> tuple[Cover
 
 
 def finalize(ext: CoverageExtract, pages: list[str], policy_id: str, pdf_rel: str, providers: list[str]) -> CoverageModel:
+    clean(ext)
     verify(ext, pages)
     m = CoverageModel(**ext.model_dump(), policy_id=policy_id, pages=len(pages), pdf_path=pdf_rel,
                       source_providers=providers)
@@ -154,3 +156,15 @@ def finalize(ext: CoverageExtract, pages: list[str], policy_id: str, pdf_rel: st
         computable, note = False, "Contains terms the estimator cannot compute exactly: " + "; ".join(m.unmodeled_terms[:3])
     m.computable, m.computable_note = computable, note
     return m
+
+
+_NOISE = re.compile(r"ambulance|check-?up|domiciliary|pre-?\s?hospital|post-?\s?hospital|daily cash|cash allowance", re.I)
+_VALID_ORDER = {"sublimit", "room_rent", "copay", "sum_insured"}
+
+
+def clean(ext: CoverageExtract) -> None:
+    """Deterministic guards on LLM output (applied before verification)."""
+    ext.sublimits = [s for s in ext.sublimits if not _NOISE.search(f"{s.label} {s.quote} {' '.join(s.keywords)}")]
+    ext.unmodeled_terms = [t for t in ext.unmodeled_terms if not _NOISE.search(t)]
+    if set(ext.deduction_order) != _VALID_ORDER or len(ext.deduction_order) != 4:
+        ext.deduction_order = ["sublimit", "room_rent", "copay", "sum_insured"]
