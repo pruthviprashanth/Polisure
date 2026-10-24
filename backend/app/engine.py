@@ -76,7 +76,7 @@ class _Run:
 
 
 def _kw(k: str, text: str) -> bool:
-    return bool(k) and re.search(r"" + re.escape(k.lower()) + r"", text) is not None
+    return bool(k) and re.search(r"\b" + re.escape(k.lower()) + r"\b", text) is not None
 
 
 def _match(cat: Category, keywords: list[str], f: ClaimFacts, text: str) -> bool:

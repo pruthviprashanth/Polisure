@@ -83,7 +83,8 @@ def run_engine_only(cov, rows: list[dict]) -> list[dict]:
         p = profile_of(r)
         f = ClaimFacts(category=Category(cat), insured_age=p["insured_age"], sum_insured=p["sum_insured"],
                        policy_age_months=p["policy_age_months"], ped=p["ped"], days=int(num(r.get("days")) or 0) or None,
-                       room_rent_per_day=num(r.get("room_rent_per_day")), is_accident=cat == "accident_trauma",
+                       room_rent_per_day=num(r.get("room_rent_per_day")), diagnosis_text=r["incident_text"],
+                       is_accident=cat == "accident_trauma" or str(r.get("is_accident", "")).strip().lower() in ("1", "true", "y", "yes"),
                        bill=Bill(**bill_of(r)), confidence=1.0)
         res = engine.run(cov, f)
         out.append(row_result(r, res.verdict, res.payout, [c.model_dump() for c in res.citations]))
