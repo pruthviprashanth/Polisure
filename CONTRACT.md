@@ -164,6 +164,20 @@ Response 200:
 ```
 `score` is `null` for non-computable policies, which are listed last with `reasons` explaining why. The score is a transparent rubric computed in code (simulated payouts, then waiting-period length, co-pay, caps, exclusions count); the response must list what it used.
 
+## POST /policies/{policy_id}/ask  (JSON body) — grounded policy Q&A (chat)
+```json
+{ "question": "Is cataract surgery covered in the first year?",
+  "history": [ { "role": "user", "content": "..." }, { "role": "assistant", "content": "..." } ] }
+```
+`history` is optional (last 4 turns are used). Response 200:
+```json
+{ "answer": "Cataract has a 24-month waiting period on the Gold and Senior plans, so it is not payable in the first year.",
+  "citations": [ { "clause": "9.A.2", "page": 5, "quote": "…", "verified": true } ],
+  "needs_calculation": false, "out_of_scope": false, "note": null,
+  "meta": { "cached": false, "providers_used": ["gemini"], "model_note": null } }
+```
+The answer comes from the policy text only; only citations whose quote was found on the cited page by code are returned (`verified` is always true here). The chat never computes payouts: `needs_calculation: true` means the user should use `/claims/check`. `note` is `null`, `"figure_guard"` (a rupee figure in the draft was not found in the policy, so it was withheld) or `"no_verified_quote"`. Errors: `400 {"error":"question is required"}`, `404 {"error":"unknown_policy"}`, `503 {"error":"llm_unavailable","detail":"…"}`.
+
 ## GET /eval/latest
 ```json
 {

@@ -92,3 +92,26 @@ def test_llm_unavailable_maps_to_503(client, pid, monkeypatch):
 def test_cors_header(client):
     r = client.get("/policies", headers={"Origin": "http://localhost:3000"})
     assert r.headers.get("access-control-allow-origin") == "http://localhost:3000"
+
+
+def test_ask_mock_cites_verified_quote(client, pid):
+    r = client.post(f"/policies/{pid}/ask", json={"question": "What is the co-payment under this policy?"})
+    assert r.status_code == 200
+    b = r.json()
+    assert "answer" in b and b["meta"]["providers_used"] == ["mock"]
+    assert all(c["verified"] for c in b["citations"])
+
+
+def test_ask_redirects_money_questions_and_validates(client, pid):
+    b = client.post(f"/policies/{pid}/ask", json={"question": "How much will I get for appendix surgery?"}).json()
+    assert b["needs_calculation"] is True
+    assert client.post(f"/policies/{pid}/ask", json={"question": "  "}).status_code == 400
+    assert client.post("/policies/nope/ask", json={"question": "hi"}).status_code == 404
+
+
+def test_ask_figure_guard(client, pid, monkeypatch):
+    from app import llm, qa
+
+    monkeypatch.setattr(llm, "extract", lambda *a, **k: (qa.AnswerLLM(answer="You will receive ₹9,99,999 always.", citations=[]), "mock"))
+    b = client.post(f"/policies/{pid}/ask", json={"question": "what do I get"}).json()
+    assert b["note"] == "figure_guard" and "9,99,999" not in b["answer"]

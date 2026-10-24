@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
 
-from . import claims, config, llm, present, store
+from . import claims, config, llm, present, qa, store
 from .schemas import CoverageModel
 
 
@@ -119,6 +119,24 @@ def check_claim(req: ClaimRequest):
     try:
         return claims.check(ids, req.profile, req.incident_text, req.bill, req.answers, store.load)
     except claims.UnknownPolicy:
+        return err(404, "unknown_policy")
+
+
+class AskRequest(BaseModel):
+    question: str
+    history: list[dict] = []
+
+
+@app.post("/policies/{policy_id}/ask")
+def ask_policy(policy_id: str, req: AskRequest):
+    m = store.load(policy_id)
+    if m is None:
+        return err(404, "unknown_policy")
+    if not req.question.strip():
+        return err(400, "question is required")
+    try:
+        return qa.ask(m, req.question, req.history)
+    except FileNotFoundError:
         return err(404, "unknown_policy")
 
 
