@@ -107,6 +107,63 @@ The UI re-submits the same request with the answers merged into `answers` / `bil
 
 Errors: `404 {"error":"unknown_policy"}`, `503 {"error":"llm_unavailable","detail":"…"}` (UI shows a retry message).
 
+## ADDENDUM (post-review): policy library, multi-policy claims, recommender
+Priority P1 — build only after the core single-policy flow works. All of it is computed by the code engine; the LLM only phrases explanations.
+
+### Policy library
+`GET /policies` (above) lists every ingested policy. The backend ingests every PDF in `data/library/` (plus `data/policy.pdf`, `data/policy_b.pdf`) through a paced, cached script. Each entry also carries `"computable": true|false` (false = the engine cannot compute payouts for this policy's structure, e.g. its room-rent rule needs hospital tariffs) and `"computable_note": str|null`.
+The UI keeps the user's own policies ("my wallet") as a list of `policy_id` in browser localStorage; the backend is stateless about users.
+
+### POST /claims/check — multi-policy extension
+The body may carry `"policy_ids": ["id1","id2"]` instead of `"policy_id"` (one of the two must be present). With 2+ ids and `status:"done"`, the response ALSO includes:
+```json
+"comparison": {
+  "results": [
+    { "policy_id": "id1", "name": "United India IHIP", "computable": true, "verdict": { "...full Verdict object as above..." } },
+    { "policy_id": "id2", "name": "SBI Health Retail", "computable": false, "verdict": { "verdict": "NEEDS_REVIEW", "payout": null, "abstain_reason": "…", "…": "…" } }
+  ],
+  "recommended_policy_id": "id1",
+  "recommendation_reason": "Pays ₹36,000 more than the alternative for this claim (room cap and waiting periods).",
+  "combined": {
+    "possible": true,
+    "total_payout": 150000,
+    "split": [ { "policy_id": "id1", "payout": 115000 }, { "policy_id": "id2", "payout": 35000 } ],
+    "note": "Indemnity policies can often be claimed together up to the actual loss; the second insurer pays against the balance. Estimate only — confirm each insurer's other-insurance clause."
+  }
+}
+```
+`combined` is `null` when it cannot be estimated. The top-level `verdict` is the verdict of `recommended_policy_id` (backward compatible). `recommended_policy_id` is `null` if no policy was computable (then `recommendation_reason` explains and next steps say to ask the insurers).
+
+### POST /policies/recommend  (JSON body)
+```json
+{
+  "profile": { "insured_age": 45, "sum_insured": 500000, "ped": false, "policy_age_months": 0, "preferred_room_rent_per_day": 8000 },
+  "likely_claims": ["appendectomy", "cataract", "joint_replacement"],
+  "assumed_bills": { "appendectomy": 160000 },
+  "annual_premiums": { "id1": 14000, "id2": 16500 },
+  "policy_ids": ["id1", "id2", "id3"]
+}
+```
+Optional: `assumed_bills` (INR per category; otherwise the backend uses an illustrative default table, which the response states), `annual_premiums` (policy wordings contain no premiums — only user-entered ones are used), `policy_ids` (default: whole library). `policy_age_months` of a NEW purchase is 0, so waiting periods apply — the backend must model that.
+Response 200:
+```json
+{
+  "ranked": [
+    { "policy_id": "id1", "name": "…", "computable": true, "score": 82,
+      "scenario_results": [ { "category": "appendectomy", "billed": 160000, "payout": 115000, "verdict": "PARTIAL" },
+                            { "category": "cataract", "billed": 60000, "payout": 0, "verdict": "NOT_COVERED", "note": "24-month waiting period for a new policy" } ],
+      "reasons": [ { "text": "Room cap is 1% of sum insured per day with proportionate payment", "clause": "1.1(i)", "page": 2, "quote": "…", "verified": true } ],
+      "premium_note": "₹14,000/yr → expected payout across your likely claims per ₹ of premium: 0.4" }
+  ],
+  "best_policy_id": "id1",
+  "why": "Highest simulated payout across the claims you said are likely, given waiting periods for a new policy.",
+  "assumptions": ["Bill sizes are illustrative (override with assumed_bills)", "Premiums were not read from the policy documents"],
+  "disclaimer": "This compares coverage terms for the claims you listed. It is not financial advice and does not consider premiums unless you entered them.",
+  "meta": { "cached": true, "providers_used": ["cache"], "model_note": null }
+}
+```
+`score` is `null` for non-computable policies, which are listed last with `reasons` explaining why. The score is a transparent rubric computed in code (simulated payouts, then waiting-period length, co-pay, caps, exclusions count); the response must list what it used.
+
 ## GET /eval/latest
 ```json
 {

@@ -26,6 +26,12 @@ The keys are in `.env` (never print or commit it). The other laptop uses a mock 
 - **B4** — eval harness: engine-only eval, paced end-to-end eval (resumable), plain-LLM baseline, cross-policy extraction test on `data/policy_b.pdf`, `eval/report.json` + `GET /eval/latest`.
 - **B5** — hardening: error responses per contract (`503 llm_unavailable`), CORS for `http://localhost:3000`, `README_BACKEND.md` with exact start commands (PowerShell and bash).
 
+### Post-review additions (P1 — only after B3 works; implement the CONTRACT.md ADDENDUM exactly)
+- **B3b — multi-policy claim:** `/claims/check` accepts `policy_ids`; run the engine once per policy (facts are extracted ONCE and reused — no extra LLM calls per policy), build `comparison` with `recommended_policy_id`, a `combined` split-claim estimate (first policy's payout, then the second pays against the remaining bill up to its own computed limit; `null` if not estimable), and mark policies the engine cannot handle as `computable:false` → NEEDS_REVIEW rather than guessing.
+- **B6 — library + recommender:** `scripts/ingest_library.py` ingests every PDF in `data/library/`, `data/policy.pdf` and `data/policy_b.pdf` sequentially through the paced, cached LLM client (resumable; it must never burst). Add `computable` / `computable_note` to `GET /policies`. Implement `POST /policies/recommend`: for each policy, simulate the user's `likely_claims` through the engine as a NEW policy (`policy_age_months = 0`, so waiting periods bite), using `assumed_bills` or an illustrative default table (state the assumptions in the response); rank with a transparent code rubric; use premiums only if the user supplied them (policy wordings contain none); the LLM may only phrase `why`/reasons from computed results. Always include the disclaimer and the assumptions list.
+- **Eval additions:** add ~6–10 multi-policy scenarios (which policy should be claimed, which is best to buy) to the eval with expected answers when scenarios exist; report them as a separate row.
+- Cut order if short on time: recommender → combined estimate → library ingest of extra policies.
+
 Scenarios (`data/scenarios.csv`) may arrive later; use `data/scenarios.sample.csv` (labelled plumbing-only) until then.
 
 ## Final report
