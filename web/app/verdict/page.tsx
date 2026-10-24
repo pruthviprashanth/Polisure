@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ComparisonView } from "@/components/ComparisonView";
 import { VerdictView } from "@/components/VerdictView";
 import { MetaBadge } from "@/components/ui";
 import { useStore } from "@/lib/store";
@@ -30,11 +31,15 @@ export default function VerdictPage() {
         </div>
         <MetaBadge meta={response.meta} />
       </div>
-      <VerdictView
-        v={response.verdict}
-        policyId={singleId}
-        policyName={singleId === policy?.policy_id ? policy?.name : undefined}
-      />
+      {response.comparison ? (
+        <ComparisonView c={response.comparison} />
+      ) : (
+        <VerdictView
+          v={response.verdict}
+          policyId={singleId}
+          policyName={singleId === policy?.policy_id ? policy?.name : undefined}
+        />
+      )}
       <div className="flex flex-wrap gap-3">
         <Link href="/claim" className="btn btn-secondary">
           ← Check another claim

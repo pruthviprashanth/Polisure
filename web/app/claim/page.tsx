@@ -59,7 +59,8 @@ export default function ClaimPage() {
     api.listPolicies().then(setLibrary, () => setLibrary([]));
   }, []);
 
-  const walletIds = wallet.filter((id) => library.some((p) => p.policy_id === id));
+  // Until the library loads, trust the stored wallet; afterwards drop ids the server no longer knows.
+  const walletIds = library.length ? wallet.filter((id) => library.some((p) => p.policy_id === id)) : wallet;
   const multi = compare && walletIds.length >= 2;
 
   function buildRequest(): ClaimRequest {
