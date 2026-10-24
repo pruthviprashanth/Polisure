@@ -68,6 +68,16 @@ python run.py
 
 Real mode: starts the backend (`uvicorn app.main:app` from `backend/`) on :8000 and the web app on :3000.
 
+To run the real backend without keys or LLM calls (its own mock LLM; cached policy summaries, keyword-based incident parsing):
+
+```powershell
+$env:LLM_MODE = "mock"; python run.py
+```
+
+```bash
+LLM_MODE=mock python run.py
+```
+
 Add `--no-browser` to skip opening the browser. Press **Ctrl+C** to stop both processes.
 
 ### Running the pieces separately

@@ -37,7 +37,9 @@ export function ComparisonView({ c }: { c: Comparison }) {
                       <div className="font-medium">{r.name}</div>
                       {rec && <span className="rounded bg-emerald-700 px-1.5 py-0.5 text-xs font-semibold text-white">Recommended</span>}
                       {!r.computable && (
-                        <div className="text-xs">Can&apos;t compute payouts: {r.verdict.abstain_reason || "structure not supported"}</div>
+                        <div className="line-clamp-2 text-xs" title={r.verdict.abstain_reason || undefined}>
+                          Can&apos;t compute payouts: {r.verdict.abstain_reason || "structure not supported"}
+                        </div>
                       )}
                     </td>
                     <td className={`py-2 pr-3 ${r.computable ? "" : "opacity-60"}`}>

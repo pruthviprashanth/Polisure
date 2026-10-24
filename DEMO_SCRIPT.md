@@ -8,7 +8,7 @@ Expected figures below are what the code engine computes from the policy rules (
 ## Before you start (5 minutes earlier)
 
 1. `python run.py` (or `python run.py --mock` if there is no network/keys — see Fallbacks).
-2. In the browser: **My policy** → click **United India Individual Health Insurance Policy** (cached, loads instantly). Set the profile above, click **Check my gaps**.
+2. In the browser: **My policy** → click the United India policy (listed by the backend as **Individual Health Insurance Policy**; cached, loads instantly). Set the profile above, click **Check my gaps**.
 3. Do one dry run of the appendix case so every call is cached.
 4. Close other tabs; zoom the browser to ~110%.
 
@@ -19,11 +19,12 @@ Expected figures below are what the code engine computes from the policy rules (
 
 **0:15 — My policy (35 s).**
 - Point at the summary cards: each one has the clause, page, exact quote and a **verified** badge (the quote was found on that page by code).
-- Click the **§ 1.1(i) · p.2** chip → the PDF opens at page 2. "Every claim we make is traceable to the document."
+- Click the clause chip on the **Proportionate payment** card (**p.2**) → the PDF opens at page 2. "Every claim we make is traceable to the document."
 - Gap report, **High**: "Your preferred room exceeds the cap — at ₹8,000/day all associated expenses are reduced to 62.5%." Note the **cached** badge.
 
 **0:50 — Appendix case → PARTIAL (45 s).**
 - **What happened** → example **Appendix surgery**: *"My father had appendix surgery. 3 days in a single AC room at ₹8,000/day. Total bill ₹1.6 lakh."* → **Check my claim**.
+- It asks one follow-up: *"How much of the bill was medicines and implants?"* → type **40000** → **Submit answers**. "When something that changes the money is missing, it asks instead of assuming."
 - Verdict **PARTIALLY COVERED**, billed **₹1,60,000**, payout **₹1,15,000**.
 - Walk the table: room 3 × ₹5,000 cap = ₹15,000; associated charges ₹96,000 × 62.5% = ₹60,000; medicines & implants ₹40,000 not reduced → **₹1,15,000**.
 - "The language model extracted the facts and wrote the explanation. It never touched a number."
@@ -32,12 +33,13 @@ Expected figures below are what the code engine computes from the policy rules (
 - What-if card: **"Choose a room within ₹5,000/day → ₹1,51,000 (+₹36,000)."** "A cheaper room saves you ₹36,000 — the engine re-ran with one change, it isn't a guess."
 
 **1:50 — Waiting period → NOT COVERED (25 s).**
-- Back to **What happened**, set **Policy age** to **12** months, example **Cataract**: *"My mother had cataract surgery on one eye last week. Bill was ₹60,000."*
+- Back to **What happened**, set **Policy age** to **12** months, example **Cataract**: *"My mother had cataract surgery on one eye. 1 day in hospital at ₹5,000/day. Bill was ₹60,000."* If asked for medicines and implants, type **20000**.
 - Verdict **NOT COVERED**: cataract has a 24-month waiting period on the Gold plan (§ 9.A.2, p.5).
 - What-if: if the waiting period had passed it would pay up to the cataract sub-limit (₹40,000 per eye). Set policy age back to 24.
 
 **2:15 — Ambiguous case → NEEDS HUMAN REVIEW (20 s).**
-- Example **Not sure about history**: *"I was admitted for 3 days with appendix pain. I'm not sure if this was diagnosed before my policy started."*
+- Set **Any pre-existing conditions?** to **Don't know**, then example **Not sure about history**: *"I was admitted for 3 days with appendix pain, room ₹8,000/day, total bill ₹1.6 lakh. I'm not sure if this was diagnosed before my policy started."*
+- Follow-up questions: medicines and implants **40000**; for *"Was this condition diagnosed … before the policy started?"* leave **Don't know** → **Submit answers**.
 - Verdict **NEEDS HUMAN REVIEW**, payout not estimated, "Why we won't guess": pre-existing status decides the 48-month exclusion. Next steps tell the user what to check. "It abstains instead of guessing."
 
 **2:35 — Eval (20 s).**

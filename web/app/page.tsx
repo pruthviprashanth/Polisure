@@ -8,7 +8,7 @@ import { ClauseChip, ErrorBox, Loading, MetaBadge, Quote, VerifiedBadge } from "
 import { api } from "@/lib/api";
 import { SEVERITY_STYLE } from "@/lib/format";
 import { useStore } from "@/lib/store";
-import type { PolicyListItem } from "@/lib/types";
+import type { PolicyListItem, SummaryItem } from "@/lib/types";
 
 const UPLOAD_STEPS = [
   "Uploading the PDF…",
@@ -18,6 +18,22 @@ const UPLOAD_STEPS = [
   "Verifying every quote against its page…",
   "Almost there…",
 ];
+
+function SummaryCard({ s, policyId }: { s: SummaryItem; policyId: string }) {
+  return (
+    <article className="card flex flex-col gap-2">
+      <div className="flex flex-wrap items-center gap-2">
+        <h3 className="font-semibold">{s.label}</h3>
+        <VerifiedBadge verified={s.verified} />
+      </div>
+      <p className="text-sm">{s.summary}</p>
+      <Quote>{s.quote}</Quote>
+      <div className="mt-auto">
+        <ClauseChip policyId={policyId} clause={s.clause} page={s.page} quote={s.quote} />
+      </div>
+    </article>
+  );
+}
 
 export default function MyPolicyPage() {
   const { ready, policy, setPolicy, profile, setProfile, gaps, setGaps } = useStore();
@@ -84,6 +100,10 @@ export default function MyPolicyPage() {
       setBusy(null);
     }
   }
+
+  // Real policies list dozens of exclusions; keep them behind a toggle so the key rules stay visible.
+  const mainItems = policy?.summary_items.filter((s) => !s.key.startsWith("exclusion")) ?? [];
+  const exclusions = policy?.summary_items.filter((s) => s.key.startsWith("exclusion")) ?? [];
 
   return (
     <div className="space-y-6">
@@ -172,20 +192,22 @@ export default function MyPolicyPage() {
               </button>
             </div>
             <div className="grid gap-3 sm:grid-cols-2">
-              {policy.summary_items.map((s) => (
-                <article key={s.key} className="card flex flex-col gap-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-semibold">{s.label}</h3>
-                    <VerifiedBadge verified={s.verified} />
-                  </div>
-                  <p className="text-sm">{s.summary}</p>
-                  <Quote>{s.quote}</Quote>
-                  <div className="mt-auto">
-                    <ClauseChip policyId={policy.policy_id} clause={s.clause} page={s.page} quote={s.quote} />
-                  </div>
-                </article>
+              {mainItems.map((s) => (
+                <SummaryCard key={s.key} s={s} policyId={policy.policy_id} />
               ))}
             </div>
+            {exclusions.length > 0 && (
+              <details className="card">
+                <summary className="cursor-pointer font-semibold">
+                  Exclusions ({exclusions.length}) <span className="text-sm font-normal text-slate-500">— show all</span>
+                </summary>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  {exclusions.map((s) => (
+                    <SummaryCard key={s.key} s={s} policyId={policy.policy_id} />
+                  ))}
+                </div>
+              </details>
+            )}
           </section>
 
           <section className="space-y-3" aria-labelledby="gaps">

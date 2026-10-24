@@ -303,22 +303,28 @@ def build_bill(category: str, text: str, bill_in: dict | None, answers: dict) ->
     t = text.lower()
     m = re.search(r"(\d+)\s*(?:days?|nights?)", t)
     days = int(answers.get("days") or (m.group(1) if m else d[4]))
-    bill_in = {k: v for k, v in (bill_in or {}).items() if v not in (None, "")}
-    if bill_in:
-        b = {k: int(bill_in.get(k, 0) or 0) for k in ("room", "linked", "meds_implants", "other")}
-        return b, max(days, 1)
+    given = {k: int(v) for k, v in (bill_in or {}).items() if v not in (None, "") and k in DEFAULT_KEYS}
     b = {"room": d[0], "linked": d[1], "meds_implants": d[2], "other": d[3]}
     rent = re.search(r"₹?\s*([\d,]{3,})\s*(?:/|per)\s*day", t)
     if rent:
         b["room"] = parse_num(rent.group(1)) * days
-    total = re.search(r"₹?\s*([\d.]+)\s*lakh", t)
-    if total:
-        tot = r(Decimal(total.group(1)) * 100000)
-        rest = max(tot - b["room"], 0)
-        share = Decimal(d[1]) / Decimal(d[1] + d[2])
-        b["linked"] = r(rest * share)
-        b["meds_implants"] = rest - b["linked"]
+    lakh = re.search(r"₹?\s*([\d.]+)\s*lakh", t)
+    plain = re.search(r"(?:bill|total)[^₹\d]{0,20}₹\s*([\d,]{4,})", t)
+    total = r(Decimal(lakh.group(1)) * 100000) if lakh else parse_num(plain.group(1)) if plain else None
+    b.update({k: v for k, v in given.items() if k == "room"})
+    if total is not None:
+        # Split what the total leaves over between the fields the user didn't give, in the default proportions.
+        missing = [k for k in ("linked", "meds_implants") if k not in given]
+        rest = max(total - b["room"] - sum(v for k, v in given.items() if k != "room"), 0)
+        weights = {"linked": d[1], "meds_implants": d[2]}
+        for i, k in enumerate(missing):
+            share = rest if i == len(missing) - 1 else r(Decimal(rest) * weights[k] / sum(weights[m] for m in missing))
+            b[k], rest = share, rest - share
+    b.update(given)
     return b, max(days, 1)
+
+
+DEFAULT_KEYS = ("room", "linked", "meds_implants", "other")
 
 
 SPECIFIC_WAIT = {"cataract": 24, "hernia": 24, "joint_replacement": 48}

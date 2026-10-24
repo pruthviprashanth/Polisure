@@ -14,10 +14,13 @@ const EXAMPLES = [
     label: "Appendix surgery",
     text: "My father had appendix surgery. 3 days in a single AC room at ₹8,000/day. Total bill ₹1.6 lakh.",
   },
-  { label: "Cataract", text: "My mother had cataract surgery on one eye last week. Bill was ₹60,000." },
+  {
+    label: "Cataract",
+    text: "My mother had cataract surgery on one eye. 1 day in hospital at ₹5,000/day. Bill was ₹60,000.",
+  },
   {
     label: "Not sure about history",
-    text: "I was admitted for 3 days with appendix pain. I'm not sure if this was diagnosed before my policy started.",
+    text: "I was admitted for 3 days with appendix pain, room ₹8,000/day, total bill ₹1.6 lakh. I'm not sure if this was diagnosed before my policy started.",
   },
   { label: "No amounts yet", text: "My father had appendix surgery last week." },
 ];
