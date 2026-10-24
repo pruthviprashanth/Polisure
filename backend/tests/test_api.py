@@ -140,3 +140,13 @@ def test_structured_answers_override_and_gap_metrics(client, pid):
 def test_session_boot_id_is_stable_within_a_run(client):
     a = client.get("/session").json()["boot_id"]
     assert a and a == client.get("/session").json()["boot_id"]
+
+
+def test_room_charge_from_bill_form_beats_profile_default_rent(client, pid):
+    # profile says 8,000/day but the bill form says 3 days cost 30,000 => 10,000/day actual
+    body = {"policy_id": pid, "profile": PROFILE, "incident_text": "Appendix surgery, 3 days in hospital.",
+            "bill": {"room": 30000, "linked": 100000, "meds_implants": 40000, "other": 0}}
+    v = client.post("/claims/check", json=body).json()["verdict"]
+    room = next(t for t in v["trace"] if t["step"] == "room_rent")
+    assert "₹10,000/day" in room["label"] and "8,000" not in room["label"]
+    assert v["payout"] == 105000  # 15,000 room + 100,000 x 50% + 40,000

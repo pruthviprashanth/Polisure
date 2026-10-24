@@ -28,18 +28,21 @@ export function ChatPanel() {
   const [error, setError] = useState<unknown>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
+  // Keep the list in step with "My policies": refetch on open and whenever policies are added or removed.
+  const walletKey = wallet.join(",");
   useEffect(() => {
-    if (open && library.length === 0) api.listPolicies().then((l) => setLibrary(l), () => {});
-  }, [open, library.length]);
+    if (open) api.listPolicies().then(setLibrary, () => {});
+  }, [open, walletKey]);
   useEffect(() => {
-    if (policy?.policy_id) setPolicyId(policy.policy_id);
-  }, [policy?.policy_id]);
+    if (policy?.policy_id && wallet.includes(policy.policy_id)) setPolicyId(policy.policy_id);
+  }, [policy?.policy_id, walletKey]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (!policyId && wallet.length > 0 && library.length > 0) {
-      const first = library.find((p) => wallet.includes(p.policy_id));
-      if (first) setPolicyId(first.policy_id);
+    // The chosen policy was removed (or none chosen yet): fall back to the first policy I own.
+    if (!wallet.includes(policyId)) {
+      setPolicyId(wallet[0] ?? "");
+      setMsgs([]);
     }
-  }, [library, policyId, wallet]);
+  }, [walletKey, policyId]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end" });
   }, [msgs, busy, open]);

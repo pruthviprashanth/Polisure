@@ -134,7 +134,18 @@ def build_facts(incident_text: str, profile: Profile, bill_in: Optional[dict], a
         if _num(bill_in.get(k)) is not None:
             bill[k] = _num(bill_in[k])
     days = _num(ans.get("days")) or obj.days
-    rent = _num(ans.get("room_rent_per_day")) or obj.room_rent_per_day or profile.preferred_room_rent_per_day
+    # Room rent per day, most reliable source first: an explicit answer, the room charge the user entered
+    # in the bill form (÷ days), the rent stated in the text, and only then the profile's preferred rent.
+    room_entered = _num(bill_in.get("room"))
+    rent = _num(ans.get("room_rent_per_day"))
+    if rent is None and room_entered and days:
+        rent = room_entered / days
+    if rent is None:
+        rent = obj.room_rent_per_day
+    if rent is None and obj.bill_room and days:
+        rent = obj.bill_room / days
+    if rent is None:
+        rent = profile.preferred_room_rent_per_day
     # a stated total with a known room: remaining split needs the user's meds/implants figure
     total = _num(bill_in.get("total")) or _num(ans.get("bill.total")) or obj.bill_total
     missing: list[str] = []
