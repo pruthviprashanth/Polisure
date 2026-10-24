@@ -9,6 +9,11 @@ from . import config, extraction
 from .schemas import CoverageModel
 
 
+# Friendly names for the bundled sample PDFs (the LLM-read title is often generic, e.g. 'Health Insurance Policy Retail').
+SAMPLE_NAMES = {"policy.pdf": "United India Individual Health Insurance Policy (sample)",
+                "policy_b.pdf": "SBI General Health Insurance Policy - Retail (sample)"}
+
+
 class NotAPdf(Exception):
     pass
 
@@ -73,5 +78,7 @@ def ingest(pdf_bytes: bytes, source: Optional[Path] = None, purpose: str = "cove
         rel = _rel(dest)
     ext, provs = extraction.extract_coverage(pages, purpose=purpose)
     model = extraction.finalize(ext, pages, pid, rel, provs)
+    if source is not None and source.parent == config.DATA and source.name in SAMPLE_NAMES:
+        model.name = SAMPLE_NAMES[source.name]
     save(model)
     return model, False, provs

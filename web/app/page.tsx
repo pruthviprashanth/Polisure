@@ -137,7 +137,7 @@ export default function MyPolicyPage() {
           </button>
         </div>
         <div>
-          <div className="label">…or use a policy we have already read</div>
+          <div className="label">…or use a sample policy we have already read</div>
           {libError ? (
             <ErrorBox error={libError} onRetry={loadLibrary} />
           ) : !library ? (
@@ -155,6 +155,11 @@ export default function MyPolicyPage() {
                   className={`btn btn-secondary ${policy?.policy_id === p.policy_id ? "ring-2 ring-teal-600" : ""}`}
                 >
                   {p.name} <span className="text-xs text-slate-500">{p.pages} pp</span>
+                  {p.computable === false && (
+                    <span className="ml-1 rounded bg-indigo-100 px-1.5 py-0.5 text-xs text-indigo-900" title={p.computable_note || undefined}>
+                      payouts can't be computed exactly
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
