@@ -32,12 +32,22 @@ export function NumberField({
       <label htmlFor={id} className="label">
         {label}
       </label>
-      <div className="relative">
-        {prefix && <span className="pointer-events-none absolute top-2 left-3 text-sm text-slate-500">{prefix}</span>}
+      <div
+        className={
+          prefix
+            ? "flex items-center rounded-lg border border-slate-300 bg-white focus-within:border-teal-600 focus-within:ring-2 focus-within:ring-teal-600/30"
+            : undefined
+        }
+      >
+        {prefix && (
+          <span aria-hidden="true" className="select-none pl-3 pr-1 text-sm font-medium text-slate-500">
+            {prefix}
+          </span>
+        )}
         <input
           id={id}
           inputMode="numeric"
-          className={`input ${prefix ? "pl-7" : ""}`}
+          className={prefix ? "w-full min-w-0 rounded-lg bg-transparent py-2 pr-3 pl-1 text-sm tabular-nums focus:outline-none" : "input tabular-nums"}
           value={text}
           placeholder={placeholder}
           onChange={(e) => {

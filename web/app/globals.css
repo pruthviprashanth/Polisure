@@ -10,27 +10,30 @@ body {
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-.card {
-  @apply rounded-xl border border-slate-200 bg-white p-4 shadow-sm;
-}
-.btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
-}
-.btn-primary {
-  @apply bg-teal-700 text-white hover:bg-teal-800;
-}
-.btn-secondary {
-  @apply border border-slate-300 bg-white text-slate-800 hover:bg-slate-50;
-}
-.input {
-  @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/30 focus:outline-none;
-}
-.label {
-  @apply mb-1 block text-sm font-medium text-slate-700;
-}
-.h1 {
-  @apply text-2xl font-semibold tracking-tight;
-}
-.h2 {
-  @apply text-lg font-semibold;
+/* Component classes live in the components layer so Tailwind utilities (py-1, ml-auto, ...) can override them. */
+@layer components {
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white p-4 shadow-sm;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-teal-700 text-white hover:bg-teal-800;
+  }
+  .btn-secondary {
+    @apply border border-slate-300 bg-white text-slate-800 hover:bg-slate-50;
+  }
+  .input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-teal-600 focus:ring-2 focus:ring-teal-600/30 focus:outline-none;
+  }
+  .label {
+    @apply mb-1 block text-sm font-medium text-slate-700;
+  }
+  .h1 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+  .h2 {
+    @apply text-lg font-semibold;
+  }
 }
