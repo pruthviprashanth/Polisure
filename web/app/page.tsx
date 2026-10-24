@@ -37,7 +37,7 @@ function SummaryCard({ s, policyId }: { s: SummaryItem; policyId: string }) {
 }
 
 export default function MyPolicyPage() {
-  const { ready, policy, setPolicy, profile, setProfile, gaps, setGaps } = useStore();
+  const { ready, policy, setPolicy, profile, setProfile, gaps, setGaps, wallet, addPolicy } = useStore();
   const pdf = usePdf();
   const [library, setLibrary] = useState<PolicyListItem[] | null>(null);
   const [libError, setLibError] = useState<unknown>(null);
@@ -80,8 +80,11 @@ export default function MyPolicyPage() {
     setBusy("upload");
     setPolicyError(null);
     try {
-      setPolicy(await api.uploadPolicy(f));
+      const up = await api.uploadPolicy(f);
+      setPolicy(up);
+      addPolicy(up.policy_id);
       loadLibrary();
+      if (fileRef.current) fileRef.current.value = "";
     } catch (e) {
       setPolicyError(e);
     } finally {
@@ -101,6 +104,14 @@ export default function MyPolicyPage() {
       setBusy(null);
     }
   }
+
+  const mine = (library ?? []).filter((p) => wallet.includes(p.policy_id));
+
+  // With policies in the wallet but none active (e.g. after removing the active one), open the first.
+  useEffect(() => {
+    if (ready && !policy && !busy && library && mine.length > 0) pickSample(mine[0].policy_id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ready, policy, library, wallet.join(",")]);
 
   // Real policies list dozens of exclusions; keep them behind a toggle so the key rules stay visible.
   const mainItems = policy?.summary_items.filter((s) => !s.key.startsWith("exclusion")) ?? [];
@@ -138,16 +149,27 @@ export default function MyPolicyPage() {
           </button>
         </div>
         <div>
-          <div className="label">…or use a sample policy we have already read</div>
+          <div className="label">
+            …or choose one of your policies{" "}
+            <Link href="/wallet" className="font-normal text-teal-700 underline">
+              (add or remove)
+            </Link>
+          </div>
           {libError ? (
             <ErrorBox error={libError} onRetry={loadLibrary} />
           ) : !library ? (
-            <p className="text-sm text-slate-500">Loading sample policies…</p>
-          ) : library.length === 0 ? (
-            <p className="text-sm text-slate-500">No cached policies on the server yet.</p>
+            <p className="text-sm text-slate-500">Loading your policies…</p>
+          ) : mine.length === 0 ? (
+            <p className="text-sm text-slate-500">
+              You have not added any policies yet. Upload one above, or{" "}
+              <Link href="/wallet" className="text-teal-700 underline">
+                add a sample on the My policies page
+              </Link>
+              .
+            </p>
           ) : (
             <div className="flex flex-wrap gap-2">
-              {library.map((p) => (
+              {mine.map((p) => (
                 <button
                   key={p.policy_id}
                   type="button"
@@ -158,7 +180,7 @@ export default function MyPolicyPage() {
                   {p.name} <span className="text-xs text-slate-500">{p.pages} pp</span>
                   {p.computable === false && (
                     <span className="ml-1 rounded bg-indigo-100 px-1.5 py-0.5 text-xs text-indigo-900" title={p.computable_note || undefined}>
-                      payouts can't be computed exactly
+                      payouts can&apos;t be computed exactly
                     </span>
                   )}
                 </button>

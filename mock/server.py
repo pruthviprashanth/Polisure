@@ -115,6 +115,14 @@ def policy_body(pid: str, cached: bool) -> dict:
             "summary_items": copy.deepcopy(p["summary_items"]), "meta": m}
 
 
+BOOT_ID = hashlib.sha1(str(random.random()).encode()).hexdigest()
+
+
+@app.get("/session")
+async def session():
+    return {"boot_id": BOOT_ID}
+
+
 @app.get("/policies")
 async def list_policies():
     out = []

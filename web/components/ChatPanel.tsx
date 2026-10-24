@@ -18,7 +18,7 @@ const SUGGESTIONS = [
 
 /** Floating policy Q&A. Answers come only from the policy text and are shown with verified quotes. */
 export function ChatPanel() {
-  const { policy } = useStore();
+  const { policy, wallet } = useStore();
   const [open, setOpen] = useState(false);
   const [library, setLibrary] = useState<PolicyListItem[]>([]);
   const [policyId, setPolicyId] = useState<string>("");
@@ -29,18 +29,22 @@ export function ChatPanel() {
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (open && library.length === 0) api.listPolicies().then(setLibrary, () => {});
+    if (open && library.length === 0) api.listPolicies().then((l) => setLibrary(l), () => {});
   }, [open, library.length]);
   useEffect(() => {
     if (policy?.policy_id) setPolicyId(policy.policy_id);
   }, [policy?.policy_id]);
   useEffect(() => {
-    if (!policyId && library.length > 0) setPolicyId(library[0].policy_id);
-  }, [library, policyId]);
+    if (!policyId && wallet.length > 0 && library.length > 0) {
+      const first = library.find((p) => wallet.includes(p.policy_id));
+      if (first) setPolicyId(first.policy_id);
+    }
+  }, [library, policyId, wallet]);
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "end" });
   }, [msgs, busy, open]);
 
+  const mineList = wallet.length ? library.filter((p) => wallet.includes(p.policy_id)) : [];
   const current = library.find((p) => p.policy_id === policyId);
   const name = current?.name || policy?.name || "a policy";
 
@@ -92,8 +96,8 @@ export function ChatPanel() {
             }}
             className="mt-1 w-full truncate rounded border border-slate-300 bg-white px-1 py-0.5 text-xs"
           >
-            {library.length === 0 && policyId && <option value={policyId}>{name}</option>}
-            {library.map((p) => (
+            {mineList.length === 0 && policyId && <option value={policyId}>{name}</option>}
+            {mineList.map((p) => (
               <option key={p.policy_id} value={p.policy_id}>
                 {p.name}
               </option>
@@ -106,7 +110,16 @@ export function ChatPanel() {
       </header>
 
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3 text-sm">
-        {msgs.length === 0 && (
+        {!policyId && (
+          <p className="rounded-lg bg-amber-50 p-3 text-amber-950">
+            Add a policy on{" "}
+            <Link href="/wallet" className="underline" onClick={() => setOpen(false)}>
+              My policies
+            </Link>{" "}
+            first, then ask questions about it here.
+          </p>
+        )}
+        {msgs.length === 0 && policyId && (
           <div className="space-y-2">
             <p className="text-slate-600">
               Answers come from the policy text only, with the exact quote and page. For what a claim would pay, use{" "}

@@ -32,6 +32,9 @@ Response 200:
 `key` values: `room_rent, icu_rent, proportionate, copay, waiting_initial, waiting_ped, waiting_specific, sublimit_<name>, exclusion_<n>` (free-form extras allowed; UI must render any key generically).
 Errors: `400 {"error": "..."}` (not a PDF / no text layer), `503 {"error":"llm_unavailable","detail":"..."}`.
 
+## GET /session
+`{ "boot_id": "<random hex, new on every backend start>" }`. The web app compares it with the value it saved; if it differs (a new launch) it clears everything it stored in the browser, so each launch starts fresh. Unreachable backend = keep the saved state.
+
 ## GET /policies
 `[{ "policy_id": "...", "name": "...", "pages": 19 }]` — cached policies (so the UI can offer "use sample policy").
 

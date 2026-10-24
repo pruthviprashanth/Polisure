@@ -22,6 +22,15 @@ export function saveLS(key: string, value: unknown) {
   }
 }
 
+// Everything this app saves in the browser starts with "polisure."; a new backend launch wipes it.
+function clearSaved() {
+  try {
+    for (const k of Object.keys(window.localStorage)) if (k.startsWith("polisure.")) window.localStorage.removeItem(k);
+  } catch {
+    /* ignore */
+  }
+}
+
 export const DEFAULT_PROFILE: Profile = {
   insured_age: 45,
   sum_insured: 500000,
@@ -72,6 +81,8 @@ type Store = {
   setGaps: (g: GapsResponse | null) => void;
   wallet: string[];
   setWallet: (ids: string[]) => void;
+  addPolicy: (id: string) => void;
+  removePolicy: (id: string) => void;
   claim: ClaimRun | null;
   setClaim: (c: ClaimRun | null) => void;
 };
@@ -90,13 +101,39 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const runId = useRef(0);
 
   useEffect(() => {
-    setProfileState({ ...DEFAULT_PROFILE, ...loadLS<Partial<Profile>>("polisure.profile", {}) });
-    setPolicyState(loadLS<Policy | null>("polisure.policy", null));
-    setWalletState(loadLS<string[]>("polisure.wallet", []));
-    setClaimState(loadLS<ClaimRun | null>("polisure.claim", null));
-    const d = loadLS<Partial<ClaimDraft>>("polisure.draft", {});
-    setDraftState({ ...EMPTY_DRAFT, text: d.text ?? "", bill: { ...EMPTY_DRAFT.bill, ...(d.bill ?? {}) }, showBill: d.showBill ?? false, compare: d.compare ?? true, isAccident: d.isAccident ?? null, isPlanned: d.isPlanned ?? null, usedSum: d.usedSum ?? null });
-    setReady(true);
+    let cancelled = false;
+    (async () => {
+      // A new backend start = a new launch: forget the previous session's policies, profile, claim and drafts.
+      try {
+        const { boot_id } = await api.session();
+        if (loadLS<string | null>("polisure.boot", null) !== boot_id) {
+          clearSaved();
+          saveLS("polisure.boot", boot_id);
+        }
+      } catch {
+        /* backend unreachable: keep whatever was saved */
+      }
+      if (cancelled) return;
+      setProfileState({ ...DEFAULT_PROFILE, ...loadLS<Partial<Profile>>("polisure.profile", {}) });
+      setPolicyState(loadLS<Policy | null>("polisure.policy", null));
+      setWalletState(loadLS<string[]>("polisure.wallet", []));
+      setClaimState(loadLS<ClaimRun | null>("polisure.claim", null));
+      const d = loadLS<Partial<ClaimDraft>>("polisure.draft", {});
+      setDraftState({
+        ...EMPTY_DRAFT,
+        text: d.text ?? "",
+        bill: { ...EMPTY_DRAFT.bill, ...(d.bill ?? {}) },
+        showBill: d.showBill ?? false,
+        compare: d.compare ?? true,
+        isAccident: d.isAccident ?? null,
+        isPlanned: d.isPlanned ?? null,
+        usedSum: d.usedSum ?? null,
+      });
+      setReady(true);
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const setProfile = useCallback((p: Profile) => {
@@ -111,6 +148,25 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const setWallet = useCallback((ids: string[]) => {
     setWalletState(ids);
     saveLS("polisure.wallet", ids);
+  }, []);
+  const addPolicy = useCallback((id: string) => {
+    setWalletState((w) => {
+      const next = w.includes(id) ? w : [...w, id];
+      saveLS("polisure.wallet", next);
+      return next;
+    });
+  }, []);
+  const removePolicy = useCallback((id: string) => {
+    setWalletState((w) => {
+      const next = w.filter((x) => x !== id);
+      saveLS("polisure.wallet", next);
+      return next;
+    });
+    setPolicyState((p) => {
+      if (p?.policy_id !== id) return p;
+      saveLS("polisure.policy", null);
+      return null;
+    });
   }, []);
   const setClaim = useCallback((c: ClaimRun | null) => {
     setClaimState(c);
@@ -155,7 +211,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <Ctx.Provider
-      value={{ ready, profile, setProfile, policy, setPolicy, gaps, setGaps, wallet, setWallet, claim, setClaim, draft, setDraft, job, runClaim, ackJob }}
+      value={{ ready, profile, setProfile, policy, setPolicy, gaps, setGaps, wallet, setWallet, addPolicy, removePolicy, claim, setClaim, draft, setDraft, job, runClaim, ackJob }}
     >
       {children}
     </Ctx.Provider>

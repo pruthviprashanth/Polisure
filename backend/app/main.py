@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import uuid
 from typing import Optional
 
 from contextlib import asynccontextmanager
@@ -24,6 +25,10 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title="PoliSure API", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
                    allow_methods=["*"], allow_headers=["*"])
+
+
+# Changes every time the backend starts; the web app clears its saved state when it sees a new value.
+BOOT_ID = uuid.uuid4().hex
 
 
 def err(status: int, error: str, detail: Optional[str] = None) -> JSONResponse:
@@ -56,6 +61,11 @@ def _meta(cached: bool, provs: list[str]) -> dict:
 def _policy_body(m: CoverageModel, cached: bool, provs: list[str]) -> dict:
     return {"policy_id": m.policy_id, "name": m.name, "pages": m.pages, "summary_items": present.summary_items(m),
             "meta": _meta(cached, provs)}
+
+
+@app.get("/session")
+def session():
+    return {"boot_id": BOOT_ID}
 
 
 @app.post("/policies")

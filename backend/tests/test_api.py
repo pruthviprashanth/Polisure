@@ -135,3 +135,8 @@ def test_structured_answers_override_and_gap_metrics(client, pid):
     cats = {c["category"]: c for c in g["typical_claims"]}
     assert cats["cataract"]["verdict"] == "NOT_COVERED" and cats["appendectomy"]["payout"] > 0
     assert g["summary"]["longest_wait_months"] == 48 and g["summary"]["exclusions"] > 0
+
+
+def test_session_boot_id_is_stable_within_a_run(client):
+    a = client.get("/session").json()["boot_id"]
+    assert a and a == client.get("/session").json()["boot_id"]

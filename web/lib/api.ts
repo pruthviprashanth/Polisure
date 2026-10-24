@@ -55,6 +55,7 @@ const json = (body: unknown): RequestInit => ({
 });
 
 export const api = {
+  session: () => request<{ boot_id: string }>("/session"),
   listPolicies: () => request<PolicyListItem[]>("/policies"),
   getPolicy: (id: string) => request<Policy>(`/policies/${encodeURIComponent(id)}`),
   uploadPolicy: (file: File) => {
