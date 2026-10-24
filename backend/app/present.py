@@ -153,3 +153,35 @@ def gaps(m: CoverageModel, age: Optional[int], si: Optional[float], ped: Optiona
     order = {"high": 0, "medium": 1, "info": 2}
     out.sort(key=lambda g: order[g["severity"]])
     return plan, out
+
+
+def gap_metrics(m: CoverageModel, age: Optional[int], si: Optional[float], rent: Optional[float],
+                policy_age_months: int = 0) -> dict:
+    """Numbers behind the gap report, for charts (all computed in code from the coverage model)."""
+    plan = engine.derive_plan(m, age)
+    out: dict = {"room": None, "waiting": [], "sublimits": [], "policy_age_months": policy_age_months}
+    rr, pr = m.room_rent, m.proportionate
+    if rr and si and rr.kind in ("percent_si", "fixed"):
+        cap = si * rr.value / 100 if rr.kind == "percent_si" else rr.value
+        pct = 100.0
+        if rent and rent > cap and pr and pr.applies:
+            pct = round(cap / rent * 100, 1)
+        out["room"] = {"cap_per_day": round(cap), "preferred_per_day": round(rent) if rent else None, "payable_pct": pct,
+                       "proportionate": bool(pr and pr.applies)}
+    if (not m.waiting_plans) or (plan in m.waiting_plans):
+        if m.waiting_initial and m.waiting_initial.days:
+            out["waiting"].append({"label": "Initial waiting", "months": round(m.waiting_initial.days / 30, 1)})
+        if m.waiting_ped and m.waiting_ped.months:
+            out["waiting"].append({"label": "Pre-existing diseases", "months": m.waiting_ped.months})
+        by: dict[int, list] = {}
+        for w in m.specific_waits:
+            by.setdefault(w.months, []).append(w.label or w.category.value)
+        for mo, names in sorted(by.items()):
+            out["waiting"].append({"label": f"Specified illnesses ({len(names)})", "months": mo, "detail": ", ".join(names)})
+    if m.sublimits and ((not m.sublimit_plans) or (plan in m.sublimit_plans)) and si:
+        for sl in m.sublimits:
+            caps = ([si * sl.pct_si / 100] if sl.pct_si is not None else []) + ([sl.limit_inr] if sl.limit_inr is not None else [])
+            if caps:
+                out["sublimits"].append({"label": (sl.label or sl.category.value) + (f" (per {sl.per})" if sl.per != "claim" else ""),
+                                         "cap_inr": round(min(caps))})
+    return out

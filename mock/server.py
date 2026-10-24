@@ -212,7 +212,7 @@ def cite(pid: str, key: str) -> dict:
 
 @app.get("/policies/{policy_id}/gaps")
 async def gaps(policy_id: str, insured_age: int, sum_insured: int, preferred_room_rent_per_day: int = 0,
-               ped: bool | None = None):
+               ped: bool | None = None, policy_age_months: int = 0):
     if not policy_entry(policy_id):
         return err(404, "unknown_policy")
     await think(0.3, 1)
@@ -224,13 +224,13 @@ async def gaps(policy_id: str, insured_age: int, sum_insured: int, preferred_roo
                     "detail": POLICIES[SBI_ID]["computable_note"], **cite(policy_id, "proportionate")})
         out.append({"severity": "medium", "title": "10% co-payment at non-network hospitals",
                     "detail": "Use a network hospital to avoid the co-payment.", **cite(policy_id, "copay")})
-        return {"plan": "—", "gaps": out, "meta": meta(True)}
+        return {"plan": "—", "gaps": out, "metrics": empty_metrics(policy_age_months), "meta": meta(True)}
     if eng == "demo":
         out.append({"severity": "medium", "title": "You pay 20% of every claim",
                     "detail": f"On a {inr(100000)} bill you would pay {inr(20000)} yourself.", **cite(policy_id, "copay")})
         out.append({"severity": "info", "title": "No room-rent cap",
                     "detail": "Any room category is paid at actuals (before co-payment).", **cite(policy_id, "room_rent")})
-        return {"plan": "—", "gaps": out, "meta": meta(True)}
+        return {"plan": "—", "gaps": out, "metrics": empty_metrics(policy_age_months), "meta": meta(True)}
 
     if plan == "Not eligible":
         out.append({"severity": "high", "title": f"Age {insured_age} is outside the plan bands (18–65)",
@@ -270,7 +270,22 @@ async def gaps(policy_id: str, insured_age: int, sum_insured: int, preferred_roo
                     **cite(policy_id, "waiting_specific")})
     out.append({"severity": "info", "title": "No co-payment", "detail": "The policy does not apply a co-payment.",
                 **cite(policy_id, "copay")})
-    return {"plan": plan, "gaps": out, "meta": meta(True)}
+    metrics = {"room": {"cap_per_day": cap, "preferred_per_day": preferred_room_rent_per_day or None,
+                        "payable_pct": round(float(Decimal(cap) / Decimal(preferred_room_rent_per_day) * 100), 1)
+                        if preferred_room_rent_per_day > cap else 100.0, "proportionate": True},
+               "waiting": [], "sublimits": [], "policy_age_months": policy_age_months}
+    if plan in ("Gold", "Senior Citizen"):
+        metrics["waiting"] = [{"label": "Initial waiting", "months": 1}, {"label": "Pre-existing diseases", "months": 48},
+                              {"label": "Specified illnesses (Table A)", "months": 24},
+                              {"label": "Specified illnesses (Table B)", "months": 48}]
+        metrics["sublimits"] = [{"label": "Cataract (per eye)", "cap_inr": min(r(sum_insured * Decimal("0.25")), 40000)},
+                                {"label": "Hernia & hysterectomy", "cap_inr": min(r(sum_insured * Decimal("0.25")), 100000)},
+                                {"label": "Major surgeries", "cap_inr": r(sum_insured * Decimal("0.7"))}]
+    return {"plan": plan, "gaps": out, "metrics": metrics, "meta": meta(True)}
+
+
+def empty_metrics(age_m: int) -> dict:
+    return {"room": None, "waiting": [], "sublimits": [], "policy_age_months": age_m}
 
 
 # ---------------------------------------------------------------- claims
@@ -677,8 +692,11 @@ async def recommend(request: Request):
         prem = premiums.get(pid)
         note = (f"{inr(int(prem))}/yr → simulated payout across your likely claims per ₹ of premium: {tot_p / int(prem):.1f}"
                 if prem else None)
+        part = {"payout": r(Decimal(score) * Decimal("0.7")), "waiting": r(Decimal(score) * Decimal("0.1")),
+                "copay": r(Decimal(score) * Decimal("0.1")), "room_cap": r(Decimal(score) * Decimal("0.05"))}
+        part["exclusions"] = score - sum(part.values())
         ranked.append({"policy_id": pid, "name": p["name"], "computable": True, "score": score, "scenario_results": sr,
-                       "reasons": reasons, "premium_note": note})
+                       "reasons": reasons, "premium_note": note, "score_breakdown": part, "total_simulated_payout": tot_p})
     ranked.sort(key=lambda x: (x["score"] is None, -(x["score"] or 0)))
     best = ranked[0]["policy_id"] if ranked and ranked[0]["score"] is not None else None
     assumptions = [
@@ -699,6 +717,34 @@ async def recommend(request: Request):
 
 
 # ---------------------------------------------------------------- eval + mock controls
+
+@app.post("/policies/{policy_id}/ask")
+async def ask(policy_id: str, request: Request):
+    p = policy_entry(policy_id)
+    if not p:
+        return err(404, "unknown_policy")
+    body = await request.json()
+    q = str(body.get("question", "")).strip()
+    if not q:
+        return err(400, "question is required")
+    await think(0.5, 1.5)
+    ql = q.lower()
+    if any(w in ql for w in ("how much", "will i get", "payout", "estimate")):
+        return {"answer": "I can explain the rules, but only the claim estimator computes payouts. Use the What happened screen.",
+                "citations": [], "needs_calculation": True, "out_of_scope": False, "note": None, "meta": meta()}
+    words = set(re.findall(r"[a-z]{4,}", ql))
+    best, score = None, 0
+    for it in p["summary_items"]:
+        sc = len(words & set(re.findall(r"[a-z]{4,}", (it["label"] + " " + it["summary"]).lower())))
+        if sc > score:
+            best, score = it, sc
+    if not best:
+        return {"answer": "This is not stated in the policy document. (Mock server: keyword matching only.)", "citations": [],
+                "needs_calculation": False, "out_of_scope": False, "note": None, "meta": meta()}
+    return {"answer": f"{best['label']}: {best['summary']}. (Mock server: keyword matching only.)",
+            "citations": [{"clause": best["clause"], "page": best["page"], "quote": best["quote"], "verified": True}],
+            "needs_calculation": False, "out_of_scope": False, "note": None, "meta": meta()}
+
 
 @app.get("/eval/latest")
 async def eval_latest():

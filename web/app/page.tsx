@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ProfileForm } from "@/components/ProfileForm";
 import { usePdf } from "@/components/PdfModal";
+import { GapCharts } from "@/components/charts";
 import { ClauseChip, ErrorBox, Loading, MetaBadge, Quote, VerifiedBadge } from "@/components/ui";
 import { api } from "@/lib/api";
 import { SEVERITY_STYLE } from "@/lib/format";
@@ -229,6 +230,7 @@ export default function MyPolicyPage() {
             </div>
             {gapsBusy && <Loading steps={["Comparing the policy rules with your profile…"]} />}
             {!!gapsError && <ErrorBox error={gapsError} onRetry={loadGaps} />}
+            {gaps?.metrics && !gapsBusy && <GapCharts m={gaps.metrics} />}
             {gaps && !gapsBusy && (
               <div className="space-y-2">
                 {gaps.gaps.length === 0 && <p className="text-sm text-slate-600">No gaps found for your profile.</p>}

@@ -47,6 +47,9 @@ def test_list_get_pdf(client, pid):
 def test_gaps(client, pid):
     r = client.get(f"/policies/{pid}/gaps", params={"insured_age": 45, "sum_insured": 500000, "ped": False, "preferred_room_rent_per_day": 8000}).json()
     assert r["plan"] == "Gold" and r["gaps"][0]["severity"] == "high" and "62.5%" in r["gaps"][0]["detail"]
+    mt = r["metrics"]
+    assert mt["room"] == {"cap_per_day": 5000, "preferred_per_day": 8000, "payable_pct": 62.5, "proportionate": True}
+    assert any(w["months"] == 48 for w in mt["waiting"]) and any(s["cap_inr"] == 40000 for s in mt["sublimits"])
 
 
 def test_claim_needs_info_then_done(client, pid):

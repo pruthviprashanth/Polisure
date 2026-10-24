@@ -1,5 +1,6 @@
 "use client";
 
+import { PaySplit, PayoutWaterfall, WhatIfChart } from "@/components/charts";
 import { ClauseChip, Disclaimer, Quote, VerdictBadge, VerifiedBadge } from "@/components/ui";
 import { inr } from "@/lib/format";
 import type { Verdict } from "@/lib/types";
@@ -43,6 +44,13 @@ export function VerdictView({ v, policyId, policyName }: { v: Verdict; policyId?
         <p>{v.why}</p>
       </section>
 
+      {v.payout !== null && v.billed !== null && (
+        <div className="grid gap-3 md:grid-cols-[2fr_1fr]">
+          <PayoutWaterfall v={v} />
+          <PaySplit v={v} />
+        </div>
+      )}
+
       {v.trace.length > 0 && (
         <section className="card space-y-2">
           <h2 className="h2">How we calculated it</h2>
@@ -79,6 +87,8 @@ export function VerdictView({ v, policyId, policyName }: { v: Verdict; policyId?
           </div>
         </section>
       )}
+
+      <WhatIfChart payout={v.payout} cfs={v.counterfactuals} />
 
       {v.counterfactuals.length > 0 && (
         <section className="space-y-2">

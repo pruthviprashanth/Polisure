@@ -2,6 +2,7 @@ import type {
   ClaimRequest,
   ClaimResponse,
   EvalReport,
+  AskResponse,
   GapsResponse,
   Policy,
   PolicyListItem,
@@ -66,6 +67,7 @@ export const api = {
       insured_age: String(p.insured_age),
       sum_insured: String(p.sum_insured),
       preferred_room_rent_per_day: String(p.preferred_room_rent_per_day),
+      policy_age_months: String(p.policy_age_months),
     });
     // ped=null ("don't know") is sent by omitting the parameter.
     if (p.ped !== null) q.set("ped", String(p.ped));
@@ -73,6 +75,8 @@ export const api = {
   },
   checkClaim: (body: ClaimRequest) => request<ClaimResponse>("/claims/check", json(body)),
   recommend: (body: RecommendRequest) => request<RecommendResponse>("/policies/recommend", json(body)),
+  ask: (id: string, question: string, history: { role: string; content: string }[]) =>
+    request<AskResponse>(`/policies/${encodeURIComponent(id)}/ask`, json({ question, history })),
   evalLatest: () => request<EvalReport>("/eval/latest"),
 };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ComparisonChart } from "@/components/charts";
 import { VerdictView } from "@/components/VerdictView";
 import { VerdictBadge } from "@/components/ui";
 import { inr } from "@/lib/format";
@@ -64,6 +65,8 @@ export function ComparisonView({ c }: { c: Comparison }) {
           {c.recommendation_reason}
         </p>
       </section>
+
+      <ComparisonChart results={c.results} />
 
       {c.combined && (
         <section className="card space-y-2 border-l-4 border-l-teal-600">

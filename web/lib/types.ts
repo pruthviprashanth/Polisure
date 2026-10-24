@@ -52,7 +52,14 @@ export type Gap = {
   verified: boolean;
 };
 
-export type GapsResponse = { plan: string; gaps: Gap[]; meta: Meta };
+export type GapMetrics = {
+  room: { cap_per_day: number; preferred_per_day: number | null; payable_pct: number; proportionate: boolean } | null;
+  waiting: { label: string; months: number; detail?: string }[];
+  sublimits: { label: string; cap_inr: number }[];
+  policy_age_months: number;
+};
+
+export type GapsResponse = { plan: string; gaps: Gap[]; metrics?: GapMetrics; meta: Meta };
 
 export type Bill = {
   room: number;
@@ -161,6 +168,8 @@ export type RankedPolicy = {
   scenario_results: ScenarioResult[];
   reasons: Reason[];
   premium_note?: string | null;
+  score_breakdown?: Record<string, number>;
+  total_simulated_payout?: number;
 };
 
 export type RecommendResponse = {
@@ -183,4 +192,15 @@ export type EvalReport = {
   confusion: Record<string, Record<string, number>>;
   baseline: (Record<string, number | string | null> & { note?: string }) | null;
   cross_policy_extraction: { policy: string; extraction_accuracy: number | null }[] | null;
+};
+
+export type AskCitation = { clause: string; page: number; quote: string; verified: boolean };
+
+export type AskResponse = {
+  answer: string;
+  citations: AskCitation[];
+  needs_calculation: boolean;
+  out_of_scope: boolean;
+  note: string | null;
+  meta: Meta;
 };

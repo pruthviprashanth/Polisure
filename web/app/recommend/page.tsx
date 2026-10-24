@@ -1,5 +1,6 @@
 "use client";
 
+import { ScenarioChart, ScoreChart } from "@/components/charts";
 import { useEffect, useState } from "react";
 import { NumberField, ProfileForm } from "@/components/ProfileForm";
 import { ClauseChip, Disclaimer, ErrorBox, Loading, MetaBadge, VerdictBadge, VerifiedBadge } from "@/components/ui";
@@ -165,6 +166,10 @@ export default function RecommendPage() {
             <MetaBadge meta={result.meta} />
           </div>
           {result.why && <p className="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-950">{result.why}</p>}
+          <div className="grid gap-3 lg:grid-cols-2">
+            <ScoreChart ranked={result.ranked} />
+            <ScenarioChart ranked={result.ranked} />
+          </div>
           <ol className="space-y-3">
             {result.ranked.map((r, i) => {
               const best = r.policy_id === result.best_policy_id;

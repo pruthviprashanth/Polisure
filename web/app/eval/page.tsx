@@ -1,5 +1,6 @@
 "use client";
 
+import { MetricsChart, PipelineVsBaseline } from "@/components/charts";
 import { useCallback, useEffect, useState } from "react";
 import { Disclaimer, ErrorBox, Loading } from "@/components/ui";
 import { api } from "@/lib/api";
@@ -111,6 +112,8 @@ export default function EvalPage() {
             </div>
           </section>
 
+          <MetricsChart metrics={report.metrics} />
+          {report.baseline && <PipelineVsBaseline metrics={report.metrics} baseline={report.baseline} />}
           {report.baseline && (
             <section className="card space-y-2">
               <h2 className="h2">Pipeline vs baseline</h2>

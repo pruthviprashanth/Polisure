@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { StoreProvider } from "@/lib/store";
 import { Nav } from "@/components/Nav";
+import { ChatPanel } from "@/components/ChatPanel";
 import { PdfProvider } from "@/components/PdfModal";
 
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               PoliSure estimates the insurer&apos;s likely decision; it is not a legal ruling. The language model reads and
               explains; payouts are computed in code.
             </footer>
+            <ChatPanel />
           </PdfProvider>
         </StoreProvider>
       </body>

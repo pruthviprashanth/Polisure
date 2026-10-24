@@ -99,7 +99,8 @@ def get_gaps(policy_id: str, insured_age: Optional[int] = None, sum_insured: Opt
     if m is None:
         return err(404, "unknown_policy")
     plan, gaps = present.gaps(m, insured_age, sum_insured, ped, preferred_room_rent_per_day, policy_age_months)
-    return {"plan": plan, "gaps": gaps, "meta": _meta(True, ["cache"])}
+    return {"plan": plan, "gaps": gaps, "metrics": present.gap_metrics(m, insured_age, sum_insured, preferred_room_rent_per_day, policy_age_months),
+            "meta": _meta(True, ["cache"])}
 
 
 class ClaimRequest(BaseModel):

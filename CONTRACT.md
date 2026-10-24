@@ -56,6 +56,8 @@ Raw `application/pdf` (UI opens `…/pdf#page=N` in an iframe).
 ```
 `severity` ∈ `high|medium|info`.
 
+Optional extra `metrics` (for charts; computed in code): `{ "room": { "cap_per_day": 5000, "preferred_per_day": 8000, "payable_pct": 62.5, "proportionate": true } | null, "waiting": [ { "label": "Pre-existing diseases", "months": 48, "detail"?: str } ], "sublimits": [ { "label": "Cataract (per eye)", "cap_inr": 40000 } ], "policy_age_months": 24 }`. The optional query parameter `policy_age_months` (default 0) marks how long the policy has run. `waiting` and `sublimits` are empty when they do not apply to the plan.
+
 ## POST /claims/check  (JSON body)
 ```json
 {
