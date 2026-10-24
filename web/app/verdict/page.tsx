@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { ComparisonView } from "@/components/ComparisonView";
 import { VerdictView } from "@/components/VerdictView";
 import { MetaBadge } from "@/components/ui";
 import { useStore } from "@/lib/store";
 
 export default function VerdictPage() {
-  const { ready, claim, policy } = useStore();
+  const { ready, claim, policy, ackJob } = useStore();
+  useEffect(() => ackJob(), [ackJob]);
   if (!ready) return null;
   if (!claim) {
     return (

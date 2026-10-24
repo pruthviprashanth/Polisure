@@ -67,7 +67,7 @@ def explain(v: Verdict) -> tuple[str, list[str], str]:
         return why, steps, "mock" if config.llm_mode() == "mock" else ""
     payload = v.model_dump_json(include={"verdict", "billed", "payout", "trace", "counterfactuals", "abstain_reason"})
     try:
-        obj, prov = llm.extract(ExplainLLM, SYSTEM, payload, purpose="explain", can_fallback=True, max_out=500)
+        obj, prov = llm.extract(ExplainLLM, SYSTEM, payload, purpose="explain", can_fallback=True, max_out=450, prefer_groq=True)
     except llm.LLMUnavailable:
         return why, steps, ""
     allowed = _allowed_numbers(v)

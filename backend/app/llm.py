@@ -310,8 +310,11 @@ def _parse_json(text: str) -> dict:
 
 
 def extract(schema: type[BaseModel], system: str, user: str, *, can_fallback: bool = True,
-            purpose: str = "", max_out: int = MAX_OUT_TOKENS_DEFAULT) -> tuple[BaseModel, str]:
-    """Return (validated object, provider_name in gemini|groq|cache|mock)."""
+            purpose: str = "", max_out: int = MAX_OUT_TOKENS_DEFAULT, prefer_groq: bool = False) -> tuple[BaseModel, str]:
+    """Return (validated object, provider_name in gemini|groq|cache|mock).
+
+    prefer_groq: try Groq first for small, latency-sensitive calls (only when fallback is allowed);
+    Gemini is then the fallback if Groq is exhausted, too large, or returns invalid JSON."""
     if config.llm_mode() == "mock":
         return _mock(schema, system, user, purpose), "mock"
 
@@ -327,7 +330,7 @@ def extract(schema: type[BaseModel], system: str, user: str, *, can_fallback: bo
 
     full_system = (f"{system}\n\nRespond with ONE JSON object only, valid against this JSON schema:\n"
                    f"{json.dumps(schema.model_json_schema())}")
-    providers = ["gemini"] + (["groq"] if can_fallback else [])
+    providers = (["groq", "gemini"] if prefer_groq else ["gemini", "groq"]) if can_fallback else ["gemini"]
     errors: list[str] = []
     for prov in providers:
         if not config.env(f"{prov.upper()}_API_KEY"):

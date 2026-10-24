@@ -122,7 +122,7 @@ def _bool(v: Any) -> Optional[bool]:
 
 def build_facts(incident_text: str, profile: Profile, bill_in: Optional[dict], answers: Optional[dict]) -> tuple[ClaimFacts, str]:
     """LLM reads the text; code merges profile, form bill and answers (these win over the text)."""
-    obj, prov = llm.extract(FactsLLM, SYSTEM, incident_text, purpose="facts", can_fallback=True, max_out=900)
+    obj, prov = llm.extract(FactsLLM, SYSTEM, incident_text, purpose="facts", can_fallback=True, max_out=600, prefer_groq=True)
     ans = dict(answers or {})
     bill_in = dict(bill_in or {})
     for k, v in list(ans.items()):                # dotted answer keys like "bill.meds_implants"

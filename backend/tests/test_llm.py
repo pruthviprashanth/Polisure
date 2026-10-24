@@ -69,3 +69,44 @@ def test_mock_mode_uses_fixture_or_handler():
     llm.register_mock("unit_test", lambda s, u: {"a": 3})
     obj, prov = llm.extract(S, "s", "u", purpose="unit_test")
     assert obj.a == 3 and prov == "mock"
+
+
+def test_prefer_groq_order_and_gemini_fallback(monkeypatch):
+    from pydantic import BaseModel
+
+    from app import config
+
+    class S(BaseModel):
+        a: int
+
+    calls = []
+
+    def fake(name, reply):
+        def f(system, user, max_out):
+            calls.append(name)
+            if reply is None:
+                raise llm.LLMUnavailable("down")
+            return reply
+        return f
+
+    monkeypatch.setattr(config, "llm_mode", lambda: "live")
+    monkeypatch.setattr(config, "cache_enabled", lambda: False)
+    monkeypatch.setenv("GEMINI_API_KEY", "x")
+    monkeypatch.setenv("GROQ_API_KEY", "x")
+    monkeypatch.setattr(llm, "_limiter", lambda p: llm.SlidingLimiter(100, 10**6))
+    monkeypatch.setattr(llm, "_is_exhausted", lambda p, r: False)
+    monkeypatch.setattr(llm, "_bump", lambda p: 1)
+    monkeypatch.setattr(llm, "_log", lambda *a, **k: None)
+    monkeypatch.setitem(llm._CALLERS, "groq", fake("groq", '{"a": 1}'))
+    monkeypatch.setitem(llm._CALLERS, "gemini", fake("gemini", '{"a": 2}'))
+    obj, prov = llm.extract(S, "s", "u", prefer_groq=True, purpose="t")
+    assert (obj.a, prov, calls) == (1, "groq", ["groq"])
+    # Groq returns invalid JSON twice -> falls back to Gemini
+    calls.clear()
+    monkeypatch.setitem(llm._CALLERS, "groq", fake("groq", "not json"))
+    obj, prov = llm.extract(S, "s", "u", prefer_groq=True, purpose="t")
+    assert prov == "gemini" and calls == ["groq", "groq", "gemini"]
+    # default order stays Gemini first
+    calls.clear()
+    llm.extract(S, "s", "u", purpose="t")
+    assert calls == ["gemini"]

@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NumberField, PedSelect } from "@/components/ProfileForm";
 import { ErrorBox, Loading } from "@/components/ui";
 import { api } from "@/lib/api";
 import { useStore } from "@/lib/store";
-import type { Bill, ClaimRequest, PolicyListItem, Question } from "@/lib/types";
+import type { Bill, ClaimRequest, PolicyListItem } from "@/lib/types";
 
 const EXAMPLES = [
   {
@@ -42,21 +42,26 @@ const PROGRESS = [
   "Still working — thanks for your patience…",
 ];
 
-type BillDraft = Record<keyof Bill, number | null>;
-const EMPTY_BILL: BillDraft = { room: null, linked: null, meds_implants: null, other: null };
 
 export default function ClaimPage() {
   const router = useRouter();
-  const { ready, policy, profile, setProfile, wallet, setClaim } = useStore();
-  const [text, setText] = useState("");
-  const [bill, setBill] = useState<BillDraft>(EMPTY_BILL);
-  const [showBill, setShowBill] = useState(false);
-  const [questions, setQuestions] = useState<Question[] | null>(null);
-  const [answers, setAnswers] = useState<Record<string, number | boolean | string | null>>({});
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<unknown>(null);
+  const { ready, policy, profile, setProfile, wallet, draft, setDraft, job, runClaim } = useStore();
+  const { text, bill, showBill, answers, questions, compare } = draft;
+  const setText = (t: string) => setDraft((d) => ({ ...d, text: t }));
+  const setBill = (b: typeof bill) => setDraft((d) => ({ ...d, bill: b }));
+  const setShowBill = (f: (s: boolean) => boolean) => setDraft((d) => ({ ...d, showBill: f(d.showBill) }));
+  const setCompare = (v: boolean) => setDraft((d) => ({ ...d, compare: v }));
+  const setQuestions = (q: typeof questions) => setDraft((d) => ({ ...d, questions: q }));
+  const setAnswers = (a: typeof answers) => setDraft((d) => ({ ...d, answers: a }));
+  const busy = job.status === "running";
+  const error = job.status === "error" ? job.error : null;
+  const prevStatus = useRef(job.status);
+  // Go to the verdict when a check that was running while this page was open finishes.
+  useEffect(() => {
+    if (prevStatus.current === "running" && job.status === "done") router.push("/verdict");
+    prevStatus.current = job.status;
+  }, [job.status, router]);
   const [library, setLibrary] = useState<PolicyListItem[]>([]);
-  const [compare, setCompare] = useState(true);
 
   useEffect(() => {
     api.listPolicies().then(setLibrary, () => setLibrary([]));
@@ -84,28 +89,8 @@ export default function ClaimPage() {
     return req;
   }
 
-  async function submit() {
-    setBusy(true);
-    setError(null);
-    const req = buildRequest();
-    try {
-      const res = await api.checkClaim(req);
-      if (res.status === "needs_info") {
-        setQuestions(res.questions);
-        setAnswers((a) => {
-          const next = { ...a };
-          for (const q of res.questions) if (!(q.field in next)) next[q.field] = null;
-          return next;
-        });
-      } else {
-        setClaim({ request: req, response: res });
-        router.push("/verdict");
-      }
-    } catch (e) {
-      setError(e);
-    } finally {
-      setBusy(false);
-    }
+  function submit() {
+    runClaim(buildRequest());
   }
 
   if (ready && !policy && walletIds.length < 2) {
